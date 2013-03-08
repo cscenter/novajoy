@@ -1,0 +1,26 @@
+BEGIN;
+CREATE TABLE `Server_user` (
+    `user_name` varchar(30) NOT NULL PRIMARY KEY,
+    `password` varchar(50) NOT NULL,
+    `email` varchar(75) NOT NULL,
+    `update_time` time NOT NULL
+)
+;
+CREATE TABLE `Server_rssfeed_name` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `rssfeed_id` integer NOT NULL,
+    `user_id` varchar(30) NOT NULL,
+    UNIQUE (`rssfeed_id`, `user_id`)
+)
+;
+ALTER TABLE `Server_rssfeed_name` ADD CONSTRAINT `user_id_refs_user_name_0456ea8a` FOREIGN KEY (`user_id`) REFERENCES `Server_user` (`user_name`);
+CREATE TABLE `Server_rssfeed` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `url` varchar(200) NOT NULL,
+    `content` longtext NOT NULL,
+    `date_adding` date NOT NULL
+)
+;
+ALTER TABLE `Server_rssfeed_name` ADD CONSTRAINT `rssfeed_id_refs_id_b7136caa` FOREIGN KEY (`rssfeed_id`) REFERENCES `Server_rssfeed` (`id`);
+
+COMMIT;
