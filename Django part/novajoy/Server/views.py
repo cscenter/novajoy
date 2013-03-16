@@ -1,4 +1,5 @@
+#coding: utf-8
 from django.http import HttpResponse
 
 def mainPage(request):
-   return HttpResponse("Hello world")
+   return HttpResponse("Hваываыва world")
