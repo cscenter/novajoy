@@ -1,18 +1,27 @@
 BEGIN;
-CREATE TABLE `Server_user` (
-    `user_name` varchar(30) NOT NULL PRIMARY KEY,
-    `password` varchar(50) NOT NULL,
-    `email` varchar(75) NOT NULL
+CREATE TABLE `Server_account` (
+    `user_ptr_id` integer NOT NULL PRIMARY KEY,
+    `age` smallint UNSIGNED NOT NULL,
+    `update` time NOT NULL
+)
+;
+ALTER TABLE `Server_account` ADD CONSTRAINT `user_ptr_id_refs_id_c1c8be64` FOREIGN KEY (`user_ptr_id`) REFERENCES `auth_user` (`id`);
+CREATE TABLE `Server_postletters` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `target` varchar(50) NOT NULL,
+    `title` varchar(100) NOT NULL,
+    `body` longtext NOT NULL,
+    `attachment` longtext
 )
 ;
 CREATE TABLE `Server_collection` (
     `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    `user_id` varchar(30) NOT NULL,
-    `name_collection` varchar(30) NOT NULL,
+    `user_id` integer NOT NULL,
+    `name_collection` varchar(100) NOT NULL,
     `update_time` time NOT NULL
 )
 ;
-ALTER TABLE `Server_collection` ADD CONSTRAINT `user_id_refs_user_name_7dbe6354` FOREIGN KEY (`user_id`) REFERENCES `Server_user` (`user_name`);
+ALTER TABLE `Server_collection` ADD CONSTRAINT `user_id_refs_user_ptr_id_a2288bda` FOREIGN KEY (`user_id`) REFERENCES `Server_account` (`user_ptr_id`);
 CREATE TABLE `Server_rssfeed_collection` (
     `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `rssfeed_id` integer NOT NULL,
@@ -20,14 +29,35 @@ CREATE TABLE `Server_rssfeed_collection` (
     UNIQUE (`rssfeed_id`, `collection_id`)
 )
 ;
-ALTER TABLE `Server_rssfeed_collection` ADD CONSTRAINT `collection_id_refs_id_787a358e` FOREIGN KEY (`collection_id`) REFERENCES `Server_collection` (`id`);
+ALTER TABLE `Server_rssfeed_collection` ADD CONSTRAINT `collection_id_refs_id_81ad26e7` FOREIGN KEY (`collection_id`) REFERENCES `Server_collection` (`id`);
 CREATE TABLE `Server_rssfeed` (
     `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
     `url` varchar(200) NOT NULL,
-    `content` longtext,
-    `date_adding` date NOT NULL
+    `pubDate` datetime NOT NULL
 )
 ;
-ALTER TABLE `Server_rssfeed_collection` ADD CONSTRAINT `rssfeed_id_refs_id_3566e62b` FOREIGN KEY (`rssfeed_id`) REFERENCES `Server_rssfeed` (`id`);
-CREATE INDEX `Server_collection_403f60f` ON `Server_collection` (`user_id`);
+ALTER TABLE `Server_rssfeed_collection` ADD CONSTRAINT `rssfeed_id_refs_id_50563ff1` FOREIGN KEY (`rssfeed_id`) REFERENCES `Server_rssfeed` (`id`);
+CREATE TABLE `Server_rssitem` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `rssfeed_id` integer,
+    `title` varchar(222),
+    `description` longtext NOT NULL,
+    `link` varchar(200) NOT NULL,
+    `author` varchar(30),
+    `pubDate` datetime NOT NULL
+)
+;
+ALTER TABLE `Server_rssitem` ADD CONSTRAINT `rssfeed_id_refs_id_054d295c` FOREIGN KEY (`rssfeed_id`) REFERENCES `Server_rssfeed` (`id`);
+CREATE TABLE `Server_category` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `rssitem_id` integer NOT NULL,
+    `category` varchar(50) NOT NULL
+)
+;
+ALTER TABLE `Server_category` ADD CONSTRAINT `rssitem_id_refs_id_3a755d56` FOREIGN KEY (`rssitem_id`) REFERENCES `Server_rssfeed` (`id`);
+CREATE INDEX `Server_collection_6340c63c` ON `Server_collection` (`user_id`);
+CREATE INDEX `Server_rssitem_3e2c4a04` ON `Server_rssitem` (`rssfeed_id`);
+CREATE INDEX `Server_category_5743b4fa` ON `Server_category` (`rssitem_id`);
+
 COMMIT;
+

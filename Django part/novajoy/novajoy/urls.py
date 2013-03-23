@@ -5,14 +5,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'novajoy.views.home', name='home'),
-    # url(r'^novajoy/', include('novajoy.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^test/',mainPage),
-)
+                       url(r'^accounts/', include('backends.urls')),
+                       #url(r'^register/$', register, {'backend': 'app.backend.RegBackend', 'form_class': CustomRegForm}, name='registration_register'),
+                       #url(r'^accounts/', include('registration.urls')),
+                       url(r'^admin/', include(admin.site.urls)),
+                       )

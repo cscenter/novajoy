@@ -18,11 +18,11 @@ DATABASES = {
         'PASSWORD': 'ru4Afoh5',
         'HOST': 'novajoy.cosqmvrs3gb3.us-east-1.rds.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
-	'OPTIONS': {
+        'OPTIONS': {
             'init_command': 'SET names utf8',
-        }
+            }
 
-	}
+    }
 }
 # DATABASES = {
 #     'default': {
@@ -40,6 +40,16 @@ DATABASES = {
 #     }
 # }
 
+AUTH_PROFILE_MODULE = 'novajoy.Server.Profile'
+ROOT_URLCONF = 'novajoy.urls'
+AUTH_USER_EMAIL_UNIQUE = True
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 1025
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_USE_TLS = False
+# DEFAULT_FROM_EMAIL = 'info@google.ru'
+# ACCOUNT_ACTIVATION_DAYS = 2
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
@@ -125,12 +135,9 @@ ROOT_URLCONF = 'novajoy.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'novajoy.wsgi.application'
+import os
+TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -139,7 +146,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'Server',
+    'registration',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
