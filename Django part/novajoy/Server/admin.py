@@ -1,7 +1,13 @@
-#coding: utf-8
+# -*- encoding: utf-8 -*-
 from django.contrib import admin
-from Server.models import User, RSSFeed,Collection
+from django.contrib.auth.models import User
 
-admin.site.register(User)
+from Server.models import RSSFeed,Collection,Account,PostLetters
+class AccountAdmin(admin.ModelAdmin):
+    list_display = ('username', 'last_name', 'first_name','is_staff', 'is_active')
+
+admin.site.unregister(User)
+admin.site.register(Account, AccountAdmin)
 admin.site.register(RSSFeed)
 admin.site.register(Collection)
+admin.site.register(PostLetters)
