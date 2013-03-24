@@ -21,9 +21,9 @@ public class NovaSender {
 
     private final String hostName = "127.0.0.1";
     private final String className = "com.mysql.jdbc.Driver";
-    private final String dbName = "novajoy";
-    private final String userName = "root";
-    private final String userPassword = "148976";
+    private final String dbName = "";
+    private final String userName = "";
+    private final String userPassword = "";
     private static Logger log = Logger.getLogger(NovaSender.class.getName());
 
     // E-mail sender configuration
@@ -32,11 +32,11 @@ public class NovaSender {
     private Session session = null;
     private final String host = "email-smtp.us-east-1.amazonaws.com";
     private final String from = "novajoy.org@gmail.com";
-    private final String pass = "Shae2aip";
+    private final String pass = "";
     private final String smtpPort = "587";
 
-    private static final String SMTP_USERNAME = "AKIAIIXANDJ6AZ7TLFTQ";
-    private static final String SMTP_PASSWORD = "Aus3qxWr0BnNBTGvk8TWDQ5zrDUsRaVt8kJHEiYsG5aX";
+    private static final String SMTP_USERNAME = "";
+    private static final String SMTP_PASSWORD = "";
 
     InternalMessage[] collection = null;
 
