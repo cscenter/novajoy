@@ -37,38 +37,39 @@ public class Crawler extends Thread {
 		process_reqsts(baseAddr, baseName, baseUser, basePass);
 	}
 
-	private static void process_reqsts(String srvrName, String dbName,
-			String usrName, String pass) {
+	private void process_reqsts(String srvrName, String dbName, String usrName,
+			String pass) {
 		Connection connection;
 		try {
 			connection = establish_jdbc_connection(srvrName, dbName, usrName,
 					pass);
 
 			String query = "Select * FROM Server_rssfeed";
-			String get_query1 = "UPDATE Server_rssfeed  SET pubDate='";
-			String get_query2 = "' WHERE id=";
+			String pquery = "UPDATE Server_rssfeed  SET pubDate = ? WHERE id = ?";
 
 			Statement stmt = connection.createStatement();
-			PreparedStatement ps = connection.prepareStatement("");
+			PreparedStatement ps = connection.prepareStatement(pquery);
 			ResultSet rs = stmt.executeQuery(query);
 			String addr;
-
+			int items_count = 0;
 			while (rs.next()) {
 				addr = rs.getString(2);
 				System.out.println("Crawling from: " + addr);
 				SyndFeed feed = readfeed(addr);
 				for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
-					insert_item((SyndEntry) i.next(), connection,
-							rs.getString(1));
+					if (insert_item((SyndEntry) i.next(), connection,
+							Long.parseLong(rs.getString(1))))
+						++items_count;
 				}
 
-				String req = get_query1
-						+ (new java.sql.Timestamp(feed.getPublishedDate()
-								.getTime())) + get_query2 + rs.getString(1)
-						+ ";";
-				ps.executeUpdate(req);
-				System.out
-						.println("Crawling and updating finished on: " + addr);
+				ps.setTimestamp(1, new java.sql.Timestamp(feed
+						.getPublishedDate().getTime()));
+				ps.setLong(2, Long.parseLong(rs.getString(1)));
+				ps.executeUpdate();
+				System.out.println(items_count
+						+ " items added.\nCrawling and updating finished on: "
+						+ addr);
+				items_count = 0;
 			}
 			connection.close();
 		} catch (SQLException e) {
@@ -80,7 +81,7 @@ public class Crawler extends Thread {
 		}
 	}
 
-	private static Connection establish_jdbc_connection(String srvrName,
+	private Connection establish_jdbc_connection(String srvrName,
 			String dbName, String usrName, String pass)
 			throws ClassNotFoundException, SQLException {
 		String driverName = "com.mysql.jdbc.Driver";
@@ -92,7 +93,7 @@ public class Crawler extends Thread {
 		return connection;
 	}
 
-	private static SyndFeed readfeed(String addr) throws Exception {
+	private SyndFeed readfeed(String addr) throws Exception {
 		XmlReader reader = null;
 		SyndFeed feed = null;
 		try {
@@ -105,24 +106,36 @@ public class Crawler extends Thread {
 		return feed;
 	}
 
-	private static void insert_item(SyndEntry entry, Connection connection,
-			String feedid) throws SQLException {
-		Statement stmt = connection.createStatement();
-		String query = "INSERT INTO Server_rssitem (rssfeed_id, title, description, link, author, pubDate) VALUES("
-				+ feedid
-				+ ",\""
-				+ entry.getTitle()
-				+ "\",\""
-				+ entry.getDescription().getValue().replace("\"", "\\\"")
-				+ "\",\""
-				+ entry.getLink()
-				+ "\",\""
-				+ entry.getAuthor()
-				+ "\",\""
-				+ (new java.sql.Timestamp(entry.getPublishedDate().getTime()))
-				+ "\");";
-		// System.out.println(query);
-		stmt.executeUpdate(query);
+	private boolean insert_item(SyndEntry entry, Connection connection,
+			long feedid) throws SQLException {
+
+		if (check_already_in(connection, entry.getLink())) {
+			// System.out.println("Entry with link: " + entry.getLink() +
+			// " already exists.");
+			return false;
+		}
+
+		String pquery = "INSERT INTO Server_rssitem (rssfeed_id, title, description, link, author, pubDate) VALUES(?,?,?,?,?,?)";
+		PreparedStatement ps = connection.prepareStatement(pquery);
+
+		ps.setLong(1, feedid);
+		ps.setString(2, entry.getTitle());
+		ps.setString(3, entry.getDescription().getValue());
+		ps.setString(4, entry.getLink());
+		ps.setString(5, entry.getAuthor());
+		ps.setTimestamp(6, new java.sql.Timestamp(entry.getPublishedDate()
+				.getTime()));
+		// System.out.println(entry.get);
+		ps.executeUpdate();
+		return true;
+	}
+
+	private boolean check_already_in(Connection connection, String link)
+			throws SQLException {
+		String pquery = "Select * FROM Server_rssitem WHERE link = ?";
+		PreparedStatement ps = connection.prepareStatement(pquery);
+		ps.setString(1, link);
+		return ps.executeQuery().next();
 	}
 
 	public static void main(String[] args) throws Exception {
