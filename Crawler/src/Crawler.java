@@ -57,7 +57,6 @@ public class Crawler extends Thread {
 				addr = rs.getString(2);
 				System.out.println("Crawling from: " + addr);
 				SyndFeed feed = readfeed(addr);
-				System.out.println(feed.getEncoding());
 				for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
 					insert_item((SyndEntry) i.next(), connection,
 							rs.getString(1));
@@ -87,7 +86,8 @@ public class Crawler extends Thread {
 		String driverName = "com.mysql.jdbc.Driver";
 		Class.forName(driverName);
 		String url = "jdbc:mysql://" + srvrName + "/" + dbName;
-		Connection connection = DriverManager.getConnection(url, usrName, pass);
+		Connection connection = DriverManager.getConnection(url
+				+ "?useUnicode=true&characterEncoding=utf-8", usrName, pass);
 		System.out.println("Connected to DB" + connection);
 		return connection;
 	}
@@ -106,7 +106,7 @@ public class Crawler extends Thread {
 	}
 
 	private static void insert_item(SyndEntry entry, Connection connection,
-			String feedid) throws SQLException, UnsupportedEncodingException {
+			String feedid) throws SQLException {
 		Statement stmt = connection.createStatement();
 		String query = "INSERT INTO Server_rssitem (rssfeed_id, title, description, link, author, pubDate) VALUES("
 				+ feedid
