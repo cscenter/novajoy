@@ -27,4 +27,28 @@ public class IniWorker {
 	public String getDBpassword() {
 		return ini.get("database", "password");
 	}
+
+	public String getSenderSmtpHost() {
+		return ini.get("sender", "smtphost");
+	}
+
+	public String getSenderSmtpPort() {
+		return ini.get("sender", "smtpport");
+	}
+
+	public String getSenderFromMail() {
+		return ini.get("sender", "from");
+	}
+
+	public String getSenderFromPass() {
+		return ini.get("sender", "password");
+	}
+
+	public String getSenderSmtpUser() {
+		return ini.get("sender", "smtpuser");
+	}
+
+	public String getSenderSmtpPass() {
+		return ini.get("sender", "smtppass");
+	}
 }
