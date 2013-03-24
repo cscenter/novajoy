@@ -15,10 +15,10 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 public class Crawler extends Thread {
-	private String baseAddr = "novajoy.cosqmvrs3gb3.us-east-1.rds.amazonaws.com",
-			baseName = "novajoydb",
-			baseUser = "novauser",
-			basePass = "ru4Afoh5";
+	private String baseAddr = "***",
+			baseName = "***",
+			baseUser = "***",
+			basePass = "***";
 
 	public Crawler(String str) {
 		super(str);
