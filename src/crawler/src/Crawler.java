@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
-
-import java.io.*;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -15,14 +15,7 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 public class Crawler extends Thread {
-	private String baseAddr = "***",
-			baseName = "***",
-			baseUser = "***",
-			basePass = "***";
-
-	public Crawler(String str) {
-		super(str);
-	}
+	private String baseAddr, baseName, baseUser, basePass;
 
 	public Crawler(String str, String baseAddr, String baseName,
 			String baseUser, String basePass) {
@@ -62,8 +55,11 @@ public class Crawler extends Thread {
 						++items_count;
 				}
 
-				ps.setTimestamp(1, new java.sql.Timestamp(feed
-						.getPublishedDate().getTime()));
+				Date time = feed.getPublishedDate();
+				if (time == null)
+					time = Calendar.getInstance().getTime();
+
+				ps.setTimestamp(1, new java.sql.Timestamp(time.getTime()));
 				ps.setLong(2, Long.parseLong(rs.getString(1)));
 				ps.executeUpdate();
 				System.out.println(items_count
@@ -139,6 +135,8 @@ public class Crawler extends Thread {
 	}
 
 	public static void main(String[] args) throws Exception {
-		new Crawler("Crawler_1").start();
+		IniWorker config = new IniWorker("..\\..\\util\\config\\config.ini");
+		new Crawler("Crawler_1", config.getDBaddress(), config.getDBbasename(),
+				config.getDBuser(), config.getDBpassword()).start();
 	}
 }

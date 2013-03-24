@@ -1,0 +1,1 @@
+This directory contains "config.ini" - all configs for service modules.  
