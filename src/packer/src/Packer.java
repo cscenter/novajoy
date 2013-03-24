@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 class Packer{
 
-    private final String hostName = "127.0.0.1";
+    private final String hostName = "";
     private final String className = "com.mysql.jdbc.Driver";
     private final String dbName = "";
     private final String userName = "";

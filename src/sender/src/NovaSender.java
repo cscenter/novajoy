@@ -3,10 +3,6 @@ import javax.activation.DataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.mail.util.ByteArrayDataSource;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -19,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class NovaSender {
 
-    private final String hostName = "127.0.0.1";
+    private final String hostName = "";
     private final String className = "com.mysql.jdbc.Driver";
     private final String dbName = "";
     private final String userName = "";
