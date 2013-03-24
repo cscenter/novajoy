@@ -16,6 +16,7 @@ import com.sun.syndication.io.XmlReader;
 
 public class Crawler extends Thread {
 	private String baseAddr, baseName, baseUser, basePass;
+	private final long sleepMillis = 10 * 60 * 1000;
 
 	public Crawler(String str, String baseAddr, String baseName,
 			String baseUser, String basePass) {
@@ -27,7 +28,17 @@ public class Crawler extends Thread {
 	}
 
 	public void run() {
-		process_reqsts(baseAddr, baseName, baseUser, basePass);
+		try {
+			while (true) {
+				process_reqsts(baseAddr, baseName, baseUser, basePass);
+				System.out.println("Process: " + Thread.currentThread()
+						+ " went to sleep.");
+				sleep(sleepMillis);
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void process_reqsts(String srvrName, String dbName, String usrName,
