@@ -2,22 +2,32 @@
 
                  <property file="Ant.properties"/>
                  <property name="build.dir" value="build"/>
-				 <property name="crawler.class.dir" value="${build.dir}/crawler"/>
+		  <property name="crawler.class.dir" value="${build.dir}/crawler"/>
+		 <property name="packer.class.dir" value="${build.dir}/packer"/>
+		 <property name="sender.class.dir" value="${build.dir}/sender"/>
 
                  <target name="make.dirs" description="Make build dirs">
                          <mkdir dir="${build.dir}"/>
                          <mkdir dir="${crawler.class.dir}"/>
+			 <mkdir dir="${packer.class.dir}"/>
+			 <mkdir dir="${sender.class.dir}"/>
                  </target>
 				 
-				<path id="crawlerclasspath" >
-                         <fileset dir="src/crawler/lib">
+	          <path id="novajoyclasspath" >
+                         <fileset dir="src/lib">
                                  <include name="**/*.jar"/>
                          </fileset>
                  </path>
 				 
                  <target name="compile" description="compile java" depends="make.dirs">
-                         <javac destdir="${crawler.class.dir}" classpathref="crawlerclasspath">
+                         <javac destdir="${crawler.class.dir}" classpathref="novajoyclasspath">
                                  <src path="src/crawler/src"/>
+                         </javac>
+			 <javac destdir="${packer.class.dir}" classpathref="novajoyclasspath">
+                                 <src path="src/packer/src"/>
+                         </javac>
+			 <javac destdir="${sender.class.dir}" classpathref="novajoyclasspath">
+                                 <src path="src/sender/src"/>
                          </javac>
                  </target>
 
