@@ -1,0 +1,31 @@
+<project name="NovaJoy" default="all" >
+
+                 <property file="Ant.properties"/>
+                 <property name="build.dir" value="build"/>
+				 <property name="crawler.class.dir" value="${build.dir}/crawler"/>
+
+                 <target name="make.dirs" description="Make build dirs">
+                         <mkdir dir="${build.dir}"/>
+                         <mkdir dir="${crawler.class.dir}"/>
+                 </target>
+				 
+				<path id="crawlerclasspath" >
+                         <fileset dir="src/crawler/lib">
+                                 <include name="**/*.jar"/>
+                         </fileset>
+                 </path>
+				 
+                 <target name="compile" description="compile java" depends="make.dirs">
+                         <javac destdir="${crawler.class.dir}" classpathref="crawlerclasspath">
+                                 <src path="src/crawler/src"/>
+                         </javac>
+                 </target>
+
+                 <target name="all" description="Do the build" depends="compile"/>
+
+                 <target name="clean" description="clean up">
+                         <echo>I'm cleaning up.</echo>
+                         <delete dir="${build.dir}"/>
+                 </target>
+
+           </project>
