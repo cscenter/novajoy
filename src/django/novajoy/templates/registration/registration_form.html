@@ -49,14 +49,6 @@
             {% endif %}
         {{ form.age }}
         </p>
-        <p>
-            <label for="id_update">Update time:</label>
-            {% if form.update.errors %}
-                <p class="errors">{{ form.update.errors.as_text }}</p>
-            {% endif %}
-        {{ form.update }}
-        </p>
-
 
         <p class="submit"><input type="submit" value="Register &rarr;"></p>
     </form>

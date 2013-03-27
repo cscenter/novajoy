@@ -11,13 +11,13 @@ from django.conf import settings
 # Бэкэнд регистрации
 class RegBackend(DefaultBackend):
     def register(self, request, **kwargs):
-        username, email, password,age,update= kwargs['username'], kwargs['email'], kwargs['password1'],kwargs['age'],kwargs['update']
+        username, email, password,age= kwargs['username'], kwargs['email'], kwargs['password1'],kwargs['age']
         if Site._meta.installed:
             site = Site.objects.get_current()
         else:
             site = RequestSite(request)
 
-        user = Account.objects.create_user(username, email, password,age,update)
+        user = Account.objects.create_user(username, email, password,age)
         user.is_active = False
         user.save()
         profile = RegistrationProfile.objects.create_profile(user)

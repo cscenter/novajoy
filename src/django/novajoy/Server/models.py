@@ -7,7 +7,7 @@ from django.utils import timezone
 
 class MyUserManager(BaseUserManager):
 
-    def create_user(self, username, email=None, password=None,age=None,update=None, **extra_fields):
+    def create_user(self, username, email=None, password=None,age=None, **extra_fields):
         """
         Creates and saves a User with the given username, email and password.
         """
@@ -15,7 +15,7 @@ class MyUserManager(BaseUserManager):
         if not username:
             raise ValueError('The given username must be set')
         email = UserManager.normalize_email(email)
-        user = self.model(username=username, email=email,age=age,update=update,
+        user = self.model(username=username,email=email,age=age,
                           is_staff=False, is_active=True, is_superuser=False,
                           last_login=now, date_joined=now, **extra_fields)
 
@@ -23,8 +23,8 @@ class MyUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password,age,update, **extra_fields):
-        u = self.create_user(username, email, password,age,update **extra_fields)
+    def create_superuser(self, username, email, password,age, **extra_fields):
+        u = self.create_user(username, email, password,age, **extra_fields)
         u.is_staff = True
         u.is_active = True
         u.is_superuser = True
@@ -34,7 +34,6 @@ class MyUserManager(BaseUserManager):
 class Account(User):
     is_staff = False
     age = models.PositiveSmallIntegerField(null=False, blank=True)
-    update = models.TimeField(null=False, blank=True)
     objects = MyUserManager()
 
     def __unicode__(self):
@@ -52,7 +51,8 @@ class PostLetters(models.Model):
 class Collection(models.Model):
     user = models.ForeignKey(Account,null=False, blank=True)
     name_collection = models.CharField(max_length=100,null=False, blank=True)
-    update_time = models.TimeField(null=False, blank=True)
+    delta_update_time = models.IntegerField(null=False, blank=True)
+    last_update_time = models.DateTimeField(null=False,blank=True)
 
     def __unicode__(self):
         return self.name_collection

@@ -1,0 +1,20 @@
+.collection a {
+    border-top: 1px solid #FFF;
+    text-decoration: none;
+    background-color: lightgreen;
+    width: 11em;
+    display: block;
+    border-right: 1px solid #FFF;
+}
+.newCollection a {
+    border-top: 1px solid #FFF;
+    text-decoration: none;
+    background-color: lightgrey;
+    width: 11em;
+    display: block;
+    border-right: 1px solid #FFF;
+}
+body {
+    text-align: left;
+    background-color: #eee;
+}

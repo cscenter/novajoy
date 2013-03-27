@@ -1,0 +1,15 @@
+#coding: utf-8
+from django.http import HttpResponse,HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.contrib import auth
+from django.contrib.auth.decorators import user_passes_test
+
+def mainPage(request):
+   return HttpResponse("Hваываыва world")
+
+def helloPage(request):
+    return HttpResponse("Hello %s" %request.user)
+
+
+def testHtml(user):
+    return user.is_authenticated()

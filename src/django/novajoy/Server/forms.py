@@ -7,4 +7,3 @@ class CustomRegForm(RegistrationForm):
     age=forms.IntegerField(
         label=_('age'),
         )
-    update = forms.TimeField(label = _('update'))
