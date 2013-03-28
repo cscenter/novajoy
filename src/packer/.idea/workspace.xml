@@ -4,7 +4,7 @@
     <list default="true" id="8bb92e3b-5cc6-451d-9c1e-3a1902ee95ca" name="Default" comment="" />
     <ignored path="nova_packer.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Packer.java" changelist="8bb92e3b-5cc6-451d-9c1e-3a1902ee95ca" time="1364122301833" ignored="false" />
+    <file path="/Packer.java" changelist="8bb92e3b-5cc6-451d-9c1e-3a1902ee95ca" time="1364496286358" ignored="false" />
     <file path="/Main.java" changelist="8bb92e3b-5cc6-451d-9c1e-3a1902ee95ca" time="1364064747788" ignored="false" />
     <file path="/DBDemo.java" changelist="8bb92e3b-5cc6-451d-9c1e-3a1902ee95ca" time="1362856824568" ignored="false" />
     <file path="$PROJECT_DIR$/../nova_sender/src/NovaSender.java" changelist="8bb92e3b-5cc6-451d-9c1e-3a1902ee95ca" time="1364067652752" ignored="false" />
@@ -29,6 +29,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -63,7 +64,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -77,7 +77,7 @@
       <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="37" selection-start="142" selection-end="142" vertical-scroll-proportion="0.0">
+            <state line="3" column="40" selection-start="66" selection-end="66" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -86,7 +86,7 @@
       <file leaf-file-name="Packer.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Packer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="20" selection-start="292" selection-end="292" vertical-scroll-proportion="-0.8564437">
+            <state line="129" column="44" selection-start="3825" selection-end="3825" vertical-scroll-proportion="0.122349106">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
@@ -163,7 +163,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -185,6 +184,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -443,13 +443,6 @@
         <state line="374" column="13" selection-start="15479" selection-end="15679" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="37" selection-start="142" selection-end="142" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/RssItem.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="35" column="22" selection-start="960" selection-end="960" vertical-scroll-proportion="0.0">
@@ -464,9 +457,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="40" selection-start="66" selection-end="66" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Packer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="20" selection-start="292" selection-end="292" vertical-scroll-proportion="-0.8564437">
+        <state line="129" column="44" selection-start="3825" selection-end="3825" vertical-scroll-proportion="0.122349106">
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />

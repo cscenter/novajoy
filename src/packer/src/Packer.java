@@ -6,6 +6,7 @@
  */
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.String;
 import java.sql.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -19,7 +20,9 @@ class Packer{
     private final String dbName = "";
     private final String userName = "";
     private final String userPassword = "";
+    private final String configPath = "";
     private static Logger log = Logger.getLogger(Packer.class.getName());
+    private final String defaultConfigPath = "";
 
     Connection con = null;
 
@@ -27,6 +30,7 @@ class Packer{
 
         try {
 
+            IniWorker config = new IniWorker(configPath);
             log.info("Establishing a connection...");
             String url = "jdbc:mysql://" + hostName + "/" + dbName;
             Class.forName(className);
