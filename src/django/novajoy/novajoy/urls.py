@@ -5,6 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+                       url(r'^captcha/', include('captcha.urls')),
                        url(r'^$',viewCollection),
                        url(r'^addCollection/$',addCollection),
                        url(r'^accounts/', include('backends.urls')),

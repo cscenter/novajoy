@@ -4,19 +4,19 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+# ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': '***', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '***',                      # Or path to database file if using sqlite3.
+        'ENGINE': '****', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '****',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': '***',
+        'USER': '****',
         'PASSWORD': '****',
-        'HOST': 'novajoy.cosqmvrs3gb3.us-east-1.rds.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'HOST': '****',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
         'OPTIONS': {
             'init_command': 'SET names utf8',
@@ -24,6 +24,22 @@ DATABASES = {
 
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+#         'NAME': 'app',                      # Or path to database file if using sqlite3.
+#         # The following settings are not used with sqlite3:
+#         'USER': 'root',
+#         'PASSWORD': 'vovan1993',
+#         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+#         'PORT': '',                      # Set to empty string for default.
+#         'OPTIONS': {
+#             'init_command': 'SET names utf8',
+#             }
+#
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -41,7 +57,7 @@ DATABASES = {
 #     }
 # }
 
-AUTH_PROFILE_MODULE = 'novajoy.Server.Profile' # Using my auth profile
+AUTH_PROFILE_MODULE = 'novajoy.Server.Profile'
 ROOT_URLCONF = 'novajoy.urls'
 AUTH_USER_EMAIL_UNIQUE = True
 # EMAIL_HOST = 'localhost'
@@ -92,6 +108,8 @@ MEDIA_URL = ''
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = ''
 
+# URL prefix for static files.
+# Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
 import os
 # Additional locations of static files
@@ -108,17 +126,17 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '**********'
+SECRET_KEY = '*hbap@^p73dkacd+39uq*qh%f&izzsb%vn6hmbr062z$wd0s!9'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -149,6 +167,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'Server',
     'registration',
+    'captcha',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -180,6 +199,6 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
-        },
-    }
+            },
+        }
 }
