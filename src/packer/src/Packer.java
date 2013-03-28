@@ -137,11 +137,6 @@ class Packer{
         }
     }
 
-    boolean performDataBaseUpdate(DocumentItem[] documents) {
-
-
-    }
-
     /**
      * Returns transformed String which consists result of XSLT transformation
      *
