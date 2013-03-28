@@ -1,4 +1,5 @@
 *.class
 */out
 */.idea
+*.idea
 *.pyc
