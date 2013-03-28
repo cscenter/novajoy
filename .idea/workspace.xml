@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="317ea7dd-ed5b-44e4-adcd-49fa1cb8ac3a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/crawler/src/Crawler.java" afterPath="$PROJECT_DIR$/src/crawler/src/Crawler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/packer/src/DocumentItem.java" afterPath="$PROJECT_DIR$/src/packer/src/DocumentItem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/config/src/IniWorker.java" afterPath="$PROJECT_DIR$/src/util/config/src/IniWorker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sender/src/InternalMessage.java" afterPath="$PROJECT_DIR$/src/sender/src/InternalMessage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/db/src/JdbcManager.java" afterPath="$PROJECT_DIR$/src/util/db/src/JdbcManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/packer/src/Main.java" afterPath="$PROJECT_DIR$/src/packer/src/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sender/src/Main.java" afterPath="$PROJECT_DIR$/src/sender/src/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sender/src/MainSender.java" afterPath="$PROJECT_DIR$/src/sender/src/MainSender.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sender/src/NovaSender.java" afterPath="$PROJECT_DIR$/src/sender/src/NovaSender.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/packer/src/Packer.java" afterPath="$PROJECT_DIR$/src/packer/src/Packer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/packer/src/RssItem.java" afterPath="$PROJECT_DIR$/src/packer/src/RssItem.java" />
-    </list>
+    <list default="true" id="317ea7dd-ed5b-44e4-adcd-49fa1cb8ac3a" name="Default" comment="" />
     <ignored path="novajoy.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="317ea7dd-ed5b-44e4-adcd-49fa1cb8ac3a" time="1364497247485" ignored="false" />
@@ -346,7 +334,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1280" height="774" extended-state="7" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -360,7 +348,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24959481" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24959481" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
