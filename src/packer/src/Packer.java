@@ -7,11 +7,6 @@
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.*;
-import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
-import javax.mail.util.ByteArrayDataSource;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import java.util.logging.Logger;

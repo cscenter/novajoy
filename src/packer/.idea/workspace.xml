@@ -70,6 +70,7 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="nova_packer" />
+    <favorites_list name="packer" />
   </component>
   <component name="FileEditorManager">
     <leaf>
@@ -85,7 +86,7 @@
       <file leaf-file-name="Packer.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Packer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="115" column="30" selection-start="3313" selection-end="3313" vertical-scroll-proportion="0.31707317">
+            <state line="12" column="20" selection-start="292" selection-end="292" vertical-scroll-proportion="-0.8564437">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
@@ -162,42 +163,28 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="nova_packer" />
+              <option name="myItemId" value="packer" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="nova_packer" />
+              <option name="myItemId" value="packer" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="nova_packer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nova_packer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nova_packer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="packer" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -419,9 +406,7 @@
     </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/src.zip!/java/lang/Throwable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="374" column="13" selection-start="15479" selection-end="15679" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="374" column="13" selection-start="15479" selection-end="15679" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rss_stylesheet.xsl">
@@ -455,9 +440,7 @@
     </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.7.0_17.jdk/Contents/Home/src.zip!/java/lang/Throwable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="374" column="13" selection-start="15479" selection-end="15679" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="374" column="13" selection-start="15479" selection-end="15679" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
@@ -483,7 +466,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Packer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="30" selection-start="3313" selection-end="3313" vertical-scroll-proportion="0.31707317">
+        <state line="12" column="20" selection-start="292" selection-end="292" vertical-scroll-proportion="-0.8564437">
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
