@@ -1,3 +1,4 @@
+package sender.src;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.*;

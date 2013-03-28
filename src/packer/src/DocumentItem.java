@@ -5,6 +5,7 @@
  * Time: 14:40
  * To change this template use File | Settings | File Templates.
  */
+package packer.src;
 public class DocumentItem {
 
     public int user_id;

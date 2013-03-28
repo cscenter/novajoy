@@ -1,3 +1,4 @@
+package util.db.src;
 import java.sql.*;
 
 public class JdbcManager {

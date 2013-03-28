@@ -5,6 +5,7 @@
  * Time: 21:42
  * To change this template use File | Settings | File Templates.
  */
+package sender.src;
 public class InternalMessage {
 
     public String target;

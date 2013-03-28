@@ -4,6 +4,7 @@
  * Date: 09.03.13
  * Time: 23:02
  */
+package packer.src;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.String;
@@ -11,26 +12,37 @@ import java.sql.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import java.util.logging.Logger;
+import util.config.src.IniWorker;
 
 
 class Packer{
 
-    private final String hostName = "";
+    private String hostName = "";
     private final String className = "com.mysql.jdbc.Driver";
-    private final String dbName = "";
-    private final String userName = "";
-    private final String userPassword = "";
-    private final String configPath = "";
+    private String dbName = "";
+    private String userName = "";
+    private String userPassword = "";
+    private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
     private static Logger log = Logger.getLogger(Packer.class.getName());
-    private final String defaultConfigPath = "";
+
 
     Connection con = null;
+
+    public void InitConfiguration(IniWorker worker) {
+
+        hostName = worker.getSenderSmtpHost();
+        dbName = worker.getDBbasename();
+        userName = worker.getDBuser();
+        userPassword = worker.getDBpassword();
+    }
 
     public Packer() {
 
         try {
 
             IniWorker config = new IniWorker(configPath);
+            InitConfiguration(config);
+
             log.info("Establishing a connection...");
             String url = "jdbc:mysql://" + hostName + "/" + dbName;
             Class.forName(className);
@@ -41,6 +53,8 @@ class Packer{
             log.warning("Class not found" + e.getMessage());
         } catch (SQLException ex) {
             log.warning(ex.getMessage());
+        } catch (Exception exc) {
+            log.warning(exc.getMessage());
         }
     }
 

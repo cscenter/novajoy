@@ -1,3 +1,4 @@
+package crawler.src;
 import java.sql.*;
 import java.net.URL;
 import java.util.Calendar;
@@ -8,6 +9,8 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+import util.config.src.IniWorker;
+import util.db.src.JdbcManager;
 
 public class Crawler extends Thread {
 	private final JdbcManager dbManager;

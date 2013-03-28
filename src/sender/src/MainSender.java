@@ -1,3 +1,4 @@
+package sender.src;
 public class MainSender {
 
     public static void main(String[] args) {
