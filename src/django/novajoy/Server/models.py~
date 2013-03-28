@@ -58,8 +58,10 @@ class Collection(models.Model):
         return self.name_collection
 
 class RSSFeed(models.Model):
+    #name = models.ManyToManyField(User)
     collection = models.ManyToManyField(Collection,null=False, blank=True)
     url = models.URLField(null=False, blank=True)
+    #content = models.TextField(blank=True,null=True)
     pubDate = models.DateTimeField(null=False, blank=True)
 
     def __unicode__(self):
