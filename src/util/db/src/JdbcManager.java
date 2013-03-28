@@ -4,7 +4,7 @@ public class JdbcManager {
 	private Connection connection;
 	private String baseAddr, baseName, baseUser, basePass;
 
-	public JdbcManager(String str, String baseAddr, String baseName,
+	public JdbcManager(String baseAddr, String baseName,
 			String baseUser, String basePass) throws ClassNotFoundException,
 			SQLException {
 		this.baseAddr = baseAddr;

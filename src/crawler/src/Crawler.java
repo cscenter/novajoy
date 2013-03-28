@@ -1,9 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
+import java.sql.*;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,22 +10,18 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 public class Crawler extends Thread {
-	private String baseAddr, baseName, baseUser, basePass;
+	private final JdbcManager dbManager;
 	private final long sleepMillis = 10 * 60 * 1000;
 
-	public Crawler(String str, String baseAddr, String baseName,
-			String baseUser, String basePass) {
+	public Crawler(String str, JdbcManager dbManager) {
 		super(str);
-		this.baseAddr = baseAddr;
-		this.baseName = baseName;
-		this.baseUser = baseUser;
-		this.basePass = basePass;
+		this.dbManager = dbManager;
 	}
 
 	public void run() {
 		try {
 			while (true) {
-				process_reqsts(baseAddr, baseName, baseUser, basePass);
+				process_reqsts();
 				System.out.println("Process: " + Thread.currentThread()
 						+ " went to sleep.");
 				sleep(sleepMillis);
@@ -41,18 +32,13 @@ public class Crawler extends Thread {
 		}
 	}
 
-	private void process_reqsts(String srvrName, String dbName, String usrName,
-			String pass) {
-		Connection connection;
+	private void process_reqsts() {
 		try {
-			connection = establish_jdbc_connection(srvrName, dbName, usrName,
-					pass);
-
 			String query = "Select * FROM Server_rssfeed";
 			String pquery = "UPDATE Server_rssfeed  SET pubDate = ? WHERE id = ?";
 
-			Statement stmt = connection.createStatement();
-			PreparedStatement ps = connection.prepareStatement(pquery);
+			Statement stmt = dbManager.createStatement();
+			PreparedStatement ps = dbManager.createPreparedStatement(pquery);
 			ResultSet rs = stmt.executeQuery(query);
 			String addr;
 			int items_count = 0;
@@ -61,7 +47,7 @@ public class Crawler extends Thread {
 				System.out.println("Crawling from: " + addr);
 				SyndFeed feed = readfeed(addr);
 				for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
-					if (insert_item((SyndEntry) i.next(), connection,
+					if (insert_item((SyndEntry) i.next(),
 							Long.parseLong(rs.getString(1))))
 						++items_count;
 				}
@@ -78,7 +64,6 @@ public class Crawler extends Thread {
 						+ addr);
 				items_count = 0;
 			}
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			// Could not find the database driver
@@ -86,18 +71,6 @@ public class Crawler extends Thread {
 			e.printStackTrace();
 			// Could not connect to the database
 		}
-	}
-
-	private Connection establish_jdbc_connection(String srvrName,
-			String dbName, String usrName, String pass)
-			throws ClassNotFoundException, SQLException {
-		String driverName = "com.mysql.jdbc.Driver";
-		Class.forName(driverName);
-		String url = "jdbc:mysql://" + srvrName + "/" + dbName;
-		Connection connection = DriverManager.getConnection(url
-				+ "?useUnicode=true&characterEncoding=utf-8", usrName, pass);
-		System.out.println("Connected to DB" + connection);
-		return connection;
 	}
 
 	private SyndFeed readfeed(String addr) throws Exception {
@@ -113,17 +86,17 @@ public class Crawler extends Thread {
 		return feed;
 	}
 
-	private boolean insert_item(SyndEntry entry, Connection connection,
-			long feedid) throws SQLException {
+	private boolean insert_item(SyndEntry entry, long feedid)
+			throws SQLException {
 
-		if (check_already_in(connection, entry.getLink())) {
+		if (check_already_in(entry.getLink())) {
 			// System.out.println("Entry with link: " + entry.getLink() +
 			// " already exists.");
 			return false;
 		}
 
 		String pquery = "INSERT INTO Server_rssitem (rssfeed_id, title, description, link, author, pubDate) VALUES(?,?,?,?,?,?)";
-		PreparedStatement ps = connection.prepareStatement(pquery);
+		PreparedStatement ps = dbManager.createPreparedStatement(pquery);
 
 		ps.setLong(1, feedid);
 		ps.setString(2, entry.getTitle());
@@ -137,17 +110,18 @@ public class Crawler extends Thread {
 		return true;
 	}
 
-	private boolean check_already_in(Connection connection, String link)
-			throws SQLException {
+	private boolean check_already_in(String link) throws SQLException {
 		String pquery = "Select * FROM Server_rssitem WHERE link = ?";
-		PreparedStatement ps = connection.prepareStatement(pquery);
+		PreparedStatement ps = dbManager.createPreparedStatement(pquery);
 		ps.setString(1, link);
 		return ps.executeQuery().next();
 	}
 
 	public static void main(String[] args) throws Exception {
-		IniWorker config = new IniWorker("..\\..\\util\\config\\config.ini");
-		new Crawler("Crawler_1", config.getDBaddress(), config.getDBbasename(),
-				config.getDBuser(), config.getDBpassword()).start();
+		IniWorker config = new IniWorker("D:\\CSCWorks\\NovaJoy\\config.ini");
+		JdbcManager dbman = new JdbcManager(config.getDBaddress(),
+				config.getDBbasename(), config.getDBuser(),
+				config.getDBpassword());
+		new Crawler("Crawler_1", dbman).start();
 	}
 }
