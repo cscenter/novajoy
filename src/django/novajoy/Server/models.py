@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.models import BaseUserManager
 from django.utils import timezone
+
 #manager for user creating
 class MyUserManager(BaseUserManager):
 
@@ -75,12 +76,5 @@ class RSSItem(models.Model):
 
     def __unicode__(self):
         return self.title
-
-class Category(models.Model):
-    rssitem = models.ForeignKey(RSSFeed,null=False, blank=True)
-    category = models.CharField(max_length=50,null=False, blank=True)
-
-    def __unicode__(self):
-        return self.category
 
 

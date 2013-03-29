@@ -1,5 +1,7 @@
 *.class
 */out
-*/.idea
+.idea/
 *.idea
 *.pyc
+*/*.pyc
+*/*.*~
