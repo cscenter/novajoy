@@ -23,7 +23,7 @@ class Packer{
     private String dbName = "";
     private String userName = "";
     private String userPassword = "";
-    private final String configPath = "";
+    private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
     private static Logger log = Logger.getLogger(Packer.class.getName());
 
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";
@@ -31,9 +31,11 @@ class Packer{
 
     Connection con = null;
 
+    private UserItem[] users = null;
+
     public void InitConfiguration(IniWorker worker) {
 
-        hostName = worker.getSenderSmtpHost();
+        hostName = worker.getDBaddress();
         dbName = worker.getDBbasename();
         userName = worker.getDBuser();
         userPassword = worker.getDBpassword();
@@ -64,7 +66,7 @@ class Packer{
     UserItem[] getUsersIds() throws SQLException {
 
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select email,id from auth_user where id in (select distinct user_id from Server_collection where UNIX_TIMESTAMP(last_update_time)+delta_update_time<UNIX_TIMESTAMP());");
+        ResultSet rs = st.executeQuery("select id,email from auth_user where id in (select distinct user_id from Server_collection where UNIX_TIMESTAMP(last_update_time)+delta_update_time<UNIX_TIMESTAMP());");
 
         int rowcount = 0;
         if (rs.last()) {
@@ -128,6 +130,34 @@ class Packer{
         return new DocumentItem(target,doc);
     }
 
+    void updateFeedTime(UserItem[] users) throws SQLException {
+
+        log.info("Start updating feed updating times");
+
+        String query = "update Server_collection set last_update_time=FROM_UNIXTIME(UNIX_TIMESTAMP()) where user_id in ";
+
+        query += "(";
+        query += new String(new char[users.length-1]).replace("\0", "?,");
+        query += "?);";
+
+        PreparedStatement ps = con.prepareStatement(query);
+
+        for (int i = 0; i < users.length; i++) {
+
+            ps.setInt(i+1,users[i].user_id);
+        }
+
+        int rs = ps.executeUpdate();
+
+        users = null;
+
+        if (rs > 0) {
+            log.info("Updating tasks completed");
+        } else {
+            log.warning("Something went wrong while updating");
+        }
+    }
+
     DocumentItem[] getPackagedData() throws SQLException {
 
         UserItem[] userIds = getUsersIds();
@@ -136,6 +166,9 @@ class Packer{
         for (int i = 0; i < userIds.length; i++) {
 
             RssItem[] userFeed = getDataForUserId(userIds[i].user_id);
+
+            if (userFeed == null)
+                continue;
             usersDocuments[i] = formDocument(userIds[i].user_email, userFeed);
         }
         return usersDocuments;
@@ -147,6 +180,10 @@ class Packer{
         try {
 
             DocumentItem[] docs = getPackagedData();
+
+            if (docs.length < 1)
+                throw new NullPointerException();
+
             String query = "insert into Server_postletters (target,title,body,attachment) values ";
 
             for (int i = 0; i < docs.length; i++) {
@@ -170,12 +207,19 @@ class Packer{
             }
 
             int rs = ps.executeUpdate();
+
+            if (users != null)
+                updateFeedTime(users);
+
             if (rs > 0) {
                 log.info("Routine tasks completed");
             } else {
                 log.warning("Something went wrong while inserting");
             }
 
+        } catch (NullPointerException e) {
+            log.info("There are no documents for update");
+            return;
         } catch (SQLException e) {
             log.warning(e.getMessage());
         }

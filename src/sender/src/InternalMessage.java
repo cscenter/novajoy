@@ -8,13 +8,15 @@
 package sender.src;
 public class InternalMessage {
 
+    public int id;
     public String target;
     public String title;
     public String body;
     public String attachment;
 
-    public InternalMessage(String _target, String _title, String _body, String _attachment) {
+    public InternalMessage(int _id, String _target, String _title, String _body, String _attachment) {
 
+        id = _id;
         target = _target;
         title = _title;
         body = _body;

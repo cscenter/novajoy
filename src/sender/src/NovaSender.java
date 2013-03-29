@@ -1,4 +1,6 @@
 package sender.src;
+import util.config.src.IniWorker;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.*;
@@ -16,34 +18,55 @@ import java.util.logging.Logger;
  */
 public class NovaSender {
 
-    private final String hostName = "";
+    // database config
+
+    private String hostName = "";
     private final String className = "com.mysql.jdbc.Driver";
-    private final String dbName = "";
-    private final String userName = "";
-    private final String userPassword = "";
+    private String dbName = "";
+    private String userName = "";
+    private String userPassword = "";
     private static Logger log = Logger.getLogger(NovaSender.class.getName());
 
     // E-mail sender configuration
 
     private Properties props = null;
     private Session session = null;
-    private final String host = "email-smtp.us-east-1.amazonaws.com";
-    private final String from = "novajoy.org@gmail.com";
-    private final String pass = "";
-    private final String smtpPort = "587";
+    private String host = "";
+    private String from = "";
+    private String pass = "";
+    private String smtpPort = "";
 
-    private static final String SMTP_USERNAME = "";
-    private static final String SMTP_PASSWORD = "";
+    private static String SMTP_USERNAME = "";
+    private static String SMTP_PASSWORD = "";
 
     InternalMessage[] collection = null;
 
+    private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
+
     Connection con = null;
 
-    private static String DEFAULT_SUBJECT = "your rss feed from novaJoy";
+    //private static String DEFAULT_SUBJECT = "your rss feed from novaJoy";
+
+    public void InitConfiguration(IniWorker worker) {
+
+        hostName = worker.getDBaddress();
+        dbName = worker.getDBbasename();
+        userName = worker.getDBuser();
+        userPassword = worker.getDBpassword();
+        host = worker.getSenderSmtpHost();
+        smtpPort = worker.getSenderSmtpPort();
+        from = worker.getSenderFromMail();
+        pass = worker.getSenderFromPass();
+        SMTP_USERNAME = worker.getSenderSmtpUser();
+        SMTP_PASSWORD = worker.getSenderSmtpPass();
+    }
 
     public NovaSender() {
 
         try {
+
+            IniWorker config = new IniWorker(configPath);
+            InitConfiguration(config);
 
             log.info("Establishing a connection...");
             String url = "jdbc:mysql://" + hostName + "/" + dbName;
@@ -71,6 +94,8 @@ public class NovaSender {
             log.warning("Class not found" + e.getMessage());
         } catch (SQLException ex) {
             log.warning(ex.getMessage());
+        } catch (Exception exc) {
+            log.warning(exc.getMessage());
         }
     }
 
@@ -86,7 +111,7 @@ public class NovaSender {
     InternalMessage[] getMessages() throws SQLException {
 
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("Select target,title,body,attachment from Server_postletters");
+        ResultSet rs = st.executeQuery("Select id,target,title,body,attachment from Server_postletters");
 
         int rowcount = 0;
         if (rs.last()) {
@@ -100,7 +125,7 @@ public class NovaSender {
 
         int i = 0;
         while (rs.next()) {
-            messages[i] = new InternalMessage(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
+            messages[i] = new InternalMessage(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5));
             i++;
         }
 
@@ -110,6 +135,31 @@ public class NovaSender {
     public Message prepareMessage(InternalMessage msg) throws MessagingException {
 
         return formMessage(msg.title, msg.body, msg.attachment, msg.target.split(","));
+    }
+
+    public void cleanDataBase(InternalMessage[] messages) throws SQLException {
+
+        log.info("Starting clean");
+
+        String query = "delete from Server_postletters where id in ";
+
+        query += "(";
+        query += new String(new char[messages.length-1]).replace("\0", "?,");
+        query += "?);";
+
+        PreparedStatement ps = con.prepareStatement(query);
+
+        for (int i = 0; i < messages.length; i++) {
+
+            ps.setInt(i+1,messages[i].id);
+        }
+
+        int rs = ps.executeUpdate();
+        if (rs > 0) {
+            log.info("Clean finished");
+        } else {
+            log.warning("Something went wrong while deleting");
+        }
     }
 
     public void performRoutineTasks() {
@@ -127,10 +177,14 @@ public class NovaSender {
                 performSend(message);
             }
 
+            cleanDataBase(collection);
+
         } catch (SQLException e) {
             log.warning(e.getMessage());
         } catch (MessagingException e) {
             log.warning(e.getMessage());
+        } catch (NullPointerException e) {
+            log.info("No mails in queue");
         }
 
         log.info("Routines finished");
