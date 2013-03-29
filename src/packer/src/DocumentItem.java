@@ -8,11 +8,11 @@
 package packer.src;
 public class DocumentItem {
 
-    public int user_id;
+    public String target_email;
     public String user_document;
 
-    public DocumentItem(int _uid, String _document) {
-        user_id = _uid;
+    public DocumentItem(String _target_email, String _document) {
+        target_email = _target_email;
         user_document = _document;
     }
 }
