@@ -1,12 +1,12 @@
 ; last modified 24 March 2013 by Bassin
 [owner]
 organization=CSCenter
- 
+
 [database]
-address=***
-base=***
-user=***
-password=***
+address=novajoy.cosqmvrs3gb3.us-east-1.rds.amazonaws.com
+base=novajoydb
+user=novauser
+password=ru4Afoh5
 
 [sender]
 smtphost=***
@@ -15,3 +15,4 @@ from=novajoy.org@gmail.com
 password=***
 smtpuser=***
 smtppass=***
+
