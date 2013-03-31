@@ -1,9 +1,8 @@
+bin
 *.class
-*/out
-.idea/
+out
 *.idea
 *.pyc
-*/*.pyc
-*/*~
-*/*.swp
+*~
+*.swp
 *.rss
