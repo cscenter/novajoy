@@ -1,41 +1,59 @@
-<project name="NovaJoy" default="all" >
-
-                <property file="Ant.properties"/>
-                <property name="build.dir" value="build"/>
-				<property name="crawler.class.dir" value="${build.dir}/crawler"/>
-				<property name="packer.class.dir" value="${build.dir}/packer"/>
-				<property name="sender.class.dir" value="${build.dir}/sender"/>
-
-                <target name="make.dirs" description="Make build dirs">
-                        <mkdir dir="${build.dir}"/>
-                        <mkdir dir="${crawler.class.dir}"/>
-						<mkdir dir="${packer.class.dir}"/>
-						<mkdir dir="${sender.class.dir}"/>
-                </target>
-				 
-	          <path id="novajoyclasspath" >
-                         <fileset dir="lib">
-                                 <include name="**/*.jar"/>
-                         </fileset>
-                 </path>
-				 
-                 <target name="compile" description="compile java" depends="make.dirs">
-                         <javac destdir="${crawler.class.dir}" classpathref="novajoyclasspath">
-                                 <src path="src/crawler/src"/>
-                         </javac>
-			 <javac destdir="${packer.class.dir}" classpathref="novajoyclasspath">
-                                 <src path="src/packer/src"/>
-                         </javac>
-			 <javac destdir="${sender.class.dir}" classpathref="novajoyclasspath">
-                                 <src path="src/sender/src"/>
-                         </javac>
-                 </target>
-
-                 <target name="all" description="Do the build" depends="compile"/>
-
-                 <target name="clean" description="clean up">
-                         <echo>I'm cleaning up.</echo>
-                         <delete dir="${build.dir}"/>
-                 </target>
-
-           </project>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="novajoy">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="novajoy.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/activation.jar"/>
+        <pathelement location="lib/ant.jar"/>
+        <pathelement location="lib/ini4j-0.5.2.jar"/>
+        <pathelement location="lib/jaxen.jar"/>
+        <pathelement location="lib/jdom-1.1.3.jar"/>
+        <pathelement location="lib/mail.jar"/>
+        <pathelement location="lib/mysql-connector-java-5.1.23-bin.jar"/>
+        <pathelement location="lib/mysql.jar"/>
+        <pathelement location="lib/rome-1.0.jar"/>
+        <pathelement location="lib/xalan.jar"/>
+        <pathelement location="lib/xerces.jar"/>
+        <pathelement location="lib/xml-apis.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="novajoy.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target name="Crawler (1)">
+        <java classname="Crawler" failonerror="true" fork="yes">
+            <classpath refid="novajoy.classpath"/>
+        </java>
+    </target>
+    <target name="Crawler (2)">
+        <java classname="crawler.src.Crawler" failonerror="true" fork="yes">
+            <classpath refid="novajoy.classpath"/>
+        </java>
+    </target>
+</project>
