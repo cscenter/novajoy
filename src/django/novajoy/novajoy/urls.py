@@ -7,7 +7,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        url(r'^captcha/', include('captcha.urls')),
                        url(r'^$',viewCollection),
+                       url(r'^selectURL/$',viewURL),
                        url(r'^addCollection/$',addCollection),
+                       url(r'^addRSS/$',addRSS),
                        url(r'^accounts/', include('backends.urls')),
                        url(r'^admin/', include(admin.site.urls)),
                        )
