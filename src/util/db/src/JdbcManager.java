@@ -1,18 +1,21 @@
 package util.db.src;
+
 import java.sql.*;
+import java.util.logging.Logger;
 
 public class JdbcManager {
 	private Connection connection;
 	private String baseAddr, baseName, baseUser, basePass;
+	private static Logger log = Logger.getLogger(JdbcManager.class.getName());
 
-	public JdbcManager(String baseAddr, String baseName,
-			String baseUser, String basePass) throws ClassNotFoundException,
-			SQLException {
+	public JdbcManager(String baseAddr, String baseName, String baseUser,
+			String basePass) throws ClassNotFoundException, SQLException {
 		this.baseAddr = baseAddr;
 		this.baseName = baseName;
 		this.baseUser = baseUser;
 		this.basePass = basePass;
 		connection = establish_jdbc_connection();
+		log.info("JdbcManager ready to use.");
 	}
 
 	private Connection establish_jdbc_connection()
@@ -23,7 +26,7 @@ public class JdbcManager {
 		Connection connection = DriverManager.getConnection(url
 				+ "?useUnicode=true&characterEncoding=utf-8", baseUser,
 				basePass);
-		System.out.println("Connected to DB" + connection);
+		log.info("Connected to DB" + connection);
 		return connection;
 	}
 

@@ -1,20 +1,20 @@
 <project name="NovaJoy" default="all" >
 
-                 <property file="Ant.properties"/>
-                 <property name="build.dir" value="build"/>
-		  <property name="crawler.class.dir" value="${build.dir}/crawler"/>
-		 <property name="packer.class.dir" value="${build.dir}/packer"/>
-		 <property name="sender.class.dir" value="${build.dir}/sender"/>
+                <property file="Ant.properties"/>
+                <property name="build.dir" value="build"/>
+				<property name="crawler.class.dir" value="${build.dir}/crawler"/>
+				<property name="packer.class.dir" value="${build.dir}/packer"/>
+				<property name="sender.class.dir" value="${build.dir}/sender"/>
 
-                 <target name="make.dirs" description="Make build dirs">
-                         <mkdir dir="${build.dir}"/>
-                         <mkdir dir="${crawler.class.dir}"/>
-			 <mkdir dir="${packer.class.dir}"/>
-			 <mkdir dir="${sender.class.dir}"/>
-                 </target>
+                <target name="make.dirs" description="Make build dirs">
+                        <mkdir dir="${build.dir}"/>
+                        <mkdir dir="${crawler.class.dir}"/>
+						<mkdir dir="${packer.class.dir}"/>
+						<mkdir dir="${sender.class.dir}"/>
+                </target>
 				 
 	          <path id="novajoyclasspath" >
-                         <fileset dir="src/lib">
+                         <fileset dir="lib">
                                  <include name="**/*.jar"/>
                          </fileset>
                  </path>

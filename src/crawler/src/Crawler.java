@@ -1,9 +1,11 @@
 package crawler.src;
+
 import java.sql.*;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -15,6 +17,7 @@ import util.db.src.JdbcManager;
 public class Crawler extends Thread {
 	private final JdbcManager dbManager;
 	private final long sleepMillis = 10 * 60 * 1000;
+	private static Logger log = Logger.getLogger(Crawler.class.getName());
 
 	public Crawler(String str, JdbcManager dbManager) {
 		super(str);
@@ -22,16 +25,17 @@ public class Crawler extends Thread {
 	}
 
 	public void run() {
+		log.info("Starting crawl thread: " + Thread.currentThread().getName());
 		try {
 			while (true) {
 				process_reqsts();
-				System.out.println("Process: " + Thread.currentThread()
+				log.info("Process: " + Thread.currentThread().getName()
 						+ " went to sleep.");
 				sleep(sleepMillis);
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warning(e.getMessage());
 		}
 	}
 
@@ -47,7 +51,7 @@ public class Crawler extends Thread {
 			int items_count = 0;
 			while (rs.next()) {
 				addr = rs.getString(2);
-				System.out.println("Crawling from: " + addr);
+				log.info("Crawling from: " + addr);
 				SyndFeed feed = readfeed(addr);
 				for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
 					if (insert_item((SyndEntry) i.next(),
@@ -62,16 +66,16 @@ public class Crawler extends Thread {
 				ps.setTimestamp(1, new java.sql.Timestamp(time.getTime()));
 				ps.setLong(2, Long.parseLong(rs.getString(1)));
 				ps.executeUpdate();
-				System.out.println(items_count
+				log.info(items_count
 						+ " items added.\nCrawling and updating finished on: "
 						+ addr);
 				items_count = 0;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.warning(e.getMessage());
 			// Could not find the database driver
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.warning(e.getMessage());
 			// Could not connect to the database
 		}
 	}
@@ -93,8 +97,7 @@ public class Crawler extends Thread {
 			throws SQLException {
 
 		if (check_already_in(entry.getLink())) {
-			// System.out.println("Entry with link: " + entry.getLink() +
-			// " already exists.");
+			log.info("Entry with link: " + entry.getLink() + " already exists.");
 			return false;
 		}
 
@@ -108,7 +111,6 @@ public class Crawler extends Thread {
 		ps.setString(5, entry.getAuthor());
 		ps.setTimestamp(6, new java.sql.Timestamp(entry.getPublishedDate()
 				.getTime()));
-		// System.out.println(entry.get);
 		ps.executeUpdate();
 		return true;
 	}
