@@ -1,4 +1,4 @@
-package sender.src;
+package novajoy.sender;
 public class Main {
 
     private final static int SLEEP_TIME = 1*60*1000;

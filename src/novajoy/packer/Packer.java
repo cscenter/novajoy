@@ -4,7 +4,7 @@
  * Date: 09.03.13
  * Time: 23:02
  */
-package packer.src;
+package novajoy.packer;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.String;
@@ -14,7 +14,7 @@ import javax.xml.transform.TransformerFactory;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.logging.Logger;
-import util.config.src.IniWorker;
+import novajoy.util.config.IniWorker;
 
 
 class Packer{
@@ -25,7 +25,7 @@ class Packer{
     private String dbName = "";
     private String userName = "";
     private String userPassword = "";
-    private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
+    private final String configPath = "";
     private static Logger log = Logger.getLogger(Packer.class.getName());
 
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";

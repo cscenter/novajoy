@@ -5,7 +5,7 @@
  * Time: 14:40
  * To change this template use File | Settings | File Templates.
  */
-package packer.src;
+package novajoy.packer;
 public class DocumentItem {
 
     public String target_email;

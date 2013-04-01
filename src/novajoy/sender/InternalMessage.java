@@ -5,7 +5,7 @@
  * Time: 21:42
  * To change this template use File | Settings | File Templates.
  */
-package sender.src;
+package novajoy.sender;
 public class InternalMessage {
 
     public int id;
