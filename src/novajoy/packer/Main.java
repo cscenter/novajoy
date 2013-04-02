@@ -1,4 +1,4 @@
-package packer.src;
+package novajoy.packer;
 public class Main {
 
     private final static int SLEEP_TIME = 10*60*1000;

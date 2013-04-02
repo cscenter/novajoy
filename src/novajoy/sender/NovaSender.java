@@ -1,6 +1,5 @@
-package sender.src;
-import util.config.src.IniWorker;
-
+package novajoy.sender;
+import novajoy.util.config.IniWorker;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.*;
@@ -27,7 +26,7 @@ public class NovaSender {
     private String userPassword = "";
     private static Logger log = Logger.getLogger(NovaSender.class.getName());
 
-    // E-mail sender configuration
+    // E-mail  configuration
 
     private Properties props = null;
     private Session session = null;
@@ -41,7 +40,7 @@ public class NovaSender {
 
     InternalMessage[] collection = null;
 
-    private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
+    private final String configPath = "";
 
     Connection con = null;
 

@@ -1,4 +1,4 @@
-package packer.src;
+package novajoy.packer;
 import java.util.Date;
 
 /**

@@ -1,4 +1,4 @@
-package util.db.src;
+package novajoy.util.db;
 
 import java.sql.*;
 import java.util.logging.Logger;

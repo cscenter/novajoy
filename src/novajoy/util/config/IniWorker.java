@@ -1,4 +1,4 @@
-package util.config.src;
+package novajoy.util.config;
 import java.io.File;
 import java.io.IOException;
 
@@ -30,26 +30,26 @@ public class IniWorker {
     }
 
     public String getSenderSmtpHost() {
-        return ini.get("sender", "smtphost");
+        return ini.get("novajoy/sender", "smtphost");
     }
 
     public String getSenderSmtpPort() {
-        return ini.get("sender", "smtpport");
+        return ini.get("novajoy/sender", "smtpport");
     }
 
     public String getSenderFromMail() {
-        return ini.get("sender", "from");
+        return ini.get("novajoy/sender", "from");
     }
 
     public String getSenderFromPass() {
-        return ini.get("sender", "password");
+        return ini.get("novajoy/sender", "password");
     }
 
     public String getSenderSmtpUser() {
-        return ini.get("sender", "smtpuser");
+        return ini.get("novajoy/sender", "smtpuser");
     }
 
     public String getSenderSmtpPass() {
-        return ini.get("sender", "smtppass");
+        return ini.get("novajoy/sender", "smtppass");
     }
 }

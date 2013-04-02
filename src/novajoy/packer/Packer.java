@@ -4,15 +4,17 @@
  * Date: 09.03.13
  * Time: 23:02
  */
-package packer.src;
+package novajoy.packer;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.String;
 import java.sql.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.logging.Logger;
-import util.config.src.IniWorker;
+import novajoy.util.config.IniWorker;
 
 
 class Packer{
@@ -23,7 +25,7 @@ class Packer{
     private String dbName = "";
     private String userName = "";
     private String userPassword = "";
-    private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
+    private final String configPath = "";
     private static Logger log = Logger.getLogger(Packer.class.getName());
 
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";
@@ -93,6 +95,7 @@ class Packer{
     RssItem[] getDataForUserId(int uid) throws SQLException {
 
         Statement st = con.createStatement();
+        //System.out.println("select * from Server_rssitem where rssfeed_id in (select rssfeed_id from Server_rssfeed_collection where collection_id in (select id from Server_collection where user_id = " + uid +"));");
         ResultSet rs = st.executeQuery("select * from Server_rssitem where rssfeed_id in (select rssfeed_id from Server_rssfeed_collection where collection_id in (select id from Server_collection where user_id = " + uid +"));");
 
         int rowcount = 0;
@@ -119,15 +122,15 @@ class Packer{
 
     DocumentItem formDocument (String target, RssItem[] userFeeds) {
 
-        String doc = new String("<html><head><title>Your RSS feed from novaJoy</title></head><body>");
+        StringBuilder builder = new StringBuilder("<html><head><title>Your RSS feed from novaJoy</title></head><body>");
 
         for (int i = 0; i < userFeeds.length; i++) {
-            doc += userFeeds[i].toHtml();
+            builder.append(userFeeds[i].toHtml());
         }
 
-        doc += "</body></html>";
+        builder.append("</body></html>");
 
-        return new DocumentItem(target,doc);
+        return new DocumentItem(target,builder.toString());
     }
 
     void updateFeedTime(UserItem[] users) throws SQLException {
@@ -158,19 +161,28 @@ class Packer{
         }
     }
 
-    DocumentItem[] getPackagedData() throws SQLException {
+    LinkedList getPackagedData() throws SQLException {
 
         UserItem[] userIds = getUsersIds();
-        DocumentItem[] usersDocuments = new DocumentItem[userIds.length];
+        LinkedList usersDocuments = new LinkedList();
 
-        for (int i = 0; i < userIds.length; i++) {
+        int j=0;
 
-            RssItem[] userFeed = getDataForUserId(userIds[i].user_id);
+        for (; ; ) {
 
-            if (userFeed == null)
+            if (j >= userIds.length)
+                break;
+
+            RssItem[] userFeed = getDataForUserId(userIds[j].user_id);
+
+            if (userFeed == null) {
+                j++;
                 continue;
-            usersDocuments[i] = formDocument(userIds[i].user_email, userFeed);
+            }
+            usersDocuments.add(formDocument(userIds[j].user_email, userFeed));
+            j++;
         }
+
         return usersDocuments;
     }
 
@@ -179,31 +191,38 @@ class Packer{
         log.info("Starting routine tasks");
         try {
 
-            DocumentItem[] docs = getPackagedData();
+            LinkedList docs = getPackagedData();
 
-            if (docs.length < 1)
+            if (docs.isEmpty())
                 throw new NullPointerException();
 
             String query = "insert into Server_postletters (target,title,body,attachment) values ";
 
-            for (int i = 0; i < docs.length; i++) {
+            ListIterator iterator = docs.listIterator();
 
+            while (iterator.hasNext()) {
 
                 /*query += "('" + docs[i].target_email + "','" +
                         DEFAULT_SUBJECT + "','" + DEFAULT_BODY + "','" +
                         docs[i].user_document + "')" + (i == docs.length-1 ? ";" : ",");*/
-                query += "(?,?,?,?)" + (i == docs.length-1 ? ";" : ",");
-
+                query += "(?,?,?,?),";
+                iterator.next();
             }
 
-            PreparedStatement ps = con.prepareStatement(query);
-            int j = 1;
-            for (int i = 0; i < docs.length; i++) {
+            query = query.substring(0,query.length()-1) + ";";
 
-                ps.setString(j++, docs[i].target_email);
+            PreparedStatement ps = con.prepareStatement(query);
+
+            int j = 1;
+            iterator = docs.listIterator();
+            while (iterator.hasNext()) {
+
+                DocumentItem item = (DocumentItem)iterator.next();
+
+                ps.setString(j++, item.target_email);
                 ps.setString(j++, DEFAULT_SUBJECT);
                 ps.setString(j++, DEFAULT_BODY);
-                ps.setString(j++, docs[i].user_document);
+                ps.setString(j++, item.user_document);
             }
 
             int rs = ps.executeUpdate();
