@@ -1,60 +1,73 @@
-$(document).ready(function () {
-    $(".collection span").click(function (evt) {
-        evt.preventDefault();
+function clickNewCollection() {
+    var nameOfNewCollection = prompt("Enter name new collection:");
+    nameOfNewCollection = nameOfNewCollection.trim()
+    if (nameOfNewCollection == "") {
+        alert("Empty field");
+    } else {
+
         $('.listURL span').remove();
-        var nameCollection = $(this).text();
-        curCol = nameCollection;
-        $.post('/selectURL/', {nameCollection: nameCollection},
+        $('.listURL').innerHTML = "";
+        var isAdding = "No";
+        $.post('/addCollection/', {newCollection: nameOfNewCollection},
             function (data) {
-                var tmp = $.parseJSON(data);
-                $('.listURL').removeData();
-                $('.listURL').innerHTML = "";
-                for (var i = 0; i < tmp.length; i++) {
-                    $(".listURL").prepend("<p><span div='url'>" + tmp[i]['fields']['url'] + " </span></p> ");
+                var isAdding = data;
+                if (isAdding == "Success") {
+                    $('.collection').append("<div><p><span>" + nameOfNewCollection + "</span></p></div>");
+                    $('.collection span:last').on("click",function(){
+                       clickCollection($(this).text());
+                    });
+                    curCol = nameOfNewCollection;
+                    $('.collection span:last').click();
+                } else {
+                    alert("Error");
                 }
             }
         );
-    });
-    curCol = $('.collection span:first').text()
-    $('.collection span:first').click();
+    }
+}
 
-    $("#newCollection").click(function (evt) {
-        evt.preventDefault();
-        var nameOfNewCollection = prompt("Enter name new collection:");
-        nameOfNewCollection = nameOfNewCollection.trim()
-        if (nameOfNewCollection == "") {
-            alert("Empty field");
-        } else {
-
-            $('.listURL span').remove();
-            $('.listURL').innerHTML = "";
-            $.post('/addCollection/', {newCollection: nameOfNewCollection},
-                function (data) {
-                    var isAdding = data;
-                    if (isAdding == "Success") {
-                        $('.collection').append("<p><span>" + nameOfNewCollection + "</span></p>");
-                    } else {
-                        alert("Error");
-                    }
-                    curCol = nameOfNewCollection;
-                    $('.collection span:last').click();
-                });
-
+function clickCollection(text) {
+    $('.listURL span').remove();
+    var nameCollection = text;
+    curCol = nameCollection;
+    $.post('/selectURL/', {nameCollection: nameCollection},
+        function (data) {
+            var tmp = $.parseJSON(data);
+            $('.listURL').empty();
+            $(".listURL").prepend('<h2>' + curCol + '</h2>');
+            for (var i = 0; i < tmp.length; i++) {
+                $(".listURL").append("<p><span>" + tmp[i]['fields']['url'] + " </span></p> ");
+            }
         }
-    });
-    $("#addURL").click(function (evt) {
+    );
+}
+
+function addRSS() {
+    var nameOfNewRSS = prompt("Enter name new RSS:");
+    nameOfNewRSS = nameOfNewRSS.trim();
+    if (nameOfNewRSS == "") {
+        alert("Empty Field");
+    } else {
+        $.post('/addRSS/', {nameOfNewRSS: nameOfNewRSS, nameCollection: curCol},
+            function (data) {
+                var isAdding = data;
+                $('.listURL').append('<p><span>' + nameOfNewRSS + '</span></p>');
+            }
+        );
+    }
+}
+
+$(document).ready(function () {
+    $(".collection span").click(function (evt) {
         evt.preventDefault();
-        var nameOfNewRSS = prompt("Enter name new RSS:");
-        nameOfNewRSS = nameOfNewRSS.trim();
-        if (nameOfNewRSS == "") {
-            alert("Empty Field");
-        } else {
-            $.post('/addRSS/', {nameOfNewRSS: nameOfNewRSS, nameCollection: curCol},
-                function (data) {
-                    var isAdding = data;
-                    $('.listURL').append('<p><span>' + nameOfNewRSS + '</span></p>');
-                }
-            );
-        }
+        clickCollection($(this).text());
+
     });
+    if ($('.collection span').length == 0) {
+        curCol = "You have no collections";
+        $(".listURL").prepend('<h2>' + curCol + '</h2>');
+    } else {
+        curCol = $('.collection span:first').text()
+        $('.collection span:first').click();
+    }
 });
