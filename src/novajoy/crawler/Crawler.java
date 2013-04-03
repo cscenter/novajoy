@@ -123,7 +123,7 @@ public class Crawler extends Thread {
 	}
 
 	public static void main(String[] args) throws Exception {
-		IniWorker config = new IniWorker("config/config.ini");
+		IniWorker config = new IniWorker("/home/ubuntu/NovaJoy/config/config.ini");
 		JdbcManager dbman = new JdbcManager(config.getDBaddress(),
 				config.getDBbasename(), config.getDBuser(),
 				config.getDBpassword());
