@@ -31,27 +31,27 @@ public class IniWorker {
 	}
 
 	public String getSenderSmtpHost() {
-		return ini.get("novajoy/sender", "smtphost");
+		return ini.get("sender", "smtphost");
 	}
 
 	public String getSenderSmtpPort() {
-		return ini.get("novajoy/sender", "smtpport");
+		return ini.get("sender", "smtpport");
 	}
 
 	public String getSenderFromMail() {
-		return ini.get("novajoy/sender", "from");
+		return ini.get("sender", "from");
 	}
 
 	public String getSenderFromPass() {
-		return ini.get("novajoy/sender", "password");
+		return ini.get("sender", "password");
 	}
 
 	public String getSenderSmtpUser() {
-		return ini.get("novajoy/sender", "smtpuser");
+		return ini.get("sender", "smtpuser");
 	}
 
 	public String getSenderSmtpPass() {
-		return ini.get("novajoy/sender", "smtppass");
+		return ini.get("sender", "smtppass");
 	}
 
 	public int getCrawlerSleepTime() {
