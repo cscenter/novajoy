@@ -50,7 +50,8 @@
 <div class="leftArea">
     <div class="collection">
         {% for col in collection %}
-            <div><p><span onclick='clickCollection({{ col }})'>{{ col }}</span></p></div>
+            <p><span onclick='clickCollection({{ col }})'>{{ col }}</span>
+            </p>
         {% endfor %}
     </div>
 
@@ -61,7 +62,8 @@
 <div class="rightArea">
     <div class="listURL"></div>
     <div id="addURL">
-        <p><a href="#" onclick="addRSS()"> Add RSS</a></p>
+        <p><a href="#" onclick="addRSS()"> Add RSS</a>
+        </p>
     </div>
 </div>
 

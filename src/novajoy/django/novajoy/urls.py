@@ -10,6 +10,8 @@ urlpatterns = patterns('',
                        url(r'^selectURL/$',viewURL),
                        url(r'^addCollection/$',addCollection),
                        url(r'^addRSS/$',addRSS),
+                       url(r'^accounts/passwordReset/$',resetPassword),
+                       url(r'^accounts/passwordReset/confirm/(?P<activation_key>\w+)$',resetPasswordConfirm),
                        url(r'^accounts/', include('backends.urls')),
                        url(r'^admin/', include(admin.site.urls)),
                        )
