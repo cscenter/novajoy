@@ -41,7 +41,6 @@ DATABASES = {
 #
 #     }
 # }
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.

@@ -35,6 +35,7 @@ class MyUserManager(BaseUserManager):
 class Account(User):
     is_staff = False
     age = models.PositiveSmallIntegerField(null=False, blank=True)
+    resetKey = models.CharField(max_length=50,null=True)
     objects = MyUserManager()
 
     def __unicode__(self):

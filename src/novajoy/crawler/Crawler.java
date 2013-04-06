@@ -11,16 +11,16 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
-import novajoy.util.config.IniWorker;
 import novajoy.util.db.JdbcManager;
 
 public class Crawler extends Thread {
 	private final JdbcManager dbManager;
-	private final long sleepMillis = 10 * 60 * 1000;
+	private final long sleepMillis;
 	private static Logger log = Logger.getLogger(Crawler.class.getName());
 
-	public Crawler(String str, JdbcManager dbManager) {
-		super(str);
+	public Crawler(String name, int sleepmin, JdbcManager dbManager) {
+		super(name);
+		this.sleepMillis = sleepmin * 60 * 1000;
 		this.dbManager = dbManager;
 	}
 
@@ -120,13 +120,5 @@ public class Crawler extends Thread {
 		PreparedStatement ps = dbManager.createPreparedStatement(pquery);
 		ps.setString(1, link);
 		return ps.executeQuery().next();
-	}
-
-	public static void main(String[] args) throws Exception {
-		IniWorker config = new IniWorker("config/config.ini");
-		JdbcManager dbman = new JdbcManager(config.getDBaddress(),
-				config.getDBbasename(), config.getDBuser(),
-				config.getDBpassword());
-		new Crawler("Crawler_1", dbman).start();
 	}
 }

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
-    {#    <link href="/static/CSS/base.css" rel="stylesheet" type="text/css" media="screen" />#}
     <title>Collections</title>
     <style>
         .collection span {
@@ -39,10 +38,10 @@
         }
 
     </style>
+
     <script type="text/javascript" src="/static/JS/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="/static/JS/settings.js"></script>
     <script type="text/javascript" src="/static/JS/base.js"></script>
-
 
 </head>
 <body>
@@ -51,23 +50,20 @@
 <div class="leftArea">
     <div class="collection">
         {% for col in collection %}
-            <p><span>{{ col }}</span></p>
+            <p><span onclick='clickCollection({{ col }})'>{{ col }}</span>
+            </p>
         {% endfor %}
     </div>
 
-
     <div id="newCollection">
-        <p><a href="#">New Collection</a></p>
+        <p><a href="#" onclick='clickNewCollection()'>New Collection</a></p>
     </div>
 </div>
 <div class="rightArea">
-    <div class="listURL">
-        <span>asd</span>
-        <span>asdwww</span>
-    </div>
-
+    <div class="listURL"></div>
     <div id="addURL">
-        <p><a href="#"> Add RSS</a></p>
+        <p><a href="#" onclick="addRSS()"> Add RSS</a>
+        </p>
     </div>
 </div>
 
