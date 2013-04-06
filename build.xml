@@ -46,6 +46,13 @@
             <classpath refid="novajoy.classpath"/>
         </javac>
     </target>
+    <target depends="build-project" name="run-crawler">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="novajoy.classpath"/>
+        </javac>
+    </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
     <target name="Crawler (1)">
         <java classname="Crawler" failonerror="true" fork="yes">
@@ -53,7 +60,7 @@
         </java>
     </target>
     <target name="Crawler (2)">
-        <java classname="crawler.src.Crawler" failonerror="true" fork="yes">
+        <java classname="novajoy.crawler.Crawler" failonerror="true" fork="yes">
             <classpath refid="novajoy.classpath"/>
         </java>
     </target>
