@@ -10,10 +10,17 @@ from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 from Server.forms import ResetPassword,Password
 import random
+import feedparser
 
 def isAuth(user):
     return user.is_authenticated()
 
+def isRss(RSSUrl):
+    feed = feedparser.parse(RSSUrl)
+    if feed['bozo']==1 :
+        return False
+    else:
+        return True
 @user_passes_test(isAuth,login_url="/accounts/login/")
 def viewCollection(request):
     if not request.user.is_authenticated():
@@ -55,13 +62,18 @@ def addRSS(request):
         return HttpResponse("Empty field nameOfNewRSS")
     response = HttpResponse()
     response['Content-Type'] = "text/javascript"
-    user = Account.objects.get(username=request.user.username)
-    collection = Collection.objects.get(user=user,name_collection=request.POST['nameCollection'])
-    newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32')
-    newRSS.save()
-    newRSS.collection.add(collection)
-    newRSS.save()
-    return HttpResponse("Success")
+    if isRss(request.POST.get('nameOfNewRSS'))==True:
+        user = Account.objects.get(username=request.user.username)
+        collection = Collection.objects.get(user=user,name_collection=request.POST['nameCollection'])
+        newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32')
+        newRSS.save()
+        newRSS.collection.add(collection)
+        newRSS.save()
+        response.write("Success")
+        return HttpResponse(response)
+    else:
+        response.write("Error")
+        return HttpResponse(response)
 
 #@user_passes_test(isAuth,login_url="/accounts/login/")
 def resetPassword(request):

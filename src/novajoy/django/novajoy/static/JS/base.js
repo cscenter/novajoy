@@ -51,7 +51,12 @@ function addRSS() {
         $.post('/addRSS/', {nameOfNewRSS: nameOfNewRSS, nameCollection: curCol},
             function (data) {
                 var isAdding = data;
-                $('.listURL').append('<p><span>' + nameOfNewRSS + '</span></p>');
+                if(isAdding=="Success"){
+                    $('.listURL').append('<p><span>' + nameOfNewRSS + '</span></p>');
+                }else{
+                    alert("This address doesn't belong to RSS");
+                }
+
             }
         );
     }
