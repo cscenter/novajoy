@@ -35,4 +35,5 @@ def validate_even(value):
 class ResetPassword(forms.Form):
     email = forms.CharField(validators=[validate_email,validate_even],
                             error_messages={'invalid': _(u'Enter a valid e-mail address.')})
+    captcha = CaptchaField(label=_("Code in the image"))
 
