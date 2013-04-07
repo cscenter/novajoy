@@ -66,7 +66,7 @@ $(document).ready(function () {
         clickCollection($(this).text());
 
     });
-//test 
+//test 2 
     if ($('.collection span').length == 0) {
         curCol = "You have no collections";
         $(".listURL").prepend('<h2>' + curCol + '</h2>');
