@@ -4,14 +4,13 @@ function clickNewCollection() {
     if (nameOfNewCollection == "") {
         alert("Empty field");
     } else {
-
         $('.listURL span').remove();
         $('.listURL').innerHTML = "";
         var isAdding = "No";
         $.post('/addCollection/', {newCollection: nameOfNewCollection},
             function (data) {
-                var isAdding = data;
-                if (isAdding == "Success") {
+                var response = data;
+                if (response == "Success") {
                     $('.collection').append("<div><p><span>" + nameOfNewCollection + "</span></p></div>");
                     $('.collection span:last').on("click",function(){
                        clickCollection($(this).text());
@@ -19,7 +18,7 @@ function clickNewCollection() {
                     curCol = nameOfNewCollection;
                     $('.collection span:last').click();
                 } else {
-                    alert("Error");
+                    alert(response);
                 }
             }
         );
@@ -50,13 +49,12 @@ function addRSS() {
     } else {
         $.post('/addRSS/', {nameOfNewRSS: nameOfNewRSS, nameCollection: curCol},
             function (data) {
-                var isAdding = data;
-                if(isAdding=="Success"){
+                var response = data;
+                if(response=="Success"){
                     $('.listURL').append('<p><span>' + nameOfNewRSS + '</span></p>');
                 }else{
-                    alert("This address doesn't belong to RSS");
+                    alert(response);
                 }
-
             }
         );
     }

@@ -21,6 +21,7 @@ def isRss(RSSUrl):
         return False
     else:
         return True
+
 @user_passes_test(isAuth,login_url="/accounts/login/")
 def viewCollection(request):
     if not request.user.is_authenticated():
@@ -43,6 +44,7 @@ def viewURL(request):
     data = serializers.serialize('json', rss)
     return HttpResponse(data,mimetype)
 
+@user_passes_test(isAuth,login_url="/accounts/login/")
 def addCollection(request):
     #to write a decorator for definition ativete user
     if request.POST.get('newCollection') is None:
@@ -50,6 +52,9 @@ def addCollection(request):
     response = HttpResponse()
     response['Content-Type'] = "text/javascript"
     user = Account.objects.get(username=request.user.username)
+    if Collection.objects.filter(user=user,name_collection=request.POST['newCollection']).__len__()>0:
+        response.write("The collection with such name already exists")
+        return HttpResponse(response)
     c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=30,last_update_time=datetime.now())
     c.save()
 
@@ -65,6 +70,9 @@ def addRSS(request):
     if isRss(request.POST.get('nameOfNewRSS'))==True:
         user = Account.objects.get(username=request.user.username)
         collection = Collection.objects.get(user=user,name_collection=request.POST['nameCollection'])
+        if RSSFeed.objects.filter(collection=collection,url=request.POST.get('nameOfNewRSS')).__len__()>0:
+            response.write("The RSS with such url already exists")
+            return HttpResponse(response)
         newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32')
         newRSS.save()
         newRSS.collection.add(collection)
@@ -72,10 +80,9 @@ def addRSS(request):
         response.write("Success")
         return HttpResponse(response)
     else:
-        response.write("Error")
+        response.write("This address doesn't belong to RSS")
         return HttpResponse(response)
 
-#@user_passes_test(isAuth,login_url="/accounts/login/")
 def resetPassword(request):
     if request.method == 'POST':
         form = ResetPassword(request.POST)
