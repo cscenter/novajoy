@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="novajoy">
+<project basedir="." default="build" name="novajoy">
     <property environment="env"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
@@ -45,14 +41,18 @@
             <classpath refid="novajoy.classpath"/>
         </javac>
     </target>
-    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target name="Crawler (1)">
-        <java classname="Crawler" failonerror="true" fork="yes">
+    <target name="start_crawler">
+        <java classname="novajoy.crawler.StartCrawling" failonerror="true" fork="yes">
             <classpath refid="novajoy.classpath"/>
         </java>
     </target>
-    <target name="Crawler (2)">
-        <java classname="crawler.src.Crawler" failonerror="true" fork="yes">
+    <target name="start_packer">
+        <java classname="novajoy.packer.Main" failonerror="true" fork="yes">
+            <classpath refid="novajoy.classpath"/>
+        </java>
+    </target>
+    <target name="start_sender">
+        <java classname="novajoy.sender.Main" failonerror="true" fork="yes">
             <classpath refid="novajoy.classpath"/>
         </java>
     </target>
