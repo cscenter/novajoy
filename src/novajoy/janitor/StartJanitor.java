@@ -5,7 +5,7 @@ import novajoy.util.db.JdbcManager;
 
 public class StartJanitor {
 	public static void main(String[] args) throws Exception {
-		IniWorker config = new IniWorker("/home/ubuntu/NovaJoy/config/config.ini");
+		IniWorker config = new IniWorker("/home/ubuntu/NovaJoyConfig/config.ini");
 		JdbcManager dbman = new JdbcManager(config.getDBaddress(),
 				config.getDBbasename(), config.getDBuser(),
 				config.getDBpassword());
