@@ -55,5 +55,9 @@
         <java classname="novajoy.sender.Main" failonerror="true" fork="yes">
             <classpath refid="novajoy.classpath"/>
         </java>
+	<target name="start_janitor">
+        <java classname="novajoy.janitor.StartJanitor" failonerror="true" fork="yes">
+            <classpath refid="novajoy.classpath"/>
+        </java>
     </target>
 </project>
