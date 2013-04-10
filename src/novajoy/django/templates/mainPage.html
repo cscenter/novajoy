@@ -36,13 +36,18 @@
             margin-left: 500px;
             position: fixed;
         }
-
+        #dialog1{
+            display : none;
+        }
     </style>
 
     <script type="text/javascript" src="/static/JS/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="/static/JS/settings.js"></script>
     <script type="text/javascript" src="/static/JS/base.js"></script>
-
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"
+          rel="stylesheet" type="text/css"/>
+{#    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>#}
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 </head>
 <body>
 <h2>List of your collections</h2>
@@ -66,7 +71,13 @@
         </p>
     </div>
 </div>
-
+<div id="dialog1" display="none" title="Первое окно">
+    <p><b>New Collection</b>.Enter name of collection and update interval.</p>
+    <form id="myform">
+        Name collection<input type="text" id="nameCollection" size='30'/>
+        Update interval <input type="text" size='30' name="description" id="updateInterval"><br>
+    </form>
+</div>
 
 </body>
 </html>

@@ -55,7 +55,7 @@ def addCollection(request):
     if Collection.objects.filter(user=user,name_collection=request.POST['newCollection']).__len__()>0:
         response.write("The collection with such name already exists")
         return HttpResponse(response)
-    c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=30,last_update_time=datetime.now())
+    c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=request.POST['updateInterval'],last_update_time=datetime.now())
     c.save()
 
     response.write("Success")
