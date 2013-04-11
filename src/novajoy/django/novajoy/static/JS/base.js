@@ -31,12 +31,15 @@ function clickNewCollection() {
             var updateInterval = document.forms[0].elements[1].value;
             //clean form
             document.getElementById('myform').reset();
-            nameOfNewCollection = nameOfNewCollection.trim()
-            if (nameOfNewCollection == "" || parseInt(updateInterval) == NaN) {
+            nameOfNewCollection = nameOfNewCollection.trim();
+            var isnan = isNaN(parseInt(updateInterval));
+            if ((nameOfNewCollection == "")  || (updateInterval.trim()=='')) {
                 alert("Empty field");
             } else if (parseInt(updateInterval) <= 0) {
                 alert("Negative updateInterval");
-            } else {
+            } else if(isnan==true){
+                alert("The field a 'Update Interval' has to contain only number");
+            }else{
                 $('.listURL span').remove();
                 $('.listURL').innerHTML = "";
                 var isAdding = "No";
