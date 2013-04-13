@@ -1,29 +1,4 @@
 function clickNewCollection() {
-//    var nameOfNewCollection = prompt("Enter name new collection:");
-//    nameOfNewCollection = nameOfNewCollection.trim()
-//    if (nameOfNewCollection == "") {
-//        alert("Empty field");
-//    } else {
-//        $('.listURL span').remove();
-//        $('.listURL').innerHTML = "";
-//        var isAdding = "No";
-//        $.post('/addCollection/', {newCollection: nameOfNewCollection},
-//            function (data) {
-//                var response = data;
-//                if (response == "Success") {
-//                    $('.collection').append("<div><p><span>" + nameOfNewCollection + "</span></p></div>");
-//                    $('.collection span:last').on("click",function(){
-//                       clickCollection($(this).text());
-//                    });
-//                    curCol = nameOfNewCollection;
-//                    $('.collection span:last').click();
-//                } else {
-//                    alert(response);
-//                }
-//            }
-//        );
-//    }
-
     $("#dialog1").dialog({autoOpen: false, width: 400, height: 350, buttons: {
         OK: function () {
             //Data from a form
@@ -52,6 +27,7 @@ function clickNewCollection() {
                                 clickCollection($(this).text());
                             });
                             curCol = nameOfNewCollection;
+                            curObject = $('.collection span:last') ;
                             $('.collection span:last').click();
                         } else {
                             alert(response);
@@ -70,7 +46,18 @@ function clickNewCollection() {
     });
     $("#dialog1").dialog("open");
 }
+function clickRemoveCollection(){
+    curObject.remove();
+    if($('.collection span').length>0){
+        curObject= $('.collection span:last');
+        curObject.click();
+    }else{
+        curCol = "You have no collections";
+        $('.listURL').empty();
+        $(".listURL").prepend('<h2>' + curCol + '</h2>');
+    }
 
+}
 function clickCollection(text) {
     $('.listURL span').remove();
     var nameCollection = text;
@@ -78,7 +65,7 @@ function clickCollection(text) {
     $.post('/selectURL/', {nameCollection: nameCollection},
         function (data) {
             var tmp = $.parseJSON(data);
-            $('.listURL').empty();
+
             $(".listURL").prepend('<h2>' + curCol + '</h2>');
             for (var i = 0; i < tmp.length; i++) {
                 $(".listURL").append("<p><span>" + tmp[i]['fields']['url'] + " </span></p> ");
@@ -107,11 +94,12 @@ function addRSS() {
 }
 
 $(document).ready(function () {
-    $(".collection span").click(function (evt) {
+    $(".collection span").bind('click',function(evt){
         evt.preventDefault();
+        curObject =$(this);
         clickCollection($(this).text());
-
     });
+
     if ($('.collection span').length == 0) {
         curCol = "You have no collections";
         $(".listURL").prepend('<h2>' + curCol + '</h2>');

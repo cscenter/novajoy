@@ -11,7 +11,9 @@
             display: block;
             border-right: 1px solid #FFF;
         }
-
+        .curCollection{
+            background-color: red;
+        }
         #newCollection span {
             border-top: 1px solid #FFF;
             text-decoration: none;
@@ -55,13 +57,16 @@
 <div class="leftArea">
     <div class="collection">
         {% for col in collection %}
-            <p><span onclick='clickCollection({{ col }})'>{{ col }}</span>
+            <p><span title='{{ col }}'>{{ col }}</span>
             </p>
         {% endfor %}
     </div>
 
     <div id="newCollection">
         <p><a href="#" onclick='clickNewCollection()'>New Collection</a></p>
+    </div>
+    <div id="removeCollection">
+        <p><a href="#" onclick='clickRemoveCollection()'>Remove collection</a></p>
     </div>
 </div>
 <div class="rightArea">
