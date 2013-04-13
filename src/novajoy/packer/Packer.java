@@ -26,7 +26,7 @@ class Packer{
     private String userName = "";
     private String userPassword = "";
     private final String configPath = "";
-    private static Logger log = Logger.getLogger(Packer.class.getName());
+    private static Logger log =  new Loggers().getPackerLogger();
 
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";
     private final String DEFAULT_BODY = "Thank you for using our service!";

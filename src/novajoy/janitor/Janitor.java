@@ -9,7 +9,7 @@ import novajoy.util.db.JdbcManager;
 
 public class Janitor {
 	private final JdbcManager dbManager;
-	private static Logger log = Logger.getLogger(Janitor.class.getName());
+	private static Logger log = new Loggers().getJanitorLogger();
 
 	public Janitor(JdbcManager dbManager) {
 		this.dbManager = dbManager;

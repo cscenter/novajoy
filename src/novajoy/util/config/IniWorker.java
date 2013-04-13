@@ -61,4 +61,20 @@ public class IniWorker {
 	public int getCrawlerThreads() {
 		return ini.get("crawler", "threads", int.class);
 	}
+
+	public String getCrawlerLogsAddr() {
+		return ini.get("logs", "crawler");
+	}
+	public String getSenderLogsAddr() {
+		return ini.get("logs", "sender");
+	}
+	public String getPackerLogsAddr() {
+		return ini.get("logs", "packer");
+	}
+	public String getJanitorLogsAddr() {
+		return ini.get("logs", "janitor");
+	}
+	public String getJdbcManagerLogsAddr() {
+		return ini.get("logs", "jdbc");
+	}
 }
