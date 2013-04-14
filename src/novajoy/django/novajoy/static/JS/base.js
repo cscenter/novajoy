@@ -46,17 +46,38 @@ function clickNewCollection() {
     });
     $("#dialog1").dialog("open");
 }
-function clickRemoveCollection(){
-    curObject.remove();
-    if($('.collection span').length>0){
-        curObject= $('.collection span:last');
-        curObject.click();
-    }else{
-        curCol = "You have no collections";
-        $('.listURL').empty();
-        $(".listURL").prepend('<h2>' + curCol + '</h2>');
-    }
 
+function deleteCollection(nameCollection){
+    //alert("delete "+nameCollection);
+    var responce="";
+    $.post('/deleteCollection/', {nameCollection: curCol},
+        function (data) {
+            response = data;
+            if (response == "Success") {
+                curObject.remove();
+                if($('.collection span').length>0){
+                    curObject= $('.collection span:last');
+                    curCol = $('.collection span:last').text();
+                    curObject.click();
+                }else{
+                    curCol = "You have no collections";
+                    $('.listURL').empty();
+                    $(".listURL").prepend('<h2>' + curCol + '</h2>');
+                }
+                return true;
+            } else {
+                alert(response);
+                return false;
+            }
+        }
+    );
+    //alert("response="+responce);
+
+
+}
+
+function clickRemoveCollection(){
+    var success = deleteCollection(curCol);
 }
 function clickCollection(text) {
     $('.listURL span').remove();
@@ -65,13 +86,53 @@ function clickCollection(text) {
     $.post('/selectURL/', {nameCollection: nameCollection},
         function (data) {
             var tmp = $.parseJSON(data);
-
+            //alert("data = "+data);
+            $(".listURL h2").remove();
+            $(".link").remove();
             $(".listURL").prepend('<h2>' + curCol + '</h2>');
+            //alert(tmp.length);
             for (var i = 0; i < tmp.length; i++) {
-                $(".listURL").append("<p><span>" + tmp[i]['fields']['url'] + " </span></p> ");
+                var url = tmp[i]['fields']['url'];
+                //alert(url);
+                var tt = "<div class='link'><p><span>" + url +
+                    "<div class='h'><a href='"+url+"'><img src='/static/JS/deleteIcon.jpg'/> </a></div>" +
+                    "</span></p></div> ";
+                //alert(tt);
+                $(".listURL").append(tt);
+//                $('.listURL').append("<div class='link'><p>"+tmp[i]['fields']['url']+
+//                "<a href='#'><div class='h'><img src='/static/JS/deleteIcon.jpg' /></div></div>"+
+//                "</p></div>");
+            }
+            $('.listURL a').bind('click',function(evt){
+                evt.preventDefault();
+                deleteRSS($(this).attr('href'));
+                //$('.listURL div:contains('+$(this).attr('href')+')').remove();
+
+            });
+
+
+        }
+    );
+}
+
+function deleteRSS(url){
+    $.post('/deleteRSS/', {URL: url, nameCollection: curCol},
+        function (data) {
+            var response = data;
+
+            if (response == "Success") {
+               // alert($('.listURL div:contains('+$(this).attr('href')+')').length);
+                //alert($('.link div:contains('+$(this).attr('href')+')').length);
+                $('.listURL div:contains('+url+')').remove();
+            } else {
+                alert("respdd:"+response);
+                alert(response);
             }
         }
     );
+//    alert("link="+$('.link div:contains()').length);
+//    alert($('.listURL div:contains('+url+')').length);
+//    $('.listURL div:contains('+url+')').remove();
 }
 
 function addRSS() {
@@ -84,7 +145,16 @@ function addRSS() {
             function (data) {
                 var response = data;
                 if (response == "Success") {
-                    $('.listURL').append('<p><span>' + nameOfNewRSS + '</span></p>');
+                    var tt = "<div class='link'><p><span>" + nameOfNewRSS +
+                        "<div class='h'><a href='"+nameOfNewRSS+"'><img src='/static/JS/deleteIcon.jpg'/> </a></div>" +
+                        "</span></p></div> ";
+                    $('.listURL').append(tt);
+                    $('.listURL a').bind('click',function(evt){
+                        evt.preventDefault();
+                        deleteRSS($(this).attr('href'));
+                        //$('.listURL div:contains('+$(this).attr('href')+')').remove();
+
+                    });
                 } else {
                     alert(response);
                 }
@@ -99,7 +169,6 @@ $(document).ready(function () {
         curObject =$(this);
         clickCollection($(this).text());
     });
-
     if ($('.collection span').length == 0) {
         curCol = "You have no collections";
         $(".listURL").prepend('<h2>' + curCol + '</h2>');
@@ -107,4 +176,5 @@ $(document).ready(function () {
         curCol = $('.collection span:first').text()
         $('.collection span:first').click();
     }
+
 });

@@ -62,6 +62,26 @@ def addCollection(request):
     return HttpResponse(response)
 
 @user_passes_test(isAuth,login_url="/accounts/login/")
+def deleteCollection(request):
+    if request.POST.get('nameCollection') is None:
+        return HttpResponse("error")
+    user = Account.objects.get(username=request.user.username)
+    collection = Collection.objects.get(user=user,name_collection=request.POST['nameCollection'])
+    collection.delete()
+
+    return HttpResponse("Success")
+
+@user_passes_test(isAuth,login_url="/accounts/login/")
+def deleteRSS(request):
+    if (request.POST.get("URL") is None) or (request.POST.get('nameCollection') is None):
+        return HttpResponse("error");
+    user = Account.objects.get(username=request.user.username)
+    collection = Collection.objects.get(user=user,name_collection=request.POST['nameCollection'])
+    rss = RSSFeed.objects.filter(collection=collection,url=request.POST.get('URL'))
+    rss.delete()
+    return HttpResponse("Success")
+
+@user_passes_test(isAuth,login_url="/accounts/login/")
 def addRSS(request):
     if request.POST.get('nameOfNewRSS') is None:
         return HttpResponse("Empty field nameOfNewRSS")
@@ -95,7 +115,7 @@ def resetPassword(request):
         subject = "NovaJoy: Reset password"
         ctx_dict = {'activation_key': activation_key,                 }
         message = render_to_string('registration/reset_password_email.txt',
-                                             ctx_dict)
+                                   ctx_dict)
         post_letters = PostLetters(target=email,title=subject,body=message)
         post_letters.save()
         user = Account.objects.get(email=email)
@@ -125,5 +145,4 @@ def resetPasswordConfirm(request,activation_key):
             #return HttpResponse("OK")
         except Account.DoesNotExist:
             return HttpResponse("Error")
-
 
