@@ -12,6 +12,7 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 import novajoy.util.db.JdbcManager;
+import novajoy.util.logger.Loggers;
 
 public class Crawler extends Thread {
 	private final JdbcManager dbManager;

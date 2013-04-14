@@ -1,5 +1,7 @@
 package novajoy.util.db;
 
+import novajoy.util.logger.Loggers;
+
 import java.sql.*;
 import java.util.logging.Logger;
 

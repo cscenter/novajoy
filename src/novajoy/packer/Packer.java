@@ -22,6 +22,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import novajoy.util.config.IniWorker;
+import novajoy.util.logger.Loggers;
 
 
 class Packer{
@@ -32,13 +33,10 @@ class Packer{
     private String dbName = "";
     private String userName = "";
     private String userPassword = "";
-<<<<<<< HEAD
+
     private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
-    private static Logger log = Logger.getLogger(Packer.class.getName());
-=======
-    private final String configPath = "";
     private static Logger log =  new Loggers().getPackerLogger();
->>>>>>> 1938abfa822af71339720b0fb1a8c9750325a50c
+
 
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";
     private final String DEFAULT_BODY = "Thank you for using our service!";
@@ -237,7 +235,7 @@ class Packer{
         return usersDocuments;
     }
 
-    public void saveAttachmentToPath(String attachment, String path) throws FileNotFoundException, IOException {
+    public String saveAttachmentToPath(String attachment, String path) throws FileNotFoundException, IOException {
 
         File file = new File(path);
         file.mkdirs();
@@ -262,6 +260,7 @@ class Packer{
             log.warning(e.getMessage());
         } finally {
             os.close();
+            return "/feed" + i + ".html";
         }
     }
 
@@ -272,8 +271,7 @@ class Packer{
         System.out.println(domain + "|" + name);
         String path = "mail_storage/" + domain + "/" + name;
 
-        saveAttachmentToPath(attachment, path);
-        return path;
+        return path + saveAttachmentToPath(attachment, path);
     }
 
     public void performRoutineTasks() {

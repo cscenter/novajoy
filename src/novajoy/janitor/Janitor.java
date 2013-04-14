@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.logging.Logger;
 
 import novajoy.util.db.JdbcManager;
+import novajoy.util.logger.Loggers;
 
 public class Janitor {
 	private final JdbcManager dbManager;
