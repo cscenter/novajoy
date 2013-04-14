@@ -2,6 +2,7 @@ package novajoy.sender;
 import com.pdfjet.*;
 import com.pdfjet.Font;
 import novajoy.util.config.IniWorker;
+import novajoy.util.logger.Loggers;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -355,6 +356,22 @@ public class NovaSender {
         return messages;
     }
 
+    public String readFile(String filename)
+    {
+        String content = null;
+        File file = new File(filename);
+        try {
+            FileReader reader = new FileReader(file);
+            char[] chars = new char[(int) file.length()];
+            reader.read(chars);
+            content = new String(chars);
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
+
     public Message prepareMessage(InternalMessage msg) throws MessagingException,FileNotFoundException,Exception {
 
         //String pdfDoc = createPDF(msg.attachment);
@@ -362,7 +379,12 @@ public class NovaSender {
         /*FileOutputStream fs = new FileOutputStream(new File("feed.pdf"));
         fs.write(pdfDoc.getBytes("UTF-8"));*/
 
-        return formMessage(msg.title, msg.body, msg.attachment, msg.target.split(","));
+        //String domain = msg.target.substring(msg.target.indexOf("@")+1,msg.target.indexOf(","));
+        //String name = msg.target.substring(0,msg.target.indexOf("@"));          "mail_storage/" + domain + "/" + name + "/"
+
+        String document = readFile(msg.attachment);
+
+        return formMessage(msg.title, msg.body, document, msg.target.split(","));
     }
 
     public void cleanDataBase(InternalMessage[] messages) throws SQLException {
