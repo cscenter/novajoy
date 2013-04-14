@@ -67,6 +67,9 @@ def deleteCollection(request):
         return HttpResponse("error")
     user = Account.objects.get(username=request.user.username)
     collection = Collection.objects.get(user=user,name_collection=request.POST['nameCollection'])
+    rss = RSSFeed.objects.filter(collection=collection)
+    #for _rss in rss:
+
     collection.delete()
 
     return HttpResponse("Success")
@@ -93,12 +96,18 @@ def addRSS(request):
         if RSSFeed.objects.filter(collection=collection,url=request.POST.get('nameOfNewRSS')).__len__()>0:
             response.write("The RSS with such url already exists")
             return HttpResponse(response)
-        newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32')
-        newRSS.save()
-        newRSS.collection.add(collection)
-        newRSS.save()
-        response.write("Success")
-        return HttpResponse(response)
+        if RSSFeed.objects.filter(url=request.POST.get('nameOfNewRSS')).__len__()>0:
+            rss = RSSFeed.objects.get(url=request.POST.get('nameOfNewRSS'))
+            rss.collection.add(collection)
+            rss.save()
+            return HttpResponse("Success")
+        else:
+            newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32')
+            newRSS.save()
+            newRSS.collection.add(collection)
+            newRSS.save()
+            response.write("Success")
+            return HttpResponse(response)
     else:
         response.write("This address doesn't belong to RSS")
         return HttpResponse(response)

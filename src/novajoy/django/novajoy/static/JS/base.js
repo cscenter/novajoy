@@ -48,7 +48,6 @@ function clickNewCollection() {
 }
 
 function deleteCollection(nameCollection){
-    //alert("delete "+nameCollection);
     var responce="";
     $.post('/deleteCollection/', {nameCollection: curCol},
         function (data) {
@@ -82,6 +81,9 @@ function clickRemoveCollection(){
 function clickCollection(text) {
     $('.listURL span').remove();
     var nameCollection = text;
+
+    curObject = $('.collection div:contains('+text+')');
+   // alert(curObject.length);
     curCol = nameCollection;
     $.post('/selectURL/', {nameCollection: nameCollection},
         function (data) {
@@ -93,15 +95,10 @@ function clickCollection(text) {
             //alert(tmp.length);
             for (var i = 0; i < tmp.length; i++) {
                 var url = tmp[i]['fields']['url'];
-                //alert(url);
                 var tt = "<div class='link'><p><span>" + url +
                     "<div class='h'><a href='"+url+"'><img src='/static/JS/deleteIcon.jpg'/> </a></div>" +
                     "</span></p></div> ";
-                //alert(tt);
                 $(".listURL").append(tt);
-//                $('.listURL').append("<div class='link'><p>"+tmp[i]['fields']['url']+
-//                "<a href='#'><div class='h'><img src='/static/JS/deleteIcon.jpg' /></div></div>"+
-//                "</p></div>");
             }
             $('.listURL a').bind('click',function(evt){
                 evt.preventDefault();
