@@ -80,8 +80,11 @@ def deleteRSS(request):
         return HttpResponse("error");
     user = Account.objects.get(username=request.user.username)
     collection = Collection.objects.get(user=user,name_collection=request.POST['nameCollection'])
-    rss = RSSFeed.objects.filter(collection=collection,url=request.POST.get('URL'))
-    rss.delete()
+    rss = RSSFeed.objects.get(collection=collection,url=request.POST.get('URL'))
+    if rss.collection.all().__len__()>1:
+        rss.collection.remove(collection)
+    else:
+        rss.delete()
     return HttpResponse("Success")
 
 @user_passes_test(isAuth,login_url="/accounts/login/")
