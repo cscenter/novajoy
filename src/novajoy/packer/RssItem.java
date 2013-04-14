@@ -30,7 +30,7 @@ public class RssItem {
     public String toHtml() {
 
         String result = new String();
-        result += "<h1>" + title + " (by " + author + ")" + "</h1>";
+        result += "<h1>" + title + (author != "" ? " (by " + author + ")" : "") + "</h1>";
         result += "<p>" + description + "</p>";
         result += "<p>" + link + "</p>";
         result += "<p>" + pubDate.toString() + "</p></hr>";

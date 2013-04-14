@@ -5,15 +5,22 @@
  * Time: 23:02
  */
 package novajoy.packer;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.lang.String;
+import java.net.URL;
 import java.sql.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.logging.Logger;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import novajoy.util.config.IniWorker;
 
 
@@ -25,7 +32,7 @@ class Packer{
     private String dbName = "";
     private String userName = "";
     private String userPassword = "";
-    private final String configPath = "";
+    private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
     private static Logger log = Logger.getLogger(Packer.class.getName());
 
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";
@@ -92,11 +99,20 @@ class Packer{
         return usersIds;
     }
 
-    RssItem[] getDataForUserId(int uid) throws SQLException {
+    ArrayList getDataForUserId(int uid) throws SQLException {
 
         Statement st = con.createStatement();
         //System.out.println("select * from Server_rssitem where rssfeed_id in (select rssfeed_id from Server_rssfeed_collection where collection_id in (select id from Server_collection where user_id = " + uid +"));");
-        ResultSet rs = st.executeQuery("select * from Server_rssitem where rssfeed_id in (select rssfeed_id from Server_rssfeed_collection where collection_id in (select id from Server_collection where user_id = " + uid +"));");
+        //ResultSet rs = st.executeQuery("select * from Server_rssitem where rssfeed_id in (select rssfeed_id from Server_rssfeed_collection where collection_id in (select id from Server_collection where user_id = " + uid +"));");
+        ResultSet rs = st.executeQuery("SELECT IT.rssfeed_id , IT.title, IT.description, IT.link, IT.author, IT.pubDate, COL.id  \n" +
+                "FROM Server_rssfeed RS \n" +
+                "JOIN Server_rssfeed_collection CONN \n" +
+                "ON RS.id=CONN.rssfeed_id \n" +
+                "JOIN Server_collection COL \n" +
+                "ON COL.id=CONN.collection_id \n" +
+                "JOIN Server_rssitem IT \n" +
+                "ON IT.rssfeed_id=RS.id\n" +
+                "WHERE COL.user_id = " + uid + " ORDER BY COL.id, IT.pubDate;");
 
         int rowcount = 0;
         if (rs.last()) {
@@ -106,12 +122,31 @@ class Packer{
             return null;
         }
 
-        RssItem[] items = new RssItem[rowcount];
-
+        //RssItem[] items = new RssItem[rowcount];
+        ArrayList items = new ArrayList();
+        int last_group_id = 0;
         int i = 0;
+
+        if (rs.next()) {
+            last_group_id = rs.getInt(7);
+
+            items.add(i, new ArrayList<RssItem>());
+            ((ArrayList)items.get(i)).add(new RssItem(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6)));
+        }
+
         while (rs.next()) {
-            items[i] = new RssItem(rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7));
-            i++;
+
+            if (rs.getInt(7) == last_group_id) {
+
+                ArrayList<RssItem> rss = (ArrayList)items.get(i);
+                rss.add(new RssItem(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6)));
+            } else {
+
+                last_group_id = rs.getInt(7);
+                i++;
+                items.add(i, new ArrayList<RssItem>());
+                ((ArrayList)items.get(i)).add(new RssItem(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6)));
+            }
         }
 
         rs.close();
@@ -120,17 +155,23 @@ class Packer{
         return items;
     }
 
-    DocumentItem formDocument (String target, RssItem[] userFeeds) {
 
-        StringBuilder builder = new StringBuilder("<html><head><title>Your RSS feed from novaJoy</title></head><body>");
+    DocumentItem formDocument (String target, ArrayList userFeeds) {
 
-        for (int i = 0; i < userFeeds.length; i++) {
-            builder.append(userFeeds[i].toHtml());
+        StringBuilder builder = new StringBuilder("<html><head><title>Your RSS feed from novaJoy</title>" +
+                "<style type =\"text/css\">\n" +
+                "   body{\n" +
+                "        font-family:\"Times New Roman\", Times, serif\n" +
+                "   }\n" +
+                "</style></head><body>");
+
+        for (int i = 0; i < userFeeds.size(); i++) {
+            builder.append(((RssItem)userFeeds.get(i)).toHtml().replaceAll("</hr>","<hr/>"));
         }
 
         builder.append("</body></html>");
 
-        return new DocumentItem(target,builder.toString());
+        return new DocumentItem(target, builder.toString());
     }
 
     void updateFeedTime(UserItem[] users) throws SQLException {
@@ -173,17 +214,61 @@ class Packer{
             if (j >= userIds.length)
                 break;
 
-            RssItem[] userFeed = getDataForUserId(userIds[j].user_id);
+            ArrayList userFeed = getDataForUserId(userIds[j].user_id);
 
             if (userFeed == null) {
                 j++;
                 continue;
             }
-            usersDocuments.add(formDocument(userIds[j].user_email, userFeed));
+
+            for (Object elem : userFeed) {
+
+                usersDocuments.add(formDocument(userIds[j].user_email, (ArrayList)elem));
+            }
+
             j++;
         }
 
         return usersDocuments;
+    }
+
+    public void saveAttachmentToPath(String attachment, String path) throws FileNotFoundException, IOException {
+
+        File file = new File(path);
+        file.mkdirs();
+
+        int i=0;
+
+        while (true) {
+
+            if (!(new File(path + "/feed" + i + ".html")).exists())
+                break;
+
+            i++;
+        }
+
+        FileOutputStream os = new FileOutputStream(file.toString() + "/feed" + i + ".html");
+
+        try {
+
+            os.write(attachment.getBytes("UTF-8"));
+
+        } catch (Exception e) {
+            log.warning(e.getMessage());
+        } finally {
+            os.close();
+        }
+    }
+
+    public String prepareAttachmentAndSave(String email, String attachment) throws FileNotFoundException, IOException {
+
+        String domain = email.substring(email.indexOf("@")+1);
+        String name = email.substring(0, email.indexOf("@"));
+        System.out.println(domain + "|" + name);
+        String path = "mail_storage/" + domain + "/" + name;
+
+        saveAttachmentToPath(attachment, path);
+        return path;
     }
 
     public void performRoutineTasks() {
@@ -222,7 +307,10 @@ class Packer{
                 ps.setString(j++, item.target_email);
                 ps.setString(j++, DEFAULT_SUBJECT);
                 ps.setString(j++, DEFAULT_BODY);
-                ps.setString(j++, item.user_document);
+
+                String filePath = prepareAttachmentAndSave(item.target_email, item.user_document);
+
+                ps.setString(j++, filePath);
             }
 
             int rs = ps.executeUpdate();
@@ -239,7 +327,7 @@ class Packer{
         } catch (NullPointerException e) {
             log.info("There are no documents for update");
             return;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.warning(e.getMessage());
         }
     }

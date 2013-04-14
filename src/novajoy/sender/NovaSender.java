@@ -1,12 +1,19 @@
 package novajoy.sender;
+import com.pdfjet.*;
+import com.pdfjet.Font;
 import novajoy.util.config.IniWorker;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.mail.util.ByteArrayDataSource;
+import java.awt.*;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.sql.*;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -40,7 +47,7 @@ public class NovaSender {
 
     InternalMessage[] collection = null;
 
-    private final String configPath = "";
+    private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
 
     Connection con = null;
 
@@ -107,6 +114,223 @@ public class NovaSender {
         log.info("Message sent");
     }
 
+    private String createPDF (String htmlDocument) throws Exception {
+
+        FileOutputStream fos = new FileOutputStream("Example_06.pdf");
+
+        PDF pdf = new PDF(fos);
+
+        InputStream inp = getClass().getResourceAsStream("/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/fonts/Core/Times-Roman.afm");
+        BufferedInputStream bis1 = new BufferedInputStream(inp);
+        Font f1 = new Font(pdf, bis1, CodePage.UNICODE, Embed.YES);
+
+        BufferedInputStream bis2 = new BufferedInputStream(
+                getClass().getResourceAsStream(
+                        "fonts/Core/Courier.afm"));
+        Font f2 = new Font(pdf, bis1, CodePage.UNICODE, Embed.YES);
+
+        BufferedInputStream bis3 = new BufferedInputStream(
+                getClass().getResourceAsStream(
+                        "fonts/Core/Helvetica.afm"));
+        Font f3 = new Font(pdf, bis1, CodePage.UNICODE, Embed.YES);
+
+        Font f4 = new Font(pdf, CoreFont.ZAPF_DINGBATS);
+
+        Page page = new Page(pdf, Letter.PORTRAIT);
+
+        int x_pos = 50;
+        int y_pos = 0;
+
+        f1.setSize(20);
+        f2.setSize(20);
+        f3.setSize(20);
+        f4.setSize(18);
+
+        TextLine text = new TextLine(f1);
+        text.setPosition(x_pos, y_pos);
+        StringBuilder buf = new StringBuilder();
+        for (int i = 32; i <= 256; i++) {
+            if (i % 32 == 0) {
+                text.setText(buf.toString());
+                text.setPosition(x_pos, y_pos += 24);
+                text.drawOn(page);
+                buf = new StringBuilder();
+            }
+            buf.append((char) i);
+        }
+
+        text.setFont(f2);
+        buf = new StringBuilder();
+        for (int i = 32; i <= 256; i++) {
+            if (i % 32 == 0) {
+                text.setText(buf.toString());
+                text.setPosition(x_pos, y_pos += 24);
+                text.drawOn(page);
+                buf = new StringBuilder();
+            }
+            buf.append((char) i);
+        }
+
+        text.setFont(f3);
+        buf = new StringBuilder();
+        for (int i = 32; i <= 256; i++) {
+            if (i == 210 || i == 242) {
+                // Character 210 is not mapped in the 1253 code page
+                // Character 242 - "SIGMA FINAL" is not available in this font
+                continue;
+            }
+            if (i % 32 == 0) {
+                text.setText(buf.toString());
+                text.setPosition(x_pos, y_pos += 24);
+                text.drawOn(page);
+                buf = new StringBuilder();
+            }
+            buf.append((char) i);
+        }
+
+        text.setFont(f4);
+        buf = new StringBuilder();
+        for (int i = 32; i <= 256; i++) {
+            if (i % 32 == 0) {
+                text.setText(buf.toString());
+                text.setPosition(x_pos, y_pos += 22);
+                text.setUnderline( true );
+                text.drawOn(page);
+                buf = new StringBuilder();
+            }
+            buf.append((char) i);
+        }
+
+        pdf.flush();
+        fos.close();
+        return null;
+    }
+
+    /*
+    private String createPDF (String htmlDocument) throws Exception {
+
+        if (htmlDocument == null)
+            return null;
+
+        DocumentCreator<DocumentStream, DocumentTemplateStream> creator = DocBag.newDocumentCreator();
+        DocumentStream document = creator.createDocument("templates/template.html");
+
+        FileOutputStream fs = new FileOutputStream("sup_doc.pdf");
+        fs.write(document.toString().getBytes("UTF-8"));
+        fs.close();
+
+        return document.toString();
+    }*/
+
+    /*private String createPDF (String htmlDocument) throws Exception {
+
+        PD4ML pd4ml = new PD4ML();
+
+        try {
+            pd4ml.setPageSize( PD4Constants.A4 );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        int topValue = 10;
+        int leftValue = 10;
+        int rightValue = 10;
+        int bottomValue = 10;
+        String unitsValue = "mm";
+        int userSpaceWidth = 780;
+
+        if ( unitsValue.equals("mm") ) {
+            pd4ml.setPageInsetsMM( new Insets(topValue, leftValue,
+                    bottomValue, rightValue) );
+        } else {
+            pd4ml.setPageInsets( new Insets(topValue, leftValue,
+                    bottomValue, rightValue) );
+        }
+
+        pd4ml.setHtmlWidth( userSpaceWidth );
+
+        byte[] input = htmlDocument.getBytes("UTF-8");
+        InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(input));
+
+        pd4ml.render(reader, new FileOutputStream("my_doc_2.pdf"));
+
+
+        //pd4ml.render(htmlDocument, new FileOutputStream("my_doc_2.pdf"));
+        return null;
+    }
+
+    private String createPDF (String htmlDocument){
+
+        if (htmlDocument == null)
+            return null;
+
+        PdfWriter pdfWriter = null;
+
+        //create a new document
+        Document document = new Document();
+        FontFactory.defaultEmbedding = true;
+
+        FontFactory.registerDirectory("/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/fonts");
+
+        Set<String> registeredFonts = FontFactory.getRegisteredFonts();
+        log.info("Registered fonts : " + registeredFonts);
+
+        try {
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            //get Instance of the PDFWriter
+            pdfWriter = PdfWriter.getInstance(document, new FileOutputStream("my_doc_aa.pdf"));
+
+            //document header attributes
+            FontFactory.registerDirectories();
+            FontFactory.register("/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/fonts");
+            document.addAuthor("NovaJoy");
+            document.addCreationDate();
+            document.addProducer();
+            document.addCreator("novajoy.org");
+            document.addTitle("Your RSS feed from NovaJoy");
+            document.setPageSize(PageSize.LETTER);
+
+            //open document
+            document.open();
+
+            //To convert a HTML file from the filesystem
+            //String File_To_Convert = "docs/SamplePDF.html";
+            //FileInputStream fis = new FileInputStream(File_To_Convert);
+
+            //URL for HTML page
+            byte[] input = htmlDocument.getBytes("UTF-8");
+            //InputStreamReader fis = new InputStreamReader();
+            FileOutputStream fos = new FileOutputStream("res.html");
+            fos.write(input);
+
+            //get the XMLWorkerHelper Instance
+            XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
+            //convert to PDF
+            worker.parseXHtml(pdfWriter, document, new ByteArrayInputStream(input));
+            //worker.parseXHtml(pdfWriter, document, new ByteArrayInputStream(input), XMLWorkerHelper.class.getResourceAsStream("/default.css"), Charset.defaultCharset(), new XMLWorkerFontProvider());
+            //close the document
+            document.close();
+            //close the writer
+            pdfWriter.close();
+
+            String result = os.toString();
+            os.close();
+
+            return result;
+
+        }
+
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return null;
+    } */
+
     InternalMessage[] getMessages() throws SQLException {
 
         Statement st = con.createStatement();
@@ -131,7 +355,12 @@ public class NovaSender {
         return messages;
     }
 
-    public Message prepareMessage(InternalMessage msg) throws MessagingException {
+    public Message prepareMessage(InternalMessage msg) throws MessagingException,FileNotFoundException,Exception {
+
+        //String pdfDoc = createPDF(msg.attachment);
+
+        /*FileOutputStream fs = new FileOutputStream(new File("feed.pdf"));
+        fs.write(pdfDoc.getBytes("UTF-8"));*/
 
         return formMessage(msg.title, msg.body, msg.attachment, msg.target.split(","));
     }
@@ -184,6 +413,8 @@ public class NovaSender {
             log.warning(e.getMessage());
         } catch (NullPointerException e) {
             log.info("No mails in queue");
+        } catch (Exception e) {
+            log.warning(e.getMessage());
         }
 
         log.info("Routines finished");
