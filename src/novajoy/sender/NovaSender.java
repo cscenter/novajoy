@@ -402,6 +402,8 @@ public class NovaSender {
         for (int i = 0; i < messages.length; i++) {
 
             ps.setInt(i+1,messages[i].id);
+            File file = new File(messages[i].attachment);
+            file.delete();
         }
 
         int rs = ps.executeUpdate();
