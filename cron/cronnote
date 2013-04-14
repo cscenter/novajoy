@@ -1,0 +1,2 @@
+0 4 * * 1 bash /home/ubuntu/NovaJoy/novajoy/cron/start_janitor.sh >> /home/ubuntu/NovaJoy/novajoy/logs/debug_cron.log 2>&1
+

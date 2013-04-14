@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 public class JdbcManager {
 	private Connection connection;
 	private String baseAddr, baseName, baseUser, basePass;
-	private static Logger log = Logger.getLogger(JdbcManager.class.getName());
+	private static Logger log =  new Loggers().getJdbcManagerLogger();
 
 	public JdbcManager(String baseAddr, String baseName, String baseUser,
 			String basePass) throws ClassNotFoundException, SQLException {

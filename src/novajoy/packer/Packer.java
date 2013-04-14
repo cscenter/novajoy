@@ -32,8 +32,13 @@ class Packer{
     private String dbName = "";
     private String userName = "";
     private String userPassword = "";
+<<<<<<< HEAD
     private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
     private static Logger log = Logger.getLogger(Packer.class.getName());
+=======
+    private final String configPath = "";
+    private static Logger log =  new Loggers().getPackerLogger();
+>>>>>>> 1938abfa822af71339720b0fb1a8c9750325a50c
 
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";
     private final String DEFAULT_BODY = "Thank you for using our service!";
