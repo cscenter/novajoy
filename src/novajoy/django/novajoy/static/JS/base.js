@@ -1,5 +1,9 @@
 function clickNewCollection() {
-    $("#dialog1").dialog({autoOpen: false, width: 400, height: 350, buttons: {
+    $("#dialog1").dialog({autoOpen: false, width: 500, height: 650,closeOnEscape: false,
+        close: function(){
+            document.getElementById('myform').reset();
+        },
+        buttons: {
         OK: function () {
             //Data from a form
             nameOfNewCollection = document.forms[0].elements[0].value;
@@ -18,6 +22,9 @@ function clickNewCollection() {
                 $('.listURL span').remove();
                 $('.listURL').innerHTML = "";
                 var isAdding = "No";
+                curCol = nameOfNewCollection;
+                curObject = $('.collection span:last') ;
+                $('.collection span:last').click();
                 $.post('/addCollection/', {newCollection: nameOfNewCollection, updateInterval: updateInterval},
                     function (data) {
                         var response = data;
@@ -26,9 +33,6 @@ function clickNewCollection() {
                             $('.collection span:last').on("click", function () {
                                 clickCollection($(this).text());
                             });
-                            curCol = nameOfNewCollection;
-                            curObject = $('.collection span:last') ;
-                            $('.collection span:last').click();
                         } else {
                             alert(response);
                         }
@@ -39,6 +43,7 @@ function clickNewCollection() {
             return false;
         },
         Cancel: function () {
+            document.getElementById('myform').reset();
             $(this).dialog("close");
             return false;
         }
@@ -70,9 +75,6 @@ function deleteCollection(nameCollection){
             }
         }
     );
-    //alert("response="+responce);
-
-
 }
 
 function clickRemoveCollection(){
