@@ -11,6 +11,8 @@ from django.template.loader import render_to_string
 from Server.forms import ResetPassword,Password
 import random
 import feedparser
+import string
+from datetime import time
 
 def isAuth(user):
     return user.is_authenticated()
@@ -55,7 +57,15 @@ def addCollection(request):
     if Collection.objects.filter(user=user,name_collection=request.POST['newCollection']).__len__()>0:
         response.write("The collection with such name already exists")
         return HttpResponse(response)
-    c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=request.POST['updateInterval'],last_update_time=datetime.now())
+    updateInterval = request.POST['updateInterval'];
+    interval_min = 0
+    if "min" in updateInterval:
+        interval_min = int(updateInterval[:string.find(updateInterval,"min")])
+    else:
+        interval_min = int(updateInterval[:string.find(updateInterval,"h")]) * 60
+
+    c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=interval_min,last_update_time=datetime.now(),
+                   sendingTime=time(int(request.POST['sendingTime'])),format = request.POST['format'],subject=request.POST['subject'])
     c.save()
 
     response.write("Success")

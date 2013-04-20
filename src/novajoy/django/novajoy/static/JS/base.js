@@ -6,26 +6,26 @@ function clickNewCollection() {
         buttons: {
         OK: function () {
             //Data from a form
-            nameOfNewCollection = document.forms[0].elements[0].value;
+            var nameOfNewCollection = document.forms[0].elements[0].value;
             var updateInterval = document.forms[0].elements[1].value;
+            var sendingTime = document.forms[0].elements[2].value;
+            var format = document.forms[0].elements[3].value;
+            var subject = document.forms[0].elements[4].value;
             //clean form
             document.getElementById('myform').reset();
             nameOfNewCollection = nameOfNewCollection.trim();
             var isnan = isNaN(parseInt(updateInterval));
-            if ((nameOfNewCollection == "")  || (updateInterval.trim()=='')) {
+            if (nameOfNewCollection == "" || subject.trim()=="" ) {
                 alert("Empty field");
-            } else if (parseInt(updateInterval) <= 0) {
-                alert("Negative updateInterval");
-            } else if(isnan==true){
-                alert("The field a 'Update Interval' has to contain only number");
-            }else{
+            } else{
                 $('.listURL span').remove();
                 $('.listURL').innerHTML = "";
                 var isAdding = "No";
                 curCol = nameOfNewCollection;
                 curObject = $('.collection span:last') ;
+                //alert("Hello");
                 $('.collection span:last').click();
-                $.post('/addCollection/', {newCollection: nameOfNewCollection, updateInterval: updateInterval},
+                $.post('/addCollection/', {newCollection: nameOfNewCollection, updateInterval: updateInterval,sendingTime:sendingTime,format:format, subject:subject},
                     function (data) {
                         var response = data;
                         if (response == "Success") {

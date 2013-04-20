@@ -1,6 +1,5 @@
 # -*- encoding: utf-8 -*-
 from django.db import models
-from django.db import models
 from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.models import BaseUserManager
 from django.utils import timezone
@@ -53,6 +52,10 @@ class PostLetters(models.Model):
 class Collection(models.Model):
     user = models.ForeignKey(Account,null=False, blank=True)
     name_collection = models.CharField(max_length=100,null=False, blank=True)
+    #sendingTime:sendingTime,format:format, subject:subject
+    sendingTime = models.TimeField(null=False, blank=True)
+    format = models.CharField(max_length=4,null=False, blank=True)
+    subject = models.CharField(max_length=10,null=False, blank=True)
     delta_update_time = models.IntegerField(null=False, blank=True)
     last_update_time = models.DateTimeField(null=False,blank=True)
 
