@@ -14,7 +14,7 @@ public class Loggers {
 	public Loggers() {
 		try {
 			IniWorker config = new IniWorker(
-					"/home/ubuntu/NovaJoyConfig/config.ini");
+					"/home/ubuntu/NovaJoy/config/config.ini");
 			janitorLog = config.getJanitorLogsAddr();
 			crawlerLog = config.getCrawlerLogsAddr();
 			packerLog = config.getPackerLogsAddr();

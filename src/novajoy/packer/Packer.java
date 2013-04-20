@@ -9,6 +9,8 @@ import java.io.*;
 import java.lang.String;
 import java.net.URL;
 import java.sql.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import java.util.ArrayList;
@@ -19,10 +21,12 @@ import java.util.logging.Logger;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import novajoy.util.config.IniWorker;
 import novajoy.util.logger.Loggers;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 
 class Packer{
@@ -34,7 +38,7 @@ class Packer{
     private String userName = "";
     private String userPassword = "";
 
-    private final String configPath = "/Users/romanfilippov/Dropbox/mydocs/Development/java/novaJoy/novajoy/config/config.ini";
+    private final String configPath = "/home/ubuntu/NovaJoy/config/config.ini";
     private static Logger log =  new Loggers().getPackerLogger();
 
 
@@ -161,12 +165,10 @@ class Packer{
 
     DocumentItem formDocument (String target, ArrayList userFeeds) {
 
-        StringBuilder builder = new StringBuilder("<html><head><title>Your RSS feed from novaJoy</title>" +
-                "<style type =\"text/css\">\n" +
-                "   body{\n" +
-                "        font-family:\"Times New Roman\", Times, serif\n" +
-                "   }\n" +
-                "</style></head><body>");
+        StringBuilder builder =
+                new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?><html><head>" +
+                        "<style type='text/css'>body{font-family:PT Sans}</style>" +
+                        "<title>Your RSS feed from novaJoy</title></head><body>");
 
         for (int i = 0; i < userFeeds.size(); i++) {
             builder.append(((RssItem)userFeeds.get(i)).toHtml().replaceAll("</hr>","<hr/>"));
@@ -174,7 +176,7 @@ class Packer{
 
         builder.append("</body></html>");
 
-        return new DocumentItem(target, builder.toString());
+        return new DocumentItem(target, builder.toString().trim());
     }
 
     void updateFeedTime(UserItem[] users) throws SQLException {
@@ -264,6 +266,25 @@ class Packer{
         }
     }
 
+    private void createPdf (String htmlDocument, String path) {
+
+        ITextRenderer renderer = new ITextRenderer();
+        try {
+            renderer.getFontResolver().addFont("fonts/PTS55F.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(htmlDocument.getBytes("UTF-8")));
+            renderer.setDocument(doc, null);
+            File file = new File(path);
+            OutputStream os = new FileOutputStream(file);
+            renderer.layout();
+            renderer.createPDF(os);
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String prepareAttachmentAndSave(String email, String attachment) throws FileNotFoundException, IOException {
 
         String domain = email.substring(email.indexOf("@")+1);
@@ -271,7 +292,11 @@ class Packer{
         System.out.println(domain + "|" + name);
         String path = "mail_storage/" + domain + "/" + name;
 
-        return path + saveAttachmentToPath(attachment, path);
+        String resultPath = path + saveAttachmentToPath(attachment, path);
+
+        createPdf(attachment, resultPath.replace(".html",".pdf"));
+
+        return resultPath;
     }
 
     public void performRoutineTasks() {
