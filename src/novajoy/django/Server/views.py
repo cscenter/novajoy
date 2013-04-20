@@ -11,6 +11,8 @@ from django.template.loader import render_to_string
 from Server.forms import ResetPassword,Password
 import random
 import feedparser
+import string
+from datetime import time
 
 def isAuth(user):
     return user.is_authenticated()
@@ -55,7 +57,15 @@ def addCollection(request):
     if Collection.objects.filter(user=user,name_collection=request.POST['newCollection']).__len__()>0:
         response.write("The collection with such name already exists")
         return HttpResponse(response)
-    c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=request.POST['updateInterval'],last_update_time=datetime.now())
+    updateInterval = request.POST['updateInterval'];
+    interval_min = 0
+    if "min" in updateInterval:
+        interval_min = int(updateInterval[:string.find(updateInterval,"min")])
+    else:
+        interval_min = int(updateInterval[:string.find(updateInterval,"h")]) * 60
+
+    c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=interval_min,last_update_time=datetime.now(),
+                   sendingTime=time(int(request.POST['sendingTime'])),format = request.POST['format'],subject=request.POST['subject'])
     c.save()
 
     response.write("Success")
@@ -67,6 +77,9 @@ def deleteCollection(request):
         return HttpResponse("error")
     user = Account.objects.get(username=request.user.username)
     collection = Collection.objects.get(user=user,name_collection=request.POST['nameCollection'])
+    rss = RSSFeed.objects.filter(collection=collection)
+    #for _rss in rss:
+
     collection.delete()
 
     return HttpResponse("Success")
@@ -77,8 +90,11 @@ def deleteRSS(request):
         return HttpResponse("error");
     user = Account.objects.get(username=request.user.username)
     collection = Collection.objects.get(user=user,name_collection=request.POST['nameCollection'])
-    rss = RSSFeed.objects.filter(collection=collection,url=request.POST.get('URL'))
-    rss.delete()
+    rss = RSSFeed.objects.get(collection=collection,url=request.POST.get('URL'))
+    if rss.collection.all().__len__()>1:
+        rss.collection.remove(collection)
+    else:
+        rss.delete()
     return HttpResponse("Success")
 
 @user_passes_test(isAuth,login_url="/accounts/login/")
@@ -93,12 +109,18 @@ def addRSS(request):
         if RSSFeed.objects.filter(collection=collection,url=request.POST.get('nameOfNewRSS')).__len__()>0:
             response.write("The RSS with such url already exists")
             return HttpResponse(response)
-        newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32')
-        newRSS.save()
-        newRSS.collection.add(collection)
-        newRSS.save()
-        response.write("Success")
-        return HttpResponse(response)
+        if RSSFeed.objects.filter(url=request.POST.get('nameOfNewRSS')).__len__()>0:
+            rss = RSSFeed.objects.get(url=request.POST.get('nameOfNewRSS'))
+            rss.collection.add(collection)
+            rss.save()
+            return HttpResponse("Success")
+        else:
+            newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32')
+            newRSS.save()
+            newRSS.collection.add(collection)
+            newRSS.save()
+            response.write("Success")
+            return HttpResponse(response)
     else:
         response.write("This address doesn't belong to RSS")
         return HttpResponse(response)

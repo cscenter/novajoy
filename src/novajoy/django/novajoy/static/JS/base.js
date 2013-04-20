@@ -1,24 +1,31 @@
 function clickNewCollection() {
-    $("#dialog1").dialog({autoOpen: false, width: 400, height: 350, buttons: {
+    $("#dialog1").dialog({autoOpen: false, width: 500, height: 650,closeOnEscape: false,
+        close: function(){
+            document.getElementById('myform').reset();
+        },
+        buttons: {
         OK: function () {
             //Data from a form
-            nameOfNewCollection = document.forms[0].elements[0].value;
+            var nameOfNewCollection = document.forms[0].elements[0].value;
             var updateInterval = document.forms[0].elements[1].value;
+            var sendingTime = document.forms[0].elements[2].value;
+            var format = document.forms[0].elements[3].value;
+            var subject = document.forms[0].elements[4].value;
             //clean form
             document.getElementById('myform').reset();
             nameOfNewCollection = nameOfNewCollection.trim();
             var isnan = isNaN(parseInt(updateInterval));
-            if ((nameOfNewCollection == "")  || (updateInterval.trim()=='')) {
+            if (nameOfNewCollection == "" || subject.trim()=="" ) {
                 alert("Empty field");
-            } else if (parseInt(updateInterval) <= 0) {
-                alert("Negative updateInterval");
-            } else if(isnan==true){
-                alert("The field a 'Update Interval' has to contain only number");
-            }else{
+            } else{
                 $('.listURL span').remove();
                 $('.listURL').innerHTML = "";
                 var isAdding = "No";
-                $.post('/addCollection/', {newCollection: nameOfNewCollection, updateInterval: updateInterval},
+                curCol = nameOfNewCollection;
+                curObject = $('.collection span:last') ;
+                //alert("Hello");
+                $('.collection span:last').click();
+                $.post('/addCollection/', {newCollection: nameOfNewCollection, updateInterval: updateInterval,sendingTime:sendingTime,format:format, subject:subject},
                     function (data) {
                         var response = data;
                         if (response == "Success") {
@@ -26,9 +33,6 @@ function clickNewCollection() {
                             $('.collection span:last').on("click", function () {
                                 clickCollection($(this).text());
                             });
-                            curCol = nameOfNewCollection;
-                            curObject = $('.collection span:last') ;
-                            $('.collection span:last').click();
                         } else {
                             alert(response);
                         }
@@ -39,6 +43,7 @@ function clickNewCollection() {
             return false;
         },
         Cancel: function () {
+            document.getElementById('myform').reset();
             $(this).dialog("close");
             return false;
         }
@@ -48,7 +53,6 @@ function clickNewCollection() {
 }
 
 function deleteCollection(nameCollection){
-    //alert("delete "+nameCollection);
     var responce="";
     $.post('/deleteCollection/', {nameCollection: curCol},
         function (data) {
@@ -71,9 +75,6 @@ function deleteCollection(nameCollection){
             }
         }
     );
-    //alert("response="+responce);
-
-
 }
 
 function clickRemoveCollection(){
@@ -82,6 +83,9 @@ function clickRemoveCollection(){
 function clickCollection(text) {
     $('.listURL span').remove();
     var nameCollection = text;
+
+    curObject = $('.collection div:contains('+text+')');
+   // alert(curObject.length);
     curCol = nameCollection;
     $.post('/selectURL/', {nameCollection: nameCollection},
         function (data) {
@@ -93,15 +97,10 @@ function clickCollection(text) {
             //alert(tmp.length);
             for (var i = 0; i < tmp.length; i++) {
                 var url = tmp[i]['fields']['url'];
-                //alert(url);
                 var tt = "<div class='link'><p><span>" + url +
                     "<div class='h'><a href='"+url+"'><img src='/static/JS/deleteIcon.jpg'/> </a></div>" +
                     "</span></p></div> ";
-                //alert(tt);
                 $(".listURL").append(tt);
-//                $('.listURL').append("<div class='link'><p>"+tmp[i]['fields']['url']+
-//                "<a href='#'><div class='h'><img src='/static/JS/deleteIcon.jpg' /></div></div>"+
-//                "</p></div>");
             }
             $('.listURL a').bind('click',function(evt){
                 evt.preventDefault();

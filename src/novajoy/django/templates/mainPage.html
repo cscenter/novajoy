@@ -57,7 +57,7 @@
 <div class="leftArea">
     <div class="collection">
         {% for col in collection %}
-            <p><span title='{{ col }}'>{{ col }}</span>
+            <div><p><span title='{{ col }}'>{{ col }}</span></div>
             </p>
         {% endfor %}
     </div>
@@ -76,13 +76,10 @@
         </p>
     </div>
 </div>
-<div id="dialog1" display="none" title="Первое окно">
-    <p><b>New Collection</b>.Enter name of collection and update interval.</p>
-    <form id="myform">
-        Name collection<input type="text" id="nameCollection" size='30'/>
-        Update interval <input type="text" size='30' name="description" id="updateInterval"><br>
-    </form>
+<div id="dialog1" title="Первое окно">
+    {% include "dialog.html" %}
 </div>
+
 
 </body>
 </html>
