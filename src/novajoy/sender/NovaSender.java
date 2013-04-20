@@ -1,16 +1,11 @@
 package novajoy.sender;
-import com.itextpdf.text.pdf.BaseFont;
 import novajoy.util.config.IniWorker;
 import novajoy.util.logger.Loggers;
-import org.w3c.dom.Document;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;

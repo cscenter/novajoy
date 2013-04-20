@@ -7,7 +7,6 @@
 package novajoy.packer;
 import java.io.*;
 import java.lang.String;
-import java.net.URL;
 import java.sql.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,12 +17,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.lowagie.text.pdf.BaseFont;
 import novajoy.util.config.IniWorker;
 import novajoy.util.logger.Loggers;
 import org.xhtmlrenderer.pdf.ITextRenderer;
