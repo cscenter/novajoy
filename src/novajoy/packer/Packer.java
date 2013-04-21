@@ -32,7 +32,7 @@ class Packer{
     private String userName = "";
     private String userPassword = "";
 
-    private final String configPath = "/home/ubuntu/NovaJoy/config/config.ini";
+    private final String configPath = "/home/ubuntu/NovaJoy/novajoy/config/config.ini";
     private static Logger log =  new Loggers().getPackerLogger();
 
 
