@@ -98,7 +98,7 @@ public class Crawler extends Thread {
 			throws SQLException {
 
 		if (check_already_in(entry.getLink())) {
-			log.info("Entry with link: " + entry.getLink() + " already exists.");
+			//log.info("Entry with link: " + entry.getLink() + " already exists.");
 			return false;
 		}
 
