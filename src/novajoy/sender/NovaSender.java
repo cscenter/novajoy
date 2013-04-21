@@ -42,7 +42,7 @@ public class NovaSender {
 
     InternalMessage[] collection = null;
 
-    private final String configPath = "/home/ubuntu/NovaJoy/config/config.ini";
+    private final String configPath = "/home/ubuntu/NovaJoyConfig/config.ini";
 
     Connection con = null;
 
