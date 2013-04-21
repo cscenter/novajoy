@@ -6,7 +6,7 @@ import novajoy.util.db.JdbcManager;
 public class StartCrawling {
 	public static void main(String[] args) throws Exception {
 		IniWorker config = new IniWorker(
-                "/home/ubuntu/NovaJoy/novajoy/config/config.ini");
+                "/home/ubuntu/NovaJoyConfig/config.ini");
 		JdbcManager dbman = new JdbcManager(config.getDBaddress(),
 				config.getDBbasename(), config.getDBuser(),
 				config.getDBpassword());
