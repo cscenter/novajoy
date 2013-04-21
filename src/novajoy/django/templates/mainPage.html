@@ -11,9 +11,6 @@
             display: block;
             border-right: 1px solid #FFF;
         }
-        .curCollection{
-            background-color: red;
-        }
         #newCollection span {
             border-top: 1px solid #FFF;
             text-decoration: none;
@@ -65,6 +62,9 @@
     <div id="newCollection">
         <p><a href="#" onclick='clickNewCollection()'>New Collection</a></p>
     </div>
+    <div id="editCollection">
+        <p><a href="#" onclick='editCollection()'>Edit Collection</a></p>
+    </div>
     <div id="removeCollection">
         <p><a href="#" onclick='clickRemoveCollection()'>Remove collection</a></p>
     </div>
@@ -76,7 +76,7 @@
         </p>
     </div>
 </div>
-<div id="dialog1" title="Первое окно">
+<div id="dialog1" >
     {% include "dialog.html" %}
 </div>
 
