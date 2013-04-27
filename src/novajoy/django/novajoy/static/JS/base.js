@@ -1,56 +1,3 @@
-function send(nameOfNewCollection,updateInterval,sendingTime,format,subject){
-    $('.listURL span').remove();
-    $('.listURL').innerHTML = "";
-    var isAdding = "No";
-    curCol = nameOfNewCollection;
-
-    //$('.collection span:last').click();
-    $.post('/addCollection/', {newCollection: nameOfNewCollection, updateInterval: updateInterval,sendingTime:sendingTime,format:format, subject:subject},
-        function (data) {
-            var response = data;
-            if (response == "Success") {
-                $('.collection').append("<div><p><span>" + nameOfNewCollection + "</span></p></div>");
-                $('.collection span:last').on("click", function () {
-                    clickCollection($(this).text());
-                });
-                curCol = nameOfNewCollection;
-                $('.collection span:last').click();
-                curObject = $('.collection span:last') ;
-                $('.collection span:last').click();
-            } else {
-                alert(response);
-            }
-        }
-    );
-
-//    alert($('.collection span:last').text());
-    //$('.collection span:last').click();
-}
-
-function sendEditCollection(oldName,nameOfNewCollection,updateInterval,sendingTime,format,subject){
-    $.post('/editCollection/', {oldName:oldName,newCollection: nameOfNewCollection, updateInterval: updateInterval,sendingTime:sendingTime,format:format, subject:subject},
-        function (data) {
-            var response = data;
-            if (response == "Success") {
-                //<div><p><span title='{{ col }}'>{{ col }}</span></div>
-                curObject = $('.collection div:contains('+oldName+') p span').text(nameOfNewCollection);
-                curCol=nameOfNewCollection;
-                curObject.click();
-                // alert($('.collection div:contains('+oldName+')').text());
-            }
-            if(response=="Error/this name already exist"){
-                alert("Error/this name already exist");
-            }
-        }
-    );
-}
-function editCollection(){
-    showDialog(sendEditCollection,curCol);
-}
-
-function clickNewCollection(){
-    showDialog(send,"");
-}
 function showDialog(func,old_name) {
     $("#dialog1").dialog({autoOpen: false, width: 500, height: 650,closeOnEscape: false,
         close: function(){
@@ -58,17 +5,14 @@ function showDialog(func,old_name) {
         },
         open:function(){
             if (old_name!=""){
-//              document.forms[0].elements[0].value=curCol;
-
                 $.post('/infoAboutCollection/', {oldName:old_name},
                     function (data) {
                         var response = $.parseJSON(data);
                         document.forms[0].elements[0].value = response[0]['fields']['name_collection'];
                         document.forms[0].elements[4].value = response[0]['fields']['subject'];
-                        alert(response[0]['fields']['sendingTime']);
+                        document.forms[0].elements[2].options[sending_time_map[response[0]['fields']['sendingTime']]].selected=true;
                         document.forms[0].elements[3].options[format_map[response[0]['fields']['format']]].selected=true;
                         document.forms[0].elements[1].options[update_time_map[response[0]['fields']['delta_update_time']]].selected=true;
-                        //alert(response[0]['fields']['subject']);
                     }
                 );
             }
@@ -109,119 +53,6 @@ function showDialog(func,old_name) {
     $("#dialog1").dialog("open");
 }
 
-function deleteCollection(nameCollection){
-    var responce="";
-    $.post('/deleteCollection/', {nameCollection: curCol},
-        function (data) {
-            response = data;
-            if (response == "Success") {
-                curObject.remove();
-                if($('.collection span').length>0){
-                    curObject= $('.collection span:last');
-                    curCol = $('.collection span:last').text();
-                    curObject.click();
-                }else{
-                    curCol = "You have no collections";
-                    $('.listURL').empty();
-                    $(".listURL").prepend('<h2>' + curCol + '</h2>');
-                }
-                return true;
-            } else {
-                alert(response);
-                return false;
-            }
-        }
-    );
-}
-
-function clickRemoveCollection(){
-    var success = deleteCollection(curCol);
-}
-
-function clickCollection(text) {
-    $('.listURL span').remove();
-    var nameCollection = text;
-    if(curObject!=null){
-        curObject.removeAttr('id');
-    }
-    else{
-        alert("vova");
-    }
-    curObject = $('.collection div:contains('+text+')');
-    curCol = nameCollection;
-    curObject.attr('id','hello');
-    $(".listURL h2").remove();
-    $(".link").remove();
-    $(".listURL").prepend('<h2>' + curCol + '</h2>');
-    $.post('/selectURL/', {nameCollection: nameCollection},
-        function (data) {
-            var tmp = $.parseJSON(data);
-            for (var i = 0; i < tmp.length; i++) {
-                var url = tmp[i]['fields']['url'];
-                var tt = "<div class='link'><p><span>" + url +
-                    "<div class='h'><a href='"+url+"'><img src='/static/JS/deleteIcon.jpg'/> </a></div>" +
-                    "</span></p></div> ";
-                $(".listURL").append(tt);
-            }
-            $('.listURL a').bind('click',function(evt){
-                evt.preventDefault();
-                deleteRSS($(this).attr('href'));
-                //$('.listURL div:contains('+$(this).attr('href')+')').remove();
-
-            });
-
-
-        }
-    );
-}
-
-function deleteRSS(url){
-    $.post('/deleteRSS/', {URL: url, nameCollection: curCol},
-        function (data) {
-            var response = data;
-
-            if (response == "Success") {
-                // alert($('.listURL div:contains('+$(this).attr('href')+')').length);
-                //alert($('.link div:contains('+$(this).attr('href')+')').length);
-                $('.listURL div:contains('+url+')').remove();
-            } else {
-                alert(response);
-            }
-        }
-    );
-//    alert("link="+$('.link div:contains()').length);
-//    alert($('.listURL div:contains('+url+')').length);
-//    $('.listURL div:contains('+url+')').remove();
-}
-
-function addRSS() {
-    var nameOfNewRSS = prompt("Enter name new RSS:");
-    nameOfNewRSS = nameOfNewRSS.trim();
-    if (nameOfNewRSS == "") {
-        alert("Empty Field");
-    } else {
-        $.post('/addRSS/', {nameOfNewRSS: nameOfNewRSS, nameCollection: curCol},
-            function (data) {
-                var response = data;
-                if (response == "Success") {
-                    var tt = "<div class='link'><p><span>" + nameOfNewRSS +
-                        "<div class='h'><a href='"+nameOfNewRSS+"'><img src='/static/JS/deleteIcon.jpg'/> </a></div>" +
-                        "</span></p></div> ";
-                    $('.listURL').append(tt);
-                    $('.listURL a').bind('click',function(evt){
-                        evt.preventDefault();
-                        deleteRSS($(this).attr('href'));
-                        //$('.listURL div:contains('+$(this).attr('href')+')').remove();
-
-                    });
-                } else {
-                    alert(response);
-                }
-            }
-        );
-    }
-}
-
 $(document).ready(function () {
     format_map = [];
     format_map['pdf'] = 0;
@@ -237,7 +68,23 @@ $(document).ready(function () {
     update_time_map['14400']=4;
 
     sending_time_map=[];
-    sending_time_map['']
+    sending_time_map['8:00:00']=0;
+    sending_time_map['9:00:00']=1;
+    sending_time_map['10:00:00']=2;
+    sending_time_map['11:00:00']=3;
+    sending_time_map['12:00:00']=4;
+    sending_time_map['13:00:00']=5;
+    sending_time_map['14:00:00']=6;
+    sending_time_map['15:00:00']=7;
+    sending_time_map['16:00:00']=8;
+    sending_time_map['17:00:00']=9;
+    sending_time_map['18:00:00']=10;
+    sending_time_map['19:00:00']=11;
+    sending_time_map['20:00:00']=12;
+    sending_time_map['21:00:00']=13;
+    sending_time_map['22:00:00']=14;
+    sending_time_map['23:00:00']=15;
+    sending_time_map['00:00:00']=16;
     $(".collection span").bind('click',function(evt){
         evt.preventDefault();
         clickCollection($(this).text());

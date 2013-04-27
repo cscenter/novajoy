@@ -141,13 +141,23 @@ def infoAboutCollection(request):
 def editCollection(request):
     if request.method=='POST':
         user = Account.objects.get(username = request.user.username)
-        if Collection.objects.filter(user=user,name_collection = request.POST['newCollection']).__len__()>0:
+        if Collection.objects.filter(user=user,name_collection = request.POST['newCollection']).__len__()>0 and request.POST['oldName']!=request.POST['newCollection']:
             return HttpResponse("Error/this name already exist")
         else:
             c = Collection.objects.get(user=user,name_collection=request.POST['oldName'])
             c.name_collection = request.POST['newCollection']
+            c.format = request.POST['format']
+            c.sendingTime = datetime.time(int(request.POST['sendingTime']))
+            updateInterval = request.POST['updateInterval'];
+            interval_sec = 0
+            if "min" in updateInterval:
+                interval_sec = int(updateInterval[:string.find(updateInterval,"min")])*60
+            else:
+                interval_sec = int(updateInterval[:string.find(updateInterval,"h")]) * 60 * 60
+
+            c.delta_update_time = interval_sec
             c.save()
-        return HttpResponse("Success")
+            return HttpResponse("Success")
     else:
         return HttpResponse("Error/No get")
 
