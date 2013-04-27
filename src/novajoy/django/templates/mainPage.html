@@ -33,13 +33,18 @@
 
         .rightArea {
             margin-left: 500px;
-            position: fixed;
+            position: absolute;
         }
         #dialog1{
             display : none;
         }
         #currentCollection span{
             background-color: red;
+        }
+        #logout_ref{
+            position:absolute;
+            right:50px;
+            top:15px;
         }
     </style>
 
@@ -80,10 +85,18 @@
         <p><a href="#" onclick="addRSS()"> Add RSS</a>
         </p>
     </div>
+
+    {#<div id="logout_ref">#}
+    {#    <a href="/accounts/logout/">#}
+    {#</div>#}
+</div>
+<div id="logout_ref">
+    <a href="/accounts/logout/">Log out</a>
 </div>
 <div id="dialog1" >
     {% include "dialog.html" %}
 </div>
+
 
 
 </body>
