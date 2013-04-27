@@ -26,6 +26,8 @@ DATABASES = {
     }
 }
 
+
+
 AUTH_PROFILE_MODULE = 'novajoy.Server.Profile'
 ROOT_URLCONF = 'novajoy.urls'
 AUTH_USER_EMAIL_UNIQUE = True
