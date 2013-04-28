@@ -11,9 +11,6 @@
             display: block;
             border-right: 1px solid #FFF;
         }
-        .curCollection{
-            background-color: red;
-        }
         #newCollection span {
             border-top: 1px solid #FFF;
             text-decoration: none;
@@ -36,19 +33,29 @@
 
         .rightArea {
             margin-left: 500px;
-            position: fixed;
+            position: absolute;
         }
         #dialog1{
             display : none;
+        }
+        #currentCollection span{
+            background-color: red;
+        }
+        #logout_ref{
+            position:absolute;
+            right:50px;
+            top:15px;
         }
     </style>
 
     <script type="text/javascript" src="/static/JS/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="/static/JS/settings.js"></script>
     <script type="text/javascript" src="/static/JS/base.js"></script>
+    <script type="text/javascript" src="/static/JS/query_to_server.js"></script>
+    <script type="text/javascript" src="/static/JS/action_rss.js"></script>
+    <script type="text/javascript" src="/static/JS/action_collection.js"></script>
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"
           rel="stylesheet" type="text/css"/>
-    {#    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>#}
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 </head>
 <body>
@@ -65,6 +72,9 @@
     <div id="newCollection">
         <p><a href="#" onclick='clickNewCollection()'>New Collection</a></p>
     </div>
+    <div id="editCollection">
+        <p><a href="#" onclick='editCollection()'>Edit Collection</a></p>
+    </div>
     <div id="removeCollection">
         <p><a href="#" onclick='clickRemoveCollection()'>Remove collection</a></p>
     </div>
@@ -75,10 +85,18 @@
         <p><a href="#" onclick="addRSS()"> Add RSS</a>
         </p>
     </div>
+
+    {#<div id="logout_ref">#}
+    {#    <a href="/accounts/logout/">#}
+    {#</div>#}
 </div>
-<div id="dialog1" title="Первое окно">
+<div id="logout_ref">
+    <a href="/accounts/logout/">Log out</a>
+</div>
+<div id="dialog1" >
     {% include "dialog.html" %}
 </div>
+
 
 
 </body>

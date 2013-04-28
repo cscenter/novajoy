@@ -1,0 +1,69 @@
+function clickCollection(text) {
+    $('.listURL span').remove();
+    var nameCollection = text;
+    if(curObject!=null){
+        curObject.removeAttr('id');
+    }
+    else{
+        alert("vova");
+    }
+    curObject = $('.collection div:contains('+text+')');
+    curCol = nameCollection;
+    curObject.attr('id','currentCollection');
+    $(".listURL h2").remove();
+    $(".link").remove();
+    $(".listURL").prepend('<h2>' + curCol + '</h2>');
+    $.post('/selectURL/', {nameCollection: nameCollection},
+        function (data) {
+            var tmp = $.parseJSON(data);
+            for (var i = 0; i < tmp.length; i++) {
+                var url = tmp[i]['fields']['url'];
+                var tt = "<div class='link'><p><span>" + url +
+                    "<div class='h'><a href='"+url+"'><img src='/static/JS/deleteIcon.jpg'/> </a></div>" +
+                    "</span></p></div> ";
+                $(".listURL").append(tt);
+            }
+            $('.listURL a').bind('click',function(evt){
+                evt.preventDefault();
+                deleteRSS($(this).attr('href'));
+            });
+        }
+    );
+}
+
+function clickRemoveCollection(){
+    var success = deleteCollection(curCol);
+}
+
+function deleteCollection(nameCollection){
+    var responce="";
+    $.post('/deleteCollection/', {nameCollection: curCol},
+        function (data) {
+            response = data;
+            if (response == "Success") {
+                curObject.remove();
+                if($('.collection span').length>0){
+                    curObject= $('.collection span:last');
+                    curCol = $('.collection span:last').text();
+                    curObject.click();
+                }else{
+                    curCol = "You have no collections";
+                    $('.listURL').empty();
+                    $(".listURL").prepend('<h2>' + curCol + '</h2>');
+                }
+                return true;
+            } else {
+                alert(response);
+                return false;
+            }
+        }
+    );
+}
+
+function editCollection(){
+    showDialog(sendEditCollection,curCol);
+}
+
+function clickNewCollection(){
+    showDialog(send,"");
+}

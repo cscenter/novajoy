@@ -13,6 +13,7 @@ import random
 import feedparser
 import string
 from datetime import time
+import datetime
 
 def isAuth(user):
     return user.is_authenticated()
@@ -58,14 +59,15 @@ def addCollection(request):
         response.write("The collection with such name already exists")
         return HttpResponse(response)
     updateInterval = request.POST['updateInterval'];
-    interval_min = 0
+    interval_sec = 0
     if "min" in updateInterval:
-        interval_min = int(updateInterval[:string.find(updateInterval,"min")])
+        interval_sec = int(updateInterval[:string.find(updateInterval,"min")])*60
     else:
-        interval_min = int(updateInterval[:string.find(updateInterval,"h")]) * 60
+        interval_sec = int(updateInterval[:string.find(updateInterval,"h")]) * 60 * 60
 
-    c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=interval_min,last_update_time=datetime.now(),
-                   sendingTime=time(int(request.POST['sendingTime'])),format = request.POST['format'],subject=request.POST['subject'])
+    s = datetime.time(int(request.POST['sendingTime']),0,0)
+    c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=interval_sec,last_update_time=datetime.datetime.now(),
+                   sendingTime=datetime.time(int(request.POST['sendingTime'])),format = request.POST['format'],subject=request.POST['subject'])
     c.save()
 
     response.write("Success")
@@ -124,6 +126,43 @@ def addRSS(request):
     else:
         response.write("This address doesn't belong to RSS")
         return HttpResponse(response)
+
+@user_passes_test(isAuth,login_url="/accounts/login/")
+def infoAboutCollection(request):
+    if request.method=='POST':
+        user = Account.objects.get(username=request.user.username)
+        c = Collection.objects.filter(user=user,name_collection=request.POST['oldName'])
+        mimetype = 'application/javascript'
+        data = serializers.serialize('json', c)
+        return HttpResponse(data,mimetype)
+    return HttpResponse("Error/ No get")
+
+@user_passes_test(isAuth,login_url="/accounts/login/")
+def editCollection(request):
+    if request.method=='POST':
+        user = Account.objects.get(username = request.user.username)
+        if Collection.objects.filter(user=user,name_collection = request.POST['newCollection']).__len__()>0 and request.POST['oldName']!=request.POST['newCollection']:
+            return HttpResponse("Error/this name already exist")
+        else:
+            c = Collection.objects.get(user=user,name_collection=request.POST['oldName'])
+            c.name_collection = request.POST['newCollection']
+            c.format = request.POST['format']
+            c.sendingTime = datetime.time(int(request.POST['sendingTime']))
+            updateInterval = request.POST['updateInterval'];
+            interval_sec = 0
+            if "min" in updateInterval:
+                interval_sec = int(updateInterval[:string.find(updateInterval,"min")])*60
+            else:
+                interval_sec = int(updateInterval[:string.find(updateInterval,"h")]) * 60 * 60
+
+            c.delta_update_time = interval_sec
+            c.save()
+            return HttpResponse("Success")
+    else:
+        return HttpResponse("Error/No get")
+
+
+
 
 def resetPassword(request):
     if request.method == 'POST':
