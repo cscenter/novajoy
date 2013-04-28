@@ -20,6 +20,7 @@ up your own URL patterns for these views instead.
 
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
+from django.contrib.auth import views as auth_views
 
 from registration.views import activate
 from registration.views import register
@@ -45,6 +46,7 @@ urlpatterns = patterns('',
                            direct_to_template,
                            {'template': 'registration/registration_complete.html'},
                            name='registration_complete'),
+
                        url(r'^register/closed/$',
                            direct_to_template,
                            {'template': 'registration/registration_closed.html'},

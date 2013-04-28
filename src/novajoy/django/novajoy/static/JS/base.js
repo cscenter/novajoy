@@ -1,5 +1,5 @@
 function showDialog(func,old_name) {
-    $("#dialog1").dialog({autoOpen: false, width: 500, height: 650,closeOnEscape: false,
+    $("#dialog1").dialog({autoOpen: false, width: 500, height: 450,closeOnEscape: false,
         close: function(){
             document.getElementById('myform').reset();
         },

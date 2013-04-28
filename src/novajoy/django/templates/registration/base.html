@@ -2,17 +2,28 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <style>
-      input.required, error {
-        border: 2px solid red;
-      }
-      body {
-          text-align: left;
-          background-color: #eee;
-      }
-    </style>
-
+{#      input.required, error {#}
+{#        border: 2px solid red;#}
+{#      }#}
+{#      body {#}
+{#          text-align: left;#}
+{#          background-color: #eee;#}
+{#      }#}
+<style type="text/css">
+    .errorMess {
+        color: red; /* Красный цвет выделения */
+    }
+</style>
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="/static/bootstrap/js/bootstrap.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <title>{% block title %}Tagging Exploration{% endblock %}</title>
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
 </head>
 
 <body>
@@ -24,5 +35,13 @@
         {% block content %}{% endblock %}
         {% block main_content %}{% endblock %}
     </div>
+    <div id="content-related">
+        {% block content-related %}{% endblock %}
+    </div>
+    <div id="footer">
+        <div><a href="/">NovaJoy</a>&#1123; &copy; 2013</div>
+    </div>
+
+
 </body>
 </html>

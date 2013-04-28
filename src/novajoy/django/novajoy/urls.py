@@ -1,11 +1,14 @@
 from django.conf.urls import patterns, include, url
 from Server.views import *
 from django.contrib import admin
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
                        url(r'^captcha/', include('captcha.urls')),
+                       url(r'^index/',indexPage),
                        url(r'^$',viewCollection),
+                       url(r'^index$',indexPage),
                        url(r'^selectURL/$',viewURL),
                        url(r'^addCollection/$',addCollection),
                        url(r'^deleteCollection/$',deleteCollection),
