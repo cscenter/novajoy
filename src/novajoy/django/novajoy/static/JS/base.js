@@ -1,30 +1,18 @@
-function startLoadingAnimation()
-{
-    var imgObj = $("#loadImg");
-    imgObj.show();
 
-    var centerX = $("#editCollection").offset().left+165;
-    var centerY = $("#editCollection").offset().top+10;
-
-    imgObj.offset(({ top: centerY, left: centerX }));
-}
-
-function stopLoadingAnimation()
-{
-    $("#loadImg").hide();
-}
 function showDialog(func,old_name) {
     $("#dialog1").dialog({autoOpen: false, width: 500, height: 450,closeOnEscape: false,
         close: function(){
             document.getElementById('myform').reset();
         },
         open:function(){
-            if (old_name!=""){
+            if (old_name.trim()!=""){
                 document.forms[0].elements[0].value = name_collection;
                 document.forms[0].elements[4].value = subject
                 document.forms[0].elements[2].options[sending_time].selected=true;
                 document.forms[0].elements[3].options[format].selected=true;
                 document.forms[0].elements[1].options[delta].selected=true;
+            }else{
+                document.getElementById('myform').reset();
             }
         },
         buttons: {
@@ -44,9 +32,11 @@ function showDialog(func,old_name) {
                 } else{
                     if(old_name!=''){
                         //alert("Edit");
+                        document.getElementById('myform').reset();
                         func(old_name,nameOfNewCollection,updateInterval,sendingTime,format,subject);
                     }else{
                         //alert("new");
+                        document.getElementById('myform').reset();
                         func(nameOfNewCollection,updateInterval,sendingTime,format,subject);
                     }
                 }
@@ -60,18 +50,22 @@ function showDialog(func,old_name) {
             }
         }
     });
-    var q=$.post('/infoAboutCollection/', {oldName:old_name},
-        function (data) {
-            var response = $.parseJSON(data);
-            name_collection = response[0]['fields']['name_collection'];
-            subject=response[0]['fields']['subject'];
-            sending_time=sending_time_map[response[0]['fields']['sendingTime']];
-            format=format_map[response[0]['fields']['format']];
-            delta=update_time_map[response[0]['fields']['delta_update_time']];
+    if(old_name!=''){
+        var q=$.post('/infoAboutCollection/', {oldName:old_name},
+            function (data) {
+                var response = $.parseJSON(data);
+                name_collection = response[0]['fields']['name_collection'];
+                subject=response[0]['fields']['subject'];
+                sending_time=sending_time_map[response[0]['fields']['sendingTime']];
+                format=format_map[response[0]['fields']['format']];
+                delta=update_time_map[response[0]['fields']['delta_update_time']];
 
-        }
-    ).always(function() {stopLoadingAnimation();$("#dialog1").dialog("open"); });
-    startLoadingAnimation();
+            }
+        ).always(function() {stopLoadingAnimation();$("#dialog1").dialog("open"); });
+        startLoadingAnimation("infoCollection");
+    }else{
+        $("#dialog1").dialog("open");
+    }
 }
 
 $(document).ready(function () {

@@ -21,7 +21,10 @@ function send(nameOfNewCollection,updateInterval,sendingTime,format,subject){
                 alert(response);
             }
         }
-    );
+    ).always(function(){
+            stopLoadingAnimation();
+        });
+    startLoadingAnimation("addCollection");
 }
 
 function sendEditCollection(oldName,nameOfNewCollection,updateInterval,sendingTime,format,subject){
@@ -39,5 +42,8 @@ function sendEditCollection(oldName,nameOfNewCollection,updateInterval,sendingTi
                 alert("Error/this name already exist");
             }
         }
-    );
+    ).always(function(){
+            stopLoadingAnimation();
+        });
+    startLoadingAnimation("editCollection");
 }

@@ -28,7 +28,10 @@ function clickCollection(text) {
                 deleteRSS($(this).attr('href'));
             });
         }
-    );
+    ).always(function(){
+            stopLoadingAnimation();
+        });
+    startLoadingAnimation("selectRSS");
 }
 
 function clickRemoveCollection(){
@@ -57,7 +60,10 @@ function deleteCollection(nameCollection){
                 return false;
             }
         }
-    );
+    ).always(function(){
+            stopLoadingAnimation();
+        });
+    startLoadingAnimation("removeCollection");
 }
 
 function editCollection(){

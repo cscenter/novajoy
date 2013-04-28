@@ -22,7 +22,10 @@ function addRSS() {
                     alert(response);
                 }
             }
-        );
+        ).always(function(){
+                stopLoadingAnimation();
+            });
+        startLoadingAnimation("addRSS");
     }
 }
 
@@ -36,5 +39,8 @@ function deleteRSS(url){
                 alert(response);
             }
         }
-    );
+    ).always(function(){
+            stopLoadingAnimation();
+        });
+    startLoadingAnimation("deleteRSS");
 }
