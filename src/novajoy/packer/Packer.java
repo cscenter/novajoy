@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import com.lowagie.text.pdf.BaseFont;
 import novajoy.util.config.IniWorker;
 import novajoy.util.logger.Loggers;
+import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 
@@ -35,6 +36,7 @@ class Packer{
     private final String configPath = "/home/ubuntu/NovaJoy/config/config.ini";
     private static Logger log =  new Loggers().getPackerLogger();
 
+    private static Tidy tidy = null;
 
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";
     private final String DEFAULT_BODY = "Thank you for using our service!";
@@ -71,6 +73,26 @@ class Packer{
         } catch (Exception exc) {
             log.warning(exc.getMessage());
         }
+    }
+
+    private static Tidy getTidy() {
+        if (null == tidy) {
+            tidy = new Tidy();
+            tidy.setQuiet(true);
+            tidy.setShowErrors(0);
+            tidy.setShowWarnings(true);
+            tidy.setXHTML(true);
+            tidy.setOutputEncoding("UTF-8");
+            tidy.setInputEncoding("UTF-8");
+            tidy.setAsciiChars(false);
+            tidy.setMakeClean(true);
+            tidy.setEscapeCdata(false);
+            tidy.setFixComments(false);
+            tidy.setFixUri(false);
+            tidy.setLiteralAttribs(true);
+            tidy.setXmlOut(true);
+        }
+        return tidy;
     }
 
     UserItem[] getUsersIds() throws SQLException {
@@ -279,16 +301,24 @@ class Packer{
         }
     }
 
-    public String prepareAttachmentAndSave(String email, String attachment) throws FileNotFoundException, IOException {
+    public String prepareAttachmentAndSave(String email, String attachment) throws IOException {
 
         String domain = email.substring(email.indexOf("@")+1);
         String name = email.substring(0, email.indexOf("@"));
         System.out.println(domain + "|" + name);
         String path = "mail_storage/" + domain + "/" + name;
 
-        String resultPath = path + saveAttachmentToPath(attachment, path);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        StringWriter writer = new StringWriter();
+        getTidy().getConfiguration().printConfigOptions(writer, true);
+        System.out.println(writer.toString());
+        getTidy().parse(new ByteArrayInputStream(attachment.getBytes("UTF-8")), os);
 
-        createPdf(attachment, resultPath.replace(".html",".pdf"));
+        String validXHTML = os.toString("UTF-8");
+        String resultPath = path + saveAttachmentToPath(validXHTML, path);
+
+        createPdf(validXHTML, resultPath.replace(".html", ".pdf"));
+        os.close();
 
         return resultPath;
     }

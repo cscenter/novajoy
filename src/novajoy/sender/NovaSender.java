@@ -233,7 +233,9 @@ public class NovaSender {
     public Message formMessage(String subject, String body, String pathToContent, String[] to) throws MessagingException {
 
         String content = pathToContent;
-        String pdfContent = pathToContent.replace(".html", ".pdf");
+        String pdfContent = null;
+        if (content != null)
+            pdfContent = pathToContent.replace(".html", ".pdf");
 
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(from));
