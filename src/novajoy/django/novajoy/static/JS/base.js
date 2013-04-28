@@ -1,3 +1,18 @@
+function startLoadingAnimation()
+{
+    var imgObj = $("#loadImg");
+    imgObj.show();
+
+    var centerX = $("#editCollection").offset().left+165;
+    var centerY = $("#editCollection").offset().top+10;
+
+    imgObj.offset(({ top: centerY, left: centerX }));
+}
+
+function stopLoadingAnimation()
+{
+    $("#loadImg").hide();
+}
 function showDialog(func,old_name) {
     $("#dialog1").dialog({autoOpen: false, width: 500, height: 450,closeOnEscape: false,
         close: function(){
@@ -5,16 +20,11 @@ function showDialog(func,old_name) {
         },
         open:function(){
             if (old_name!=""){
-                $.post('/infoAboutCollection/', {oldName:old_name},
-                    function (data) {
-                        var response = $.parseJSON(data);
-                        document.forms[0].elements[0].value = response[0]['fields']['name_collection'];
-                        document.forms[0].elements[4].value = response[0]['fields']['subject'];
-                        document.forms[0].elements[2].options[sending_time_map[response[0]['fields']['sendingTime']]].selected=true;
-                        document.forms[0].elements[3].options[format_map[response[0]['fields']['format']]].selected=true;
-                        document.forms[0].elements[1].options[update_time_map[response[0]['fields']['delta_update_time']]].selected=true;
-                    }
-                );
+                document.forms[0].elements[0].value = name_collection;
+                document.forms[0].elements[4].value = subject
+                document.forms[0].elements[2].options[sending_time].selected=true;
+                document.forms[0].elements[3].options[format].selected=true;
+                document.forms[0].elements[1].options[delta].selected=true;
             }
         },
         buttons: {
@@ -50,7 +60,18 @@ function showDialog(func,old_name) {
             }
         }
     });
-    $("#dialog1").dialog("open");
+    var q=$.post('/infoAboutCollection/', {oldName:old_name},
+        function (data) {
+            var response = $.parseJSON(data);
+            name_collection = response[0]['fields']['name_collection'];
+            subject=response[0]['fields']['subject'];
+            sending_time=sending_time_map[response[0]['fields']['sendingTime']];
+            format=format_map[response[0]['fields']['format']];
+            delta=update_time_map[response[0]['fields']['delta_update_time']];
+
+        }
+    ).always(function() {stopLoadingAnimation();$("#dialog1").dialog("open"); });
+    startLoadingAnimation();
 }
 
 $(document).ready(function () {

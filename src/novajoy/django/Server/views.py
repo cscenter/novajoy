@@ -206,6 +206,3 @@ def resetPasswordConfirm(request,activation_key):
             #return HttpResponse("OK")
         except Account.DoesNotExist:
             return HttpResponse("Error")
-
-def indexPage(request):
-    return  render_to_response('index.html',context_instance=RequestContext(request))
