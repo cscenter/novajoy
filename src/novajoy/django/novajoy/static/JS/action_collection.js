@@ -39,10 +39,9 @@ function clickRemoveCollection(){
 }
 
 function deleteCollection(nameCollection){
-    var responce="";
     $.post('/deleteCollection/', {nameCollection: curCol},
         function (data) {
-            response = data;
+            var response = data;
             if (response == "Success") {
                 curObject.remove();
                 if($('.collection span').length>0){
