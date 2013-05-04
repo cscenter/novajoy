@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from Server.views import *
 from django.contrib import admin
+
 admin.autodiscover()
 
 urlpatterns = patterns('',

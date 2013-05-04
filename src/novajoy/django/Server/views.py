@@ -32,7 +32,7 @@ def viewCollection(request):
     try:
         user = Account.objects.get(username=request.user.username)
         collection = Collection.objects.filter(user=user)
-        return render_to_response('mainPage.html',{'collection':collection},context_instance=RequestContext(request))
+        return render_to_response('mainPage.html',{'collection':collection,'user_name':user.username},context_instance=RequestContext(request))
     except Account.DoesNotExist:
         return HttpResponse("This User don't have collections")
 
@@ -206,4 +206,3 @@ def resetPasswordConfirm(request,activation_key):
             #return HttpResponse("OK")
         except Account.DoesNotExist:
             return HttpResponse("Error")
-
