@@ -54,9 +54,9 @@ class Collection(models.Model):
     name_collection = models.CharField(max_length=100,null=False, blank=True)
     format = models.CharField(max_length=4,null=False, blank=True)
     subject = models.CharField(max_length=10,null=False, blank=True)
-    delta_update_time = models.IntegerField(null=False, blank=True)
+    delta_sending_time = models.IntegerField(null=False, blank=True)
     last_update_time = models.DateTimeField(null=False,blank=True)
-    sendingTime = models.TimeField(null=False, blank=True)
+    # sendingTime = models.TimeField(null=False, blank=True)
 
     def __unicode__(self):
         return self.name_collection

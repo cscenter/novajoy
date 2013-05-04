@@ -58,16 +58,19 @@ def addCollection(request):
     if Collection.objects.filter(user=user,name_collection=request.POST['newCollection']).__len__()>0:
         response.write("The collection with such name already exists")
         return HttpResponse(response)
-    updateInterval = request.POST['updateInterval'];
+    delta_sending_time = request.POST['delta_sending_time'];
     interval_sec = 0
-    if "min" in updateInterval:
-        interval_sec = int(updateInterval[:string.find(updateInterval,"min")])*60
+    if "min" in delta_sending_time:
+        interval_sec = int(delta_sending_time[:string.find(delta_sending_time,"min")])*60
+    elif "h" in delta_sending_time:
+        interval_sec = int(delta_sending_time[:string.find(delta_sending_time,"h")]) * 60 * 60
     else:
-        interval_sec = int(updateInterval[:string.find(updateInterval,"h")]) * 60 * 60
+        interval_sec = int(delta_sending_time[:string.find(delta_sending_time,"h")]) * 60 * 60 * 24
 
-    s = datetime.time(int(request.POST['sendingTime']),0,0)
-    c = Collection(user=user,name_collection=request.POST['newCollection'],delta_update_time=interval_sec,last_update_time=datetime.datetime.now(),
-                   sendingTime=datetime.time(int(request.POST['sendingTime'])),format = request.POST['format'],subject=request.POST['subject'])
+    # c = Collection(user=user,name_collection=request.POST['newCollection'],last_update_time=datetime.datetime.now(),
+                   # delta_sending_time=interval_sec,format = request.POST['format'],subject=request.POST['format'])
+    c = Collection(user=user,name_collection=request.POST['newCollection'],last_update_time=datetime.datetime.now(),
+                   delta_sending_time=interval_sec,format=request.POST['format'],subject=request.POST['subject'])
     c.save()
 
     response.write("Success")
@@ -147,15 +150,17 @@ def editCollection(request):
             c = Collection.objects.get(user=user,name_collection=request.POST['oldName'])
             c.name_collection = request.POST['newCollection']
             c.format = request.POST['format']
-            c.sendingTime = datetime.time(int(request.POST['sendingTime']))
-            updateInterval = request.POST['updateInterval'];
+            c.subject = request.POST['subject']
+            # c.sendingTime = datetime.time(int(request.POST['sendingTime']))
+            delta_sending_time = request.POST['delta_sending_time'];
             interval_sec = 0
-            if "min" in updateInterval:
-                interval_sec = int(updateInterval[:string.find(updateInterval,"min")])*60
+            if "min" in delta_sending_time:
+                interval_sec = int(delta_sending_time[:string.find(delta_sending_time,"min")])*60
+            elif "h" in delta_sending_time:
+                interval_sec = int(delta_sending_time[:string.find(delta_sending_time,"h")]) * 60 * 60
             else:
-                interval_sec = int(updateInterval[:string.find(updateInterval,"h")]) * 60 * 60
-
-            c.delta_update_time = interval_sec
+                interval_sec = int(delta_sending_time[:string.find(delta_sending_time,"h")]) * 60 * 60 * 24
+            c.delta_sending_time = interval_sec
             c.save()
             return HttpResponse("Success")
     else:

@@ -1,11 +1,11 @@
-function send(nameOfNewCollection,updateInterval,sendingTime,format,subject){
+function send(nameOfNewCollection,delta_sending_time,format,subject){
     $('.listURL span').remove();
     $('.listURL').innerHTML = "";
     var isAdding = "No";
     curCol = nameOfNewCollection;
 
     //$('.collection span:last').click();
-    $.post('/addCollection/', {newCollection: nameOfNewCollection, updateInterval: updateInterval,sendingTime:sendingTime,format:format, subject:subject},
+    $.post('/addCollection/', {newCollection: nameOfNewCollection,delta_sending_time:delta_sending_time,format:format, subject:subject},
         function (data) {
             var response = data;
             if (response == "Success") {
@@ -27,8 +27,8 @@ function send(nameOfNewCollection,updateInterval,sendingTime,format,subject){
     startLoadingAnimation("addCollection");
 }
 
-function sendEditCollection(oldName,nameOfNewCollection,updateInterval,sendingTime,format,subject){
-    $.post('/editCollection/', {oldName:oldName,newCollection: nameOfNewCollection, updateInterval: updateInterval,sendingTime:sendingTime,format:format, subject:subject},
+function sendEditCollection(oldName,nameOfNewCollection,delta_sending_time,format,subject){
+    $.post('/editCollection/', {oldName:oldName,newCollection: nameOfNewCollection,delta_sending_time:delta_sending_time,format:format, subject:subject},
         function (data) {
             var response = data;
             if (response == "Success") {

@@ -7,10 +7,9 @@ function showDialog(func,old_name) {
         open:function(){
             if (old_name.trim()!=""){
                 document.forms[0].elements[0].value = name_collection;
-                document.forms[0].elements[4].value = subject
-                document.forms[0].elements[2].options[sending_time].selected=true;
-                document.forms[0].elements[3].options[format].selected=true;
-                document.forms[0].elements[1].options[delta].selected=true;
+                document.forms[0].elements[3].value = subject
+                document.forms[0].elements[1].options[delta_sending_time].selected=true;
+                document.forms[0].elements[2].options[format].selected=true;
             }else{
                 document.getElementById('myform').reset();
             }
@@ -19,25 +18,24 @@ function showDialog(func,old_name) {
             OK: function () {
                 //Data from a form
                 var nameOfNewCollection = document.forms[0].elements[0].value;
-                var updateInterval = document.forms[0].elements[1].value;
-                var sendingTime = document.forms[0].elements[2].value;
-                var format = document.forms[0].elements[3].value;
-                var subject = document.forms[0].elements[4].value;
+                var delta_sending_time = document.forms[0].elements[1].value;
+                var format = document.forms[0].elements[2].value;
+                var subject = document.forms[0].elements[3].value;
                 //clean form
                 document.getElementById('myform').reset();
                 nameOfNewCollection = nameOfNewCollection.trim();
-                var isnan = isNaN(parseInt(updateInterval));
+                var isnan = isNaN(parseInt(delta_sending_time));
                 if (nameOfNewCollection == "" || subject.trim()=="" ) {
                     alert("Empty field");
                 } else{
                     if(old_name!=''){
                         //alert("Edit");
                         document.getElementById('myform').reset();
-                        func(old_name,nameOfNewCollection,updateInterval,sendingTime,format,subject);
+                        func(old_name,nameOfNewCollection,delta_sending_time,format,subject);
                     }else{
                         //alert("new");
                         document.getElementById('myform').reset();
-                        func(nameOfNewCollection,updateInterval,sendingTime,format,subject);
+                        func(nameOfNewCollection,delta_sending_time,format,subject);
                     }
                 }
                 $(this).dialog("close");
@@ -51,17 +49,19 @@ function showDialog(func,old_name) {
         }
     });
     if(old_name!=''){
+        var response="";
         var q=$.post('/infoAboutCollection/', {oldName:old_name},
             function (data) {
-                var response = $.parseJSON(data);
-                name_collection = response[0]['fields']['name_collection'];
-                subject=response[0]['fields']['subject'];
-                sending_time=sending_time_map[response[0]['fields']['sendingTime']];
-                format=format_map[response[0]['fields']['format']];
-                delta=update_time_map[response[0]['fields']['delta_update_time']];
+                response = $.parseJSON(data);
 
             }
-        ).always(function() {stopLoadingAnimation();$("#dialog1").dialog("open"); });
+        ).always(function() {
+                name_collection = response[0]['fields']['name_collection'];
+                subject=response[0]['fields']['subject'];
+                delta_sending_time=delta_sending_time_map[response[0]['fields']['delta_sending_time']];
+                format=format_map[response[0]['fields']['format']];
+                stopLoadingAnimation();$("#dialog1").dialog("open"); }
+        );
         startLoadingAnimation("infoCollection");
     }else{
         $("#dialog1").dialog("open");
@@ -75,31 +75,14 @@ $(document).ready(function () {
     format_map['html'] = 2;
     format_map['fb2'] = 3;
 
-    update_time_map = []
-    update_time_map['900']=0;
-    update_time_map['1800']=1;
-    update_time_map['3600']=2;
-    update_time_map['7200']=3;
-    update_time_map['14400']=4;
-
-    sending_time_map=[];
-    sending_time_map['8:00:00']=0;
-    sending_time_map['9:00:00']=1;
-    sending_time_map['10:00:00']=2;
-    sending_time_map['11:00:00']=3;
-    sending_time_map['12:00:00']=4;
-    sending_time_map['13:00:00']=5;
-    sending_time_map['14:00:00']=6;
-    sending_time_map['15:00:00']=7;
-    sending_time_map['16:00:00']=8;
-    sending_time_map['17:00:00']=9;
-    sending_time_map['18:00:00']=10;
-    sending_time_map['19:00:00']=11;
-    sending_time_map['20:00:00']=12;
-    sending_time_map['21:00:00']=13;
-    sending_time_map['22:00:00']=14;
-    sending_time_map['23:00:00']=15;
-    sending_time_map['00:00:00']=16;
+    delta_sending_time_map=[];
+    delta_sending_time_map[3600]=0;
+    delta_sending_time_map[7200]=1;
+    delta_sending_time_map[14400]=2;
+    delta_sending_time_map[21600]=3;
+    delta_sending_time_map[43200]=4;
+    delta_sending_time_map[86400]=5;
+    delta_sending_time_map[172800]=6;
     $(".collection span").bind('click',function(evt){
         evt.preventDefault();
         clickCollection($(this).text());
