@@ -133,24 +133,6 @@ public class NovaSender {
         return messages;
     }
 
-    public String readFile(String filename)
-    {
-        if (filename == null)
-            return null;
-        String content = null;
-        File file = new File(filename);
-        try {
-            FileReader reader = new FileReader(file);
-            char[] chars = new char[(int) file.length()];
-            reader.read(chars);
-            content = new String(chars);
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return content;
-    }
-
     public Message prepareMessage(InternalMessage msg) throws Exception {
 
         //"<html><head><style type='text/css'>body{font-family:PT Sans}</style><title>FAAAAA</title></head><body><h1>косяпорович</h1></body></html>"
@@ -184,6 +166,10 @@ public class NovaSender {
             File pdfFile = new File(messages[i].attachment.replace(".html",".pdf"));
             if (pdfFile.exists())
                 pdfFile.delete();
+
+            File epubFile = new File(messages[i].attachment.replace(".html",".epub"));
+            if (epubFile.exists())
+                epubFile.delete();
         }
 
         int rs = ps.executeUpdate();
@@ -234,8 +220,12 @@ public class NovaSender {
 
         String content = pathToContent;
         String pdfContent = null;
-        if (content != null)
+        String epubContent = null;
+        if (content != null) {
             pdfContent = pathToContent.replace(".html", ".pdf");
+
+
+        }
 
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(from));
@@ -265,9 +255,11 @@ public class NovaSender {
 
             File htmlFile = new File(content);
             File pdfFile = new File(pdfContent);
+            File epubFile = new File(epubContent);
 
             MimeBodyPart attachmentPart = null;
             MimeBodyPart pdfAttachmentPart = null;
+            MimeBodyPart epubAttachmentPart = null;
 
             if (htmlFile.exists()) {
                 // message attach
@@ -292,7 +284,7 @@ public class NovaSender {
                     DataSource ds = new FileDataSource(pdfContent);
                     pdfAttachmentPart = new MimeBodyPart();
                     pdfAttachmentPart.setDataHandler(new DataHandler(ds));
-                    //new ByteArrayDataSource(pdfContent, "application/octet-stream");
+
                 } catch (Exception e) {
                     log.warning(e.getMessage());
                 }
@@ -301,8 +293,26 @@ public class NovaSender {
 
             }
 
+            if (epubFile.exists()) {
+
+                epubAttachmentPart = new MimeBodyPart();
+
+                try {
+                    DataSource ds = new FileDataSource(epubContent);
+                    epubAttachmentPart = new MimeBodyPart();
+                    epubAttachmentPart.setDataHandler(new DataHandler(ds));
+
+                } catch (Exception e) {
+                    log.warning(e.getMessage());
+                }
+
+                epubAttachmentPart.setFileName("feed.epub");
+
+            }
+
             multipart.addBodyPart(pdfAttachmentPart);
             multipart.addBodyPart(attachmentPart);
+            multipart.addBodyPart(epubAttachmentPart);
         }
 
         // Put parts in message
