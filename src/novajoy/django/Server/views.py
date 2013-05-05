@@ -19,6 +19,8 @@ from django.template import loader, Context
 
 
 def isAuth(user):
+    if user.username=="novajoyUser":
+        return False
     return user.is_authenticated()
 
 def isRss(RSSUrl):
@@ -216,7 +218,7 @@ def resetPasswordConfirm(request,activation_key):
             return HttpResponse("Error")
 
 def about(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated() or request.user.username=='novajoyUser':
         return render_to_response('about_carousel.html',{'templ':'registration/bar1.html'},
                                   context_instance=RequestContext(request))
     else:
@@ -225,10 +227,14 @@ def about(request):
                                   context_instance=RequestContext(request))
 
 def contact(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated() or request.user.username=='novajoyUser':
         return render_to_response('contact.html',{'templ':'registration/bar1.html'},
                                   context_instance=RequestContext(request))
     else:
         user = Account.objects.get(username=request.user.username)
-        return render_to_response('contact.html',{'templ':'registration/bar2.html','user_name':user.username},
-                                  context_instance=RequestContext(request))
+        if user.username!='novajoyUser':
+            return render_to_response('contact.html',{'templ':'registration/bar1.html'},
+                                      context_instance=RequestContext(request))
+        else:
+            return render_to_response('contact.html',{'templ':'registration/bar2.html','user_name':user.username},
+                                      context_instance=RequestContext(request))
