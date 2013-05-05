@@ -1,7 +1,22 @@
 {% extends "registration/bar1.html" %}
 
 {% block main_content %}
+<script>
+    function validateEmail(name){
 
+        var reg = /^[a-zA-Z0-9_]+$/;
+        return reg.test(name);
+    }
+    $(document).ready(function () {
+        $('.submit_button').bind('click',function(evt){
+            var b=validateEmail($('#id_username').val().trim());
+            if(!b){
+                alert("The name has to contain only English letters or digits");
+                evt.preventDefault();
+            }
+        });
+    });
+</script>
 <div class="container"></div><div class="container-fluid">
 
 
@@ -63,7 +78,7 @@
                             {% endif %}
                         {{ form.captcha }}
                         </p>
-                        <p class="submit"><input type="submit" value="Register &rarr;"></p>
+                        <p class="submit"><input class="submit_button" type="submit" value="Register &rarr;"></p>
                     </form>
                 </div>
             </div>
