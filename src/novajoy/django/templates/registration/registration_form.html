@@ -2,14 +2,14 @@
 
 {% block main_content %}
 <script>
-    function validateEmail(name){
+    function validateUsername(name){
 
         var reg = /^[a-zA-Z0-9_]+$/;
         return reg.test(name);
     }
     $(document).ready(function () {
         $('.submit_button').bind('click',function(evt){
-            var b=validateEmail($('#id_username').val().trim());
+            var b=validateUsername($('#id_username').val().trim());
             if(!b){
                 alert("The name has to contain only English letters or digits");
                 evt.preventDefault();

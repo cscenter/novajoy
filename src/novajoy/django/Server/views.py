@@ -12,8 +12,11 @@ from Server.forms import ResetPassword,Password
 import random
 import feedparser
 import string
+from django import template
 from datetime import time
 import datetime
+from django.template import loader, Context
+
 
 def isAuth(user):
     return user.is_authenticated()
@@ -213,7 +216,19 @@ def resetPasswordConfirm(request,activation_key):
             return HttpResponse("Error")
 
 def about(request):
-    return render_to_response('about_carousel.html',context_instance=RequestContext(request))
+    if not request.user.is_authenticated():
+        return render_to_response('about_carousel.html',{'templ':'registration/bar1.html'},
+                                  context_instance=RequestContext(request))
+    else:
+        user = Account.objects.get(username=request.user.username)
+        return render_to_response('about_carousel.html',{'templ':'registration/bar2.html','user_name':user.username},
+                                  context_instance=RequestContext(request))
 
 def contact(request):
-    return render_to_response('contact.html',context_instance=RequestContext(request))
+    if not request.user.is_authenticated():
+        return render_to_response('contact.html',{'templ':'registration/bar1.html'},
+                                  context_instance=RequestContext(request))
+    else:
+        user = Account.objects.get(username=request.user.username)
+        return render_to_response('contact.html',{'templ':'registration/bar2.html','user_name':user.username},
+                                  context_instance=RequestContext(request))
