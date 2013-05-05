@@ -231,17 +231,17 @@ class Packer{
 
     LinkedList getPackagedData() throws SQLException {
 
-        UserItem[] userIds = getUsersIds();
+        users = getUsersIds();
         LinkedList usersDocuments = new LinkedList();
 
         int j=0;
 
         for (; ; ) {
 
-            if (j >= userIds.length)
+            if (j >= users.length)
                 break;
 
-            ArrayList userFeed = getDataForUserId(userIds[j].user_id);
+            ArrayList userFeed = getDataForUserId(users[j].user_id);
 
             if (userFeed == null) {
                 j++;
@@ -250,7 +250,7 @@ class Packer{
 
             for (Object elem : userFeed) {
 
-                usersDocuments.add(formDocument(userIds[j].user_email, (ArrayList)elem));
+                usersDocuments.add(formDocument(users[j].user_email, (ArrayList)elem));
             }
 
             j++;
