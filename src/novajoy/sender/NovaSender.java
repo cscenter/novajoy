@@ -223,7 +223,7 @@ public class NovaSender {
         String epubContent = null;
         if (content != null) {
             pdfContent = pathToContent.replace(".html", ".pdf");
-
+            epubContent = pathToContent.replace(".html", ".epub");
 
         }
 
