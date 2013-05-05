@@ -4,9 +4,6 @@ function clickCollection(text) {
     if(curObject!=null){
         curObject.removeAttr('id');
     }
-    else{
-        alert("vova");
-    }
     curObject = $('.collection div:contains('+text+')');
     curCol = nameCollection;
     curObject.attr('id','currentCollection');
