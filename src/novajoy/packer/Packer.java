@@ -104,7 +104,7 @@ class Packer{
     UserItem[] getUsersIds() throws SQLException {
 
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select id,email from auth_user where id in (select distinct user_id from Server_collection where UNIX_TIMESTAMP(last_update_time)+delta_update_time<UNIX_TIMESTAMP());");
+        ResultSet rs = st.executeQuery("select id,email from auth_user where id in (select distinct user_id from Server_collection where UNIX_TIMESTAMP(last_update_time)+delta_sending_time<UNIX_TIMESTAMP());");
 
         int rowcount = 0;
         if (rs.last()) {
