@@ -67,5 +67,6 @@ function editCollection(){
 }
 
 function clickNewCollection(){
+    alert("asdasd");
     showDialog(send,"");
 }

@@ -18,4 +18,7 @@ urlpatterns = patterns('',
                        url(r'^accounts/', include('backends.urls')),
                        url(r'^editCollection/$',editCollection),
                        url(r'^admin/', include(admin.site.urls)),
+                       url(r'^about/',about),
+                       url(r'^contact/',contact),
+
                        )

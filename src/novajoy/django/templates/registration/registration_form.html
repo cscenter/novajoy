@@ -1,75 +1,73 @@
-{% extends "registration/base.html" %}
+{% extends "registration/bar1.html" %}
 
-{% block title %}Sign up{% endblock %}
+{% block main_content %}
 
-{% block content %}
+<div class="container"></div><div class="container-fluid">
 
-    {% if form.errors %}
-        <p class="errors">Please correct the errors below: {{ form.non_field_errors }}</p>
-    {% endif %}
 
-    <h1>Create an account</h1>
+    <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="span4 offset4 well">
+                    <legend>Please Sign In</legend>
+                    {% if form.errors %}
+                        <p class="errorMess">Please correct the errors below: {{ form.non_field_errors }}</p>
+                    {% endif %}
 
-    <form method="post" action="" class="wide">
-        {% csrf_token %}
-        <p>
-            <label for="id_username">Username:</label>
-            {% if form.username.errors %}
-                <p class="errors">{{ form.username.errors.as_text }}</p>
-            {% endif %}
-        {{ form.username }}
-        </p>
+                    <h1>Create an account</h1>
 
-        <p>
-            <label for="id_email">Email address:</label>
-            {% if form.email.errors %}
-                <p class="errors">{{ form.email.errors.as_text }}</p>
-            {% endif %}
-        {{ form.email }}
-        </p>
-        <p>
-            <label for="id_password1">Password:</label>
-            {% if form.password1.errors %}
-                <p class="errors">{{ form.password1.errors.as_text }}</p>
-            {% endif %}
-        {{ form.password1 }}
-        </p>
-        <p>
-            <label for="id_password2">Password (type again to catch typos):</label>
-            {% if form.password2.errors %}
-                <p class="errors">{{ form.password2.errors.as_text }}</p>
-            {% endif %}
-        {{ form.password2 }}
-        </p>
+                    <form method="post" action="" class="wide">
+                        {% csrf_token %}
+                        <p>
+                            <label for="id_username">Username:</label>
+                            {% if form.username.errors %}
+                                <p class="errorMess">{{ form.username.errors.as_text }}</p>
+                            {% endif %}
+                        {{ form.username }}
+                        </p>
 
-        <p>
-            <label for="id_age">age:</label>
-            {% if form.age.errors %}
-                <p class="errors">{{ form.age.errors.as_text }}</p>
-            {% endif %}
-        {{ form.age }}
-        </p>
+                        <p>
+                            <label for="id_email">Email address:</label>
+                            {% if form.email.errors %}
+                                <p class="errorMess">{{ form.email.errors.as_text }}</p>
+                            {% endif %}
+                        {{ form.email }}
+                        </p>
+                        <p>
+                            <label for="id_password1">Password:</label>
+                            {% if form.password1.errors %}
+                                <p class="errorMess">{{ form.password1.errors.as_text }}</p>
+                            {% endif %}
+                        {{ form.password1 }}
+                        </p>
+                        <p>
+                            <label for="id_password2">Password (type again to catch typos):</label>
+                            {% if form.password2.errors %}
+                                <p class="errorMess">{{ form.password2.errors.as_text }}</p>
+                            {% endif %}
+                        {{ form.password2 }}
+                        </p>
 
-        <p>
-            <label for="id_captcha">captcha:</label>
-            {% if form.captcha.errors %}
-                <p class="errors">{{ form.captcha.errors.as_text }}</p>
-            {% endif %}
-        {{ form.captcha }}
-        </p>
-        <p class="submit"><input type="submit" value="Register &rarr;"></p>
-    </form>
+                        <p>
+                            <label for="id_age">age:</label>
+                            {% if form.age.errors %}
+                                <p class="errorMess">{{ form.age.errors.as_text }}</p>
+                            {% endif %}
+                        {{ form.age }}
+                        </p>
 
-{% endblock %}
-
-{% block content-related %}
-    <p>Fill out the form to the left (all fields are required), and your
-        account will be created; you'll be sent an email with instructions on how
-        to finish your registration.</p>
-
-    <p>We'll only use your email to send you signup instructions. We hate spam
-        as much as you do.</p>
-
-    <p>This account will let you log into the ticket tracker, claim tickets,
-        and be exempt from spam filtering.</p>
+                        <p>
+                            <label for="id_captcha">captcha:</label>
+                            {% if form.captcha.errors %}
+                                <p class="errorMess">{{ form.captcha.errors.as_text }}</p>
+                            {% endif %}
+                        {{ form.captcha }}
+                        </p>
+                        <p class="submit"><input type="submit" value="Register &rarr;"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div><hr>
+</div><!--/.fluid-container-->
 {% endblock %}

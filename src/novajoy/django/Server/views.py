@@ -120,7 +120,7 @@ def addRSS(request):
             rss.save()
             return HttpResponse("Success")
         else:
-            newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32')
+            newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32',spoiled=False)
             newRSS.save()
             newRSS.collection.add(collection)
             newRSS.save()
@@ -211,3 +211,9 @@ def resetPasswordConfirm(request,activation_key):
             #return HttpResponse("OK")
         except Account.DoesNotExist:
             return HttpResponse("Error")
+
+def about(request):
+    return render_to_response('about_carousel.html',context_instance=RequestContext(request))
+
+def contact(request):
+    return render_to_response('contact.html',context_instance=RequestContext(request))

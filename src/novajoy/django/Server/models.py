@@ -53,7 +53,7 @@ class Collection(models.Model):
     user = models.ForeignKey(Account,null=False, blank=True)
     name_collection = models.CharField(max_length=100,null=False, blank=True)
     format = models.CharField(max_length=4,null=False, blank=True)
-    subject = models.CharField(max_length=10,null=False, blank=True)
+    subject = models.CharField(max_length=100,null=False, blank=True)
     delta_sending_time = models.IntegerField(null=False, blank=True)
     last_update_time = models.DateTimeField(null=False,blank=True)
     # sendingTime = models.TimeField(null=False, blank=True)
@@ -65,6 +65,7 @@ class RSSFeed(models.Model):
     collection = models.ManyToManyField(Collection,null=False, blank=True)
     url = models.URLField(null=False, blank=True)
     pubDate = models.DateTimeField(null=False, blank=True)
+    spoiled = models.BooleanField()
 
     def __unicode__(self):
         return self.url

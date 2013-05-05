@@ -9,7 +9,7 @@ function addRSS() {
                 var response = data;
                 if (response == "Success") {
                     var tt = "<div class='link'><p><span>" + nameOfNewRSS +
-                        "<div class='h'><a href='"+nameOfNewRSS+"'><img src='/static/JS/deleteIcon.jpg'/> </a></div>" +
+                        "<a href='"+nameOfNewRSS+"'><img src='/static/JS/deleteIcon.jpg'/> </a>" +
                         "</span></p></div> ";
                     $('.listURL').append(tt);
                     $('.listURL a').bind('click',function(evt){

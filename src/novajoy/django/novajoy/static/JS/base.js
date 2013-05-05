@@ -29,11 +29,9 @@ function showDialog(func,old_name) {
                     alert("Empty field");
                 } else{
                     if(old_name!=''){
-                        //alert("Edit");
                         document.getElementById('myform').reset();
                         func(old_name,nameOfNewCollection,delta_sending_time,format,subject);
                     }else{
-                        //alert("new");
                         document.getElementById('myform').reset();
                         func(nameOfNewCollection,delta_sending_time,format,subject);
                     }
