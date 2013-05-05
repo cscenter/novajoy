@@ -18,6 +18,7 @@
         <pathelement location="lib/xalan.jar"/>
         <pathelement location="lib/xerces.jar"/>
         <pathelement location="lib/xml-apis.jar"/>
+        <pathelement location="lib/jtidy-r938.jar"/>
         <pathelement location="lib/flying_saucer/core-renderer.jar"/>
         <pathelement location="lib/flying_saucer/iText-2.0.8.jar"/>
         <pathelement location="lib/flying_saucer/xml-apis-xerces-2.9.1.jar"/>
