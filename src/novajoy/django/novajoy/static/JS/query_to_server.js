@@ -4,7 +4,7 @@ function send(nameOfNewCollection,delta_sending_time,format,subject){
     var isAdding = "No";
     curCol = nameOfNewCollection;
 
-    alert(nameOfNewCollection+"|"+delta_sending_time+"|"+format+"|"+subject+"|");
+    //alert(nameOfNewCollection+"|"+delta_sending_time+"|"+format+"|"+subject+"|");
     $.post('/addCollection/', {newCollection: nameOfNewCollection,delta_sending_time:delta_sending_time,format:format, subject:subject},
         function (data) {
             var response = data;

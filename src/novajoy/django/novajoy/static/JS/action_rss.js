@@ -14,7 +14,8 @@ function addRSS() {
                     $('.listURL').append(tt);
                     $('.listURL a').bind('click',function(evt){
                         evt.preventDefault();
-                        alert("vova rss");
+                        //alert($(this).attr('href'));
+                        showDialogRemoveRSS($(this).attr('href'));
                         //deleteRSS($(this).attr('href'));
                         //$('.listURL div:contains('+$(this).attr('href')+')').remove();
 

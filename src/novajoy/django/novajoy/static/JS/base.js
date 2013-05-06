@@ -1,6 +1,26 @@
+function showDialogRemoveRSS(url){
+    $("#dialogRemoveRSS").dialog({autoOpen: false, width: 300, height: 200,closeOnEscape: false,title:"Remove RSS",
+        close: function(){
+        },
+        open:function(){
+        },
+        buttons: {
+            OK: function () {
+                deleteRSS(url);
+                $(this).dialog("close");
+                return false;
+            },
+            Cancel: function () {
+                $(this).dialog("close");
+                return false;
+            }
+        }
+    });
 
+    $("#dialogRemoveRSS").dialog("open");
+}
 function showDialog(func,old_name) {
-    $("#dialog1").dialog({autoOpen: false, width: 500, height: 450,closeOnEscape: false,
+    $("#dialog1").dialog({autoOpen: false, width: 500, height: 450,closeOnEscape: false,title:"New Collection",
         close: function(){
             document.getElementById('myform').reset();
         },

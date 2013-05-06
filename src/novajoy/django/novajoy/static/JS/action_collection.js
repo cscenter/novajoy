@@ -22,7 +22,8 @@ function clickCollection(text) {
             }
             $('.listURL a').bind('click',function(evt){
                 evt.preventDefault();
-                alert("vova");
+                //alert($(this).attr('href'));
+                showDialogRemoveRSS($(this).attr('href'));
                 //deleteRSS($(this).attr('href'));
             });
         }
