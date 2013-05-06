@@ -8,13 +8,14 @@ function addRSS() {
             function (data) {
                 var response = data;
                 if (response == "Success") {
-                    var tt = "<div class='link'><p><span>" + nameOfNewRSS +
-                        "<a href='"+nameOfNewRSS+"'><img src='/static/JS/deleteIcon.jpg'/> </a>" +
+                    var tt = "<div class='link'><p><span>" +
+                        "<a href='"+nameOfNewRSS+"'>"+nameOfNewRSS+"</a>" +
                         "</span></p></div> ";
                     $('.listURL').append(tt);
                     $('.listURL a').bind('click',function(evt){
                         evt.preventDefault();
-                        deleteRSS($(this).attr('href'));
+                        alert("vova rss");
+                        //deleteRSS($(this).attr('href'));
                         //$('.listURL div:contains('+$(this).attr('href')+')').remove();
 
                     });

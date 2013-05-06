@@ -15,14 +15,15 @@ function clickCollection(text) {
             var tmp = $.parseJSON(data);
             for (var i = 0; i < tmp.length; i++) {
                 var url = tmp[i]['fields']['url'];
-                var tt = "<div class='link'><p><span>" + url +
-                    "<div class='h'><a href='"+url+"'><img src='/static/JS/deleteIcon.jpg'/> </a></div>" +
+                var tt = "<div class='link'><p><span>"+
+                    "<div class='h'><a href='"+url+"'>"+url+" </a></div>" +
                     "</span></p></div> ";
                 $(".listURL").append(tt);
             }
             $('.listURL a').bind('click',function(evt){
                 evt.preventDefault();
-                deleteRSS($(this).attr('href'));
+                alert("vova");
+                //deleteRSS($(this).attr('href'));
             });
         }
     ).always(function(){
@@ -67,6 +68,5 @@ function editCollection(){
 }
 
 function clickNewCollection(){
-    alert("asdasd");
     showDialog(send,"");
 }

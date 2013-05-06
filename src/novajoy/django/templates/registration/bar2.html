@@ -262,6 +262,18 @@
         }
 
     </style>
+    <script>
+        $('.listURL a').bind('click',function(evt){
+            evt.preventDefault();
+            alert("hello");
+            //deleteRSS($(this).attr('href'));
+            //$('.listURL div:contains('+$(this).attr('href')+')').remove();
+
+        });
+    </script>
+    <script type="text/javascript" src="/static/bootstrap/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/bootstrap.min.js"></script>
+
     <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <script type="text/javascript" src="/static/JS/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="/static/JS/settings.js"></script>

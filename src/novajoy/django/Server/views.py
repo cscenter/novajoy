@@ -231,10 +231,5 @@ def contact(request):
         return render_to_response('contact.html',{'templ':'registration/bar1.html'},
                                   context_instance=RequestContext(request))
     else:
-        user = Account.objects.get(username=request.user.username)
-        if user.username!='novajoyUser':
-            return render_to_response('contact.html',{'templ':'registration/bar1.html'},
-                                      context_instance=RequestContext(request))
-        else:
-            return render_to_response('contact.html',{'templ':'registration/bar2.html','user_name':user.username},
+        return render_to_response('contact.html',{'templ':'registration/bar2.html','user_name':request.user.username},
                                       context_instance=RequestContext(request))
