@@ -3,7 +3,9 @@ function send(nameOfNewCollection,delta_sending_time,format,subject){
     $('.listURL').innerHTML = "";
     var isAdding = "No";
     curCol = nameOfNewCollection;
-
+    document.getElementById("addURL").disabled = false;
+    document.getElementById("editCollection").disabled = false;
+    document.getElementById("removeCollection").disabled = false;
     //alert(nameOfNewCollection+"|"+delta_sending_time+"|"+format+"|"+subject+"|");
     $.post('/addCollection/', {newCollection: nameOfNewCollection,delta_sending_time:delta_sending_time,format:format, subject:subject},
         function (data) {

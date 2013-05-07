@@ -38,6 +38,11 @@ function clickRemoveCollection(){
 }
 
 function deleteCollection(nameCollection){
+    if ($('.collection span').length == 1) {
+        document.getElementById("addURL").disabled = true;
+        document.getElementById("editCollection").disabled = true;
+        document.getElementById("removeCollection").disabled = true;
+    }
     $.post('/deleteCollection/', {nameCollection: curCol},
         function (data) {
             var response = data;

@@ -11,7 +11,7 @@
         $('.submit_button').bind('click',function(evt){
             var b=validateUsername($('#id_username').val().trim());
             if(!b){
-                alert("The name has to contain only English letters or digits");
+                alert("The name has to contain only Latin letters or digits");
                 evt.preventDefault();
             }
         });
@@ -83,6 +83,6 @@
                 </div>
             </div>
         </div>
-    </div><hr>
+    </div>
 </div><!--/.fluid-container-->
 {% endblock %}

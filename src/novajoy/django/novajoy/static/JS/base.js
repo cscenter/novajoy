@@ -106,10 +106,16 @@ $(document).ready(function () {
         clickCollection($(this).text());
     });
     if ($('.collection span').length == 0) {
+        document.getElementById("addURL").disabled = true;
+        document.getElementById("editCollection").disabled = true;
+        document.getElementById("removeCollection").disabled = true;
         curCol = "You have no collections";
         curObject=null;
         $(".listURL").prepend('<h2>' + curCol + '</h2>');
     } else {
+        document.getElementById("addURL").disabled = false;
+        document.getElementById("editCollection").disabled = false;
+        document.getElementById("removeCollection").disabled = false;
         curCol = $('.collection span:first').text();
         curObject =$('.collection span:first');
         curObject.click();

@@ -2,280 +2,300 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>
-    </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Le styles -->
-    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <style>
-        body { padding-top: 60px; /* 60px to make the container go all the way
-      to the bottom of the topbar */ }
+<meta charset="utf-8">
+<title>
+</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<!-- Le styles -->
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+<style>
+body {
+    padding-top: 60px;
+    /* 60px to make the container go all the way
+         to the bottom of the topbar */
+}
 
-        .navbar-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 10;
-            margin-top: 20px;
-            margin-bottom: -90px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
-        }
-        .navbar-wrapper .navbar {
+.navbar-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin-top: 20px;
+    margin-bottom: -90px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
+}
 
-        }
+.navbar-wrapper .navbar {
 
-            /* Remove border and change up box shadow for more contrast */
-        .navbar .navbar-inner {
-            border: 0;
-            -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.25);
-            -moz-box-shadow: 0 2px 10px rgba(0,0,0,.25);
-            box-shadow: 0 2px 10px rgba(0,0,0,.25);
-        }
+}
 
-            /* Downsize the brand/project name a bit */
-        .navbar .brand {
-            padding: 14px 20px 16px; /* Increase vertical padding to match navbar links */
-            font-size: 16px;
-            font-weight: bold;
-            text-shadow: 0 -1px 0 rgba(0,0,0,.5);
-        }
+    /* Remove border and change up box shadow for more contrast */
+.navbar .navbar-inner {
+    border: 0;
+    -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+    -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+}
 
-            /* Navbar links: increase padding for taller navbar */
-        .navbar .nav > li > a {
-            padding: 15px 20px;
-        }
+    /* Downsize the brand/project name a bit */
+.navbar .brand {
+    padding: 14px 20px 16px; /* Increase vertical padding to match navbar links */
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, .5);
+}
 
-            /* Offset the responsive button for proper vertical alignment */
-        .navbar .btn-navbar {
-            margin-top: 10px;
-        }
+    /* Navbar links: increase padding for taller navbar */
+.navbar .nav > li > a {
+    padding: 15px 20px;
+}
 
+    /* Offset the responsive button for proper vertical alignment */
+.navbar .btn-navbar {
+    margin-top: 10px;
+}
 
+    /* CUSTOMIZE THE CAROUSEL
+    -------------------------------------------------- */
 
-            /* CUSTOMIZE THE CAROUSEL
-            -------------------------------------------------- */
+    /* Carousel base class */
+.carousel {
+    margin-bottom: 60px;
+}
 
-            /* Carousel base class */
-        .carousel {
-            margin-bottom: 60px;
-        }
+.carousel .container {
+    position: relative;
+    z-index: 9;
+}
 
-        .carousel .container {
-            position: relative;
-            z-index: 9;
-        }
+.carousel-control {
+    height: 80px;
+    margin-top: 0;
+    font-size: 120px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .4);
+    background-color: transparent;
+    border: 0;
+    z-index: 10;
+}
 
-        .carousel-control {
-            height: 80px;
-            margin-top: 0;
-            font-size: 120px;
-            text-shadow: 0 1px 1px rgba(0,0,0,.4);
-            background-color: transparent;
-            border: 0;
-            z-index: 10;
-        }
+.carousel .item {
+    height: 500px;
+}
 
-        .carousel .item {
-            height: 500px;
-        }
-        .carousel img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            min-width: 100%;
-            height: 500px;
-        }
+.carousel img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 500px;
+}
 
-        .carousel-caption {
-            background-color: transparent;
-            position: static;
-            max-width: 550px;
-            padding: 0 20px;
-            margin-top: 200px;
-        }
-        .carousel-caption h1,
-        .carousel-caption .lead {
-            margin: 0;
-            line-height: 1.25;
-            color: #fff;
-            text-shadow: 0 1px 1px rgba(0,0,0,.4);
-        }
-        .carousel-caption .btn {
-            margin-top: 10px;
-        }
+.carousel-caption {
+    background-color: transparent;
+    position: static;
+    max-width: 550px;
+    padding: 0 20px;
+    margin-top: 200px;
+}
 
+.carousel-caption h1,
+.carousel-caption .lead {
+    margin: 0;
+    line-height: 1.25;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .4);
+}
 
+.carousel-caption .btn {
+    margin-top: 10px;
+}
 
-            /* MARKETING CONTENT
-            -------------------------------------------------- */
+    /* MARKETING CONTENT
+    -------------------------------------------------- */
 
-            /* Center align the text within the three columns below the carousel */
-        .marketing .span4 {
-            text-align: center;
-        }
-        .marketing h2 {
-            font-weight: normal;
-        }
-        .marketing .span4 p {
-            margin-left: 10px;
-            margin-right: 10px;
-        }
+    /* Center align the text within the three columns below the carousel */
+.marketing .span4 {
+    text-align: center;
+}
 
+.marketing h2 {
+    font-weight: normal;
+}
 
-            /* Featurettes
-            ------------------------- */
+.marketing .span4 p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
 
-        .featurette-divider {
-            margin: 80px 0; /* Space out the Bootstrap <hr> more */
-        }
-        .featurette {
-            padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
-            overflow: hidden; /* Vertically center images part 2: clear their floats. */
-        }
-        .featurette-image {
-            margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
-        }
+    /* Featurettes
+    ------------------------- */
 
-            /* Give some space on the sides of the floated elements so text doesn't run right into it. */
-        .featurette-image.pull-left {
-            margin-right: 40px;
-        }
-        .featurette-image.pull-right {
-            margin-left: 40px;
-        }
+.featurette-divider {
+    margin: 80px 0; /* Space out the Bootstrap <hr> more */
+}
 
-            /* Thin out the marketing headings */
-        .featurette-heading {
-            font-size: 50px;
-            font-weight: 300;
-            line-height: 1;
-            letter-spacing: -1px;
-        }
+.featurette {
+    padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+    overflow: hidden; /* Vertically center images part 2: clear their floats. */
+}
 
+.featurette-image {
+    margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+}
 
+    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+.featurette-image.pull-left {
+    margin-right: 40px;
+}
 
-            /* RESPONSIVE CSS
-            -------------------------------------------------- */
-        #dialog1{
-            display : none;
-        }
-        #dialogRemoveRSS{
-            display : none;
-        }
-        @media (max-width: 979px) {
+.featurette-image.pull-right {
+    margin-left: 40px;
+}
 
-            .container.navbar-wrapper {
-                margin-bottom: 0;
-                width: auto;
-            }
-            .navbar-inner {
-                border-radius: 0;
-                margin: -20px 0;
-            }
+    /* Thin out the marketing headings */
+.featurette-heading {
+    font-size: 50px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -1px;
+}
 
-            .carousel .item {
-                height: 500px;
-            }
-            .carousel img {
-                width: auto;
-                height: 500px;
-            }
+    /* RESPONSIVE CSS
+    -------------------------------------------------- */
+#dialog1 {
+    display: none;
+}
 
-            .featurette {
-                height: auto;
-                padding: 0;
-            }
-            .featurette-image.pull-left,
-            .featurette-image.pull-right {
-                display: block;
-                float: none;
-                max-width: 40%;
-                margin: 0 auto 20px;
-            }
-        }
+#dialogRemoveRSS {
+    display: none;
+}
 
+@media (max-width: 979px) {
 
-        @media (max-width: 767px) {
+    .container.navbar-wrapper {
+        margin-bottom: 0;
+        width: auto;
+    }
 
-            .navbar-inner {
-                margin: -20px;
-            }
+    .navbar-inner {
+        border-radius: 0;
+        margin: -20px 0;
+    }
 
-            .carousel {
-                margin-left: -20px;
-                margin-right: -20px;
-            }
-            .carousel .container {
+    .carousel .item {
+        height: 500px;
+    }
 
-            }
-            .carousel .item {
-                height: 300px;
-            }
-            .carousel img {
-                height: 300px;
-            }
-            .carousel-caption {
-                width: 65%;
-                padding: 0 70px;
-                margin-top: 100px;
-            }
-            .carousel-caption h1 {
-                font-size: 30px;
-            }
-            .carousel-caption .lead,
-            .carousel-caption .btn {
-                font-size: 18px;
-            }
+    .carousel img {
+        width: auto;
+        height: 500px;
+    }
 
-            .marketing .span4 + .span4 {
-                margin-top: 40px;
-            }
+    .featurette {
+        height: auto;
+        padding: 0;
+    }
 
-            .featurette-heading {
-                font-size: 30px;
-            }
-            .featurette .lead {
-                font-size: 18px;
-                line-height: 1.5;
-            }
+    .featurette-image.pull-left,
+    .featurette-image.pull-right {
+        display: block;
+        float: none;
+        max-width: 40%;
+        margin: 0 auto 20px;
+    }
+}
 
-        }
+@media (max-width: 767px) {
 
-        body {
-            padding-top: 60px;
-            padding-bottom: 40px;
+    .navbar-inner {
+        margin: -20px;
+    }
 
-        }
-        .sidebar-nav {
-            padding: 9px 0;
-        }
-        .errorMess {
-            color: red; /* Красный цвет выделения */
-        }
-        @media (max-width: 980px) {
-            /* Enable use of floated navbar text */
-            .navbar-text.pull-right {
-                float: none;
-                padding-left: 5px;
-                padding-right: 5px;
-            }
-        }
-        {% block my_style %}{% endblock %}
-    </style>
-    <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-    <script type="text/javascript" src="/static/JS/jquery-1.9.1.js"></script>
-    <script type="text/javascript" src="/static/JS/settings.js"></script>
-    <script type="text/javascript" src="/static/JS/base.js"></script>
-    <script type="text/javascript" src="/static/JS/query_to_server.js"></script>
-    <script type="text/javascript" src="/static/JS/action_rss.js"></script>
-    <script type="text/javascript" src="/static/JS/animation.js"></script>
-    <script type="text/javascript" src="/static/JS/action_collection.js"></script>
-    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"
-          rel="stylesheet" type="text/css"/>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+    .carousel {
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .carousel .container {
+
+    }
+
+    .carousel .item {
+        height: 300px;
+    }
+
+    .carousel img {
+        height: 300px;
+    }
+
+    .carousel-caption {
+        width: 65%;
+        padding: 0 70px;
+        margin-top: 100px;
+    }
+
+    .carousel-caption h1 {
+        font-size: 30px;
+    }
+
+    .carousel-caption .lead,
+    .carousel-caption .btn {
+        font-size: 18px;
+    }
+
+    .marketing .span4 + .span4 {
+        margin-top: 40px;
+    }
+
+    .featurette-heading {
+        font-size: 30px;
+    }
+
+    .featurette .lead {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+}
+
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+
+}
+
+.sidebar-nav {
+    padding: 9px 0;
+}
+
+.errorMess {
+    color: red; /* Красный цвет выделения */
+}
+
+@media (max-width: 980px) {
+    /* Enable use of floated navbar text */
+    .navbar-text.pull-right {
+        float: none;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+{% block my_style %}{% endblock %}
+</style>
+<link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<script type="text/javascript" src="/static/JS/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="/static/JS/settings.js"></script>
+<script type="text/javascript" src="/static/JS/base.js"></script>
+<script type="text/javascript" src="/static/JS/query_to_server.js"></script>
+<script type="text/javascript" src="/static/JS/action_rss.js"></script>
+<script type="text/javascript" src="/static/JS/animation.js"></script>
+<script type="text/javascript" src="/static/JS/action_collection.js"></script>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"
+      rel="stylesheet" type="text/css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 </head>
 <body>
 <div id="content">
@@ -288,28 +308,33 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="brand" href="/">NovaJoy</a>
+
                 <div class="nav-collapse collapse">
                     <ul class="nav">
                         <li><a href="/">Home</a></li>
                         <li><a href="/about">About</a></li>
 
-                        <li><a href="/contact">Contact</a></li><li></li></ul>
+                        <li><a href="/contact">Contact</a></li>
+                        <li></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
     {% block title %}{% endblock %}
     {% block main_content %}{% endblock %}
-    <div class="container"></div><div class="container-fluid">
-    <div class="container">
-        <div class="container"></div>
-    </div><hr>
-    <footer>
-        <p class="text-center">© NovaJoy 2013</p>
-    </footer>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="container"></div>
+        </div>
+        <hr>
+        <footer>
+            <p class="text-center">© NovaJoy 2013</p>
+        </footer>
 
 
-</div><!--/.fluid-container-->
+    </div>
+    <!--/.fluid-container-->
 
 </div>
 
