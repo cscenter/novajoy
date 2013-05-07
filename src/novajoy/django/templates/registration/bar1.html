@@ -293,6 +293,22 @@ body {
 <script type="text/javascript" src="/static/JS/action_rss.js"></script>
 <script type="text/javascript" src="/static/JS/animation.js"></script>
 <script type="text/javascript" src="/static/JS/action_collection.js"></script>
+<script>
+    function validateUsername(name){
+
+        var reg = /^[a-zA-Z0-9_]+$/;
+        return reg.test(name);
+    }
+    $(document).ready(function () {
+        $('.submit_button').bind('click',function(evt){
+            var b=validateUsername($('#id_username').val().trim());
+            if(!b){
+                alert("The name has to contain only Latin letters or digits");
+                evt.preventDefault();
+            }
+        });
+    });
+</script>
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"
       rel="stylesheet" type="text/css"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
@@ -324,9 +340,6 @@ body {
     {% block title %}{% endblock %}
     {% block main_content %}{% endblock %}
     <div class="container-fluid">
-        <div class="container">
-            <div class="container"></div>
-        </div>
         <hr>
         <footer>
             <p class="text-center">© NovaJoy 2013</p>

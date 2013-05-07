@@ -1,22 +1,7 @@
 {% extends "registration/bar1.html" %}
 
 {% block main_content %}
-<script>
-    function validateUsername(name){
 
-        var reg = /^[a-zA-Z0-9_]+$/;
-        return reg.test(name);
-    }
-    $(document).ready(function () {
-        $('.submit_button').bind('click',function(evt){
-            var b=validateUsername($('#id_username').val().trim());
-            if(!b){
-                alert("The name has to contain only Latin letters or digits");
-                evt.preventDefault();
-            }
-        });
-    });
-</script>
 <div class="container"></div><div class="container-fluid">
 
 

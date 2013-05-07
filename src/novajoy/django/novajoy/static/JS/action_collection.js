@@ -7,9 +7,9 @@ function clickCollection(text) {
     curObject = $('.collection div:contains('+text+')');
     curCol = nameCollection;
     curObject.attr('id','currentCollection');
-    $(".listURL h2").remove();
+    $(".place_for_name_collection h2").remove();
     $(".link").remove();
-    $(".listURL").prepend('<h2>' + curCol + '</h2>');
+    $(".place_for_name_collection").prepend('<h2>' + curCol + '</h2>');
     $.post('/selectURL/', {nameCollection: nameCollection},
         function (data) {
             var tmp = $.parseJSON(data);
@@ -55,7 +55,8 @@ function deleteCollection(nameCollection){
                 }else{
                     curCol = "You have no collections";
                     $('.listURL').empty();
-                    $(".listURL").prepend('<h2>' + curCol + '</h2>');
+                    $('.place_for_name_collection').empty();
+                    $(".place_for_name_collection").prepend('<h2>' + curCol + '</h2>');
                 }
                 return true;
             } else {
