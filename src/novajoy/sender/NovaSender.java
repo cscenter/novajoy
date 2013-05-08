@@ -218,14 +218,7 @@ public class NovaSender {
      */
     public Message formMessage(String subject, String body, String pathToContent, String[] to) throws MessagingException {
 
-        String content = pathToContent;
-        String pdfContent = null;
-        String epubContent = null;
-        if (content != null) {
-            pdfContent = pathToContent.replace(".html", ".pdf");
-            epubContent = pathToContent.replace(".html", ".epub");
-
-        }
+        String format = pathToContent.substring(pathToContent.length()-3);
 
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(from));
@@ -251,68 +244,28 @@ public class NovaSender {
 
         multipart.addBodyPart(bodyPart);
 
-        if (content != null) {
+        if (pathToContent != null) {
 
-            File htmlFile = new File(content);
-            File pdfFile = new File(pdfContent);
-            File epubFile = new File(epubContent);
+            File attach = new File(pathToContent);
 
             MimeBodyPart attachmentPart = null;
-            MimeBodyPart pdfAttachmentPart = null;
-            MimeBodyPart epubAttachmentPart = null;
 
-            if (htmlFile.exists()) {
+            if (attach.exists()) {
                 // message attach
                 attachmentPart = new MimeBodyPart();
 
                 try {
-                    DataSource ds = new FileDataSource(content);
+                    DataSource ds = new FileDataSource(pathToContent);
                     attachmentPart = new MimeBodyPart();
                     attachmentPart.setDataHandler(new DataHandler(ds));
                 } catch (Exception e) {
                     log.warning(e.getMessage());
                 }
 
-                attachmentPart.setFileName("feed.html");
+                attachmentPart.setFileName("feed." + format);
             }
 
-            if (pdfFile.exists()) {
-
-                pdfAttachmentPart = new MimeBodyPart();
-
-                try {
-                    DataSource ds = new FileDataSource(pdfContent);
-                    pdfAttachmentPart = new MimeBodyPart();
-                    pdfAttachmentPart.setDataHandler(new DataHandler(ds));
-
-                } catch (Exception e) {
-                    log.warning(e.getMessage());
-                }
-
-                pdfAttachmentPart.setFileName("feed.pdf");
-
-            }
-
-            if (epubFile.exists()) {
-
-                epubAttachmentPart = new MimeBodyPart();
-
-                try {
-                    DataSource ds = new FileDataSource(epubContent);
-                    epubAttachmentPart = new MimeBodyPart();
-                    epubAttachmentPart.setDataHandler(new DataHandler(ds));
-
-                } catch (Exception e) {
-                    log.warning(e.getMessage());
-                }
-
-                epubAttachmentPart.setFileName("feed.epub");
-
-            }
-
-            multipart.addBodyPart(pdfAttachmentPart);
             multipart.addBodyPart(attachmentPart);
-            multipart.addBodyPart(epubAttachmentPart);
         }
 
         // Put parts in message

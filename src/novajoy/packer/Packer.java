@@ -133,7 +133,7 @@ class Packer{
         Statement st = con.createStatement();
         //System.out.println("select * from Server_rssitem where rssfeed_id in (select rssfeed_id from Server_rssfeed_collection where collection_id in (select id from Server_collection where user_id = " + uid +"));");
         //ResultSet rs = st.executeQuery("select * from Server_rssitem where rssfeed_id in (select rssfeed_id from Server_rssfeed_collection where collection_id in (select id from Server_collection where user_id = " + uid +"));");
-        ResultSet rs = st.executeQuery("SELECT IT.rssfeed_id , IT.title, IT.description, IT.link, IT.author, IT.pubDate, COL.id  \n" +
+        ResultSet rs = st.executeQuery("SELECT IT.rssfeed_id , IT.title, IT.description, IT.link, IT.author, IT.pubDate, COL.id, COL.format, COL.subject  \n" +
                 "FROM Server_rssfeed RS \n" +
                 "JOIN Server_rssfeed_collection CONN \n" +
                 "ON RS.id=CONN.rssfeed_id \n" +
@@ -141,7 +141,7 @@ class Packer{
                 "ON COL.id=CONN.collection_id \n" +
                 "JOIN Server_rssitem IT \n" +
                 "ON IT.rssfeed_id=RS.id\n" +
-                "WHERE COL.user_id = " + uid + " AND IT.pubDate >= NOW() ORDER BY COL.id, IT.pubDate;");
+                "WHERE COL.user_id = " + uid + " AND IT.pubDate >= COL.last_update_time ORDER BY COL.id, IT.pubDate;");
 
         int rowcount = 0;
         if (rs.last()) {
@@ -153,28 +153,29 @@ class Packer{
 
         //RssItem[] items = new RssItem[rowcount];
         ArrayList items = new ArrayList();
+
         int last_group_id = 0;
         int i = 0;
 
         if (rs.next()) {
             last_group_id = rs.getInt(7);
 
-            items.add(i, new ArrayList<RssItem>());
-            ((ArrayList)items.get(i)).add(new RssItem(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6)));
+            items.add(i, new ItemCollection(rs.getString(9),rs.getString(8)));
+            ((ItemCollection)items.get(i)).insertItem(new RssItem(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6)));
         }
 
         while (rs.next()) {
 
             if (rs.getInt(7) == last_group_id) {
 
-                ArrayList<RssItem> rss = (ArrayList)items.get(i);
-                rss.add(new RssItem(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6)));
+                ItemCollection rss = (ItemCollection)items.get(i);
+                rss.insertItem(new RssItem(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6)));
             } else {
 
                 last_group_id = rs.getInt(7);
                 i++;
-                items.add(i, new ArrayList<RssItem>());
-                ((ArrayList)items.get(i)).add(new RssItem(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6)));
+                items.add(i, new ItemCollection(rs.getString(9),rs.getString(8)));
+                ((ItemCollection)items.get(i)).insertItem(new RssItem(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6)));
             }
         }
 
@@ -185,7 +186,7 @@ class Packer{
     }
 
 
-    DocumentItem formDocument (String target, ArrayList userFeeds) {
+    DocumentItem formDocument (String target, ItemCollection userFeeds) {
 
         StringBuilder builder =
                 new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?><html><head>" +
@@ -198,7 +199,7 @@ class Packer{
 
         builder.append("</body></html>");
 
-        return new DocumentItem(target, builder.toString().trim());
+        return new DocumentItem(target, builder.toString().trim(), userFeeds.subject, userFeeds.format);
     }
 
     void updateFeedTime(UserItem[] users) throws SQLException {
@@ -250,7 +251,7 @@ class Packer{
 
             for (Object elem : userFeed) {
 
-                usersDocuments.add(formDocument(users[j].user_email, (ArrayList)elem));
+                usersDocuments.add(formDocument(users[j].user_email, (ItemCollection)elem));
             }
 
             j++;
@@ -514,7 +515,7 @@ class Packer{
         return cleanXMLString;
     }
 
-    public String prepareAttachmentAndSave(String email, String attachment) throws IOException {
+    public String prepareAttachmentAndSave(String email, String attachment, String format) throws IOException {
 
         String domain = email.substring(email.indexOf("@")+1);
         String name = email.substring(0, email.indexOf("@"));
@@ -532,10 +533,14 @@ class Packer{
 
         Archiver.createZip(mailStoragePath + "/epub", resultPath.replace(".html",".epub"));  */
 
-        createEpub(validXHTML, resultPath.replace(".html", ".epub"));
-        createPdf(validXHTML, resultPath.replace(".html", ".pdf"));
-
-        return resultPath;
+        if (format.equalsIgnoreCase("EPUB")) {
+            createEpub(validXHTML, resultPath.replace(".html", ".epub"));
+            return resultPath.replace(".html", ".epub");
+        } else if (format.equalsIgnoreCase("PDF")) {
+            createPdf(validXHTML, resultPath.replace(".html", ".pdf"));
+            return resultPath.replace(".html", ".pdf");
+        } else
+            return resultPath;
     }
 
     /*public static void copyFile(File sourceFile, File destFile) throws IOException {
@@ -599,10 +604,10 @@ class Packer{
                 DocumentItem item = (DocumentItem)iterator.next();
 
                 ps.setString(j++, item.target_email);
-                ps.setString(j++, DEFAULT_SUBJECT);
+                ps.setString(j++, item.subject);
                 ps.setString(j++, DEFAULT_BODY);
 
-                String filePath = prepareAttachmentAndSave(item.target_email, item.user_document);
+                String filePath = prepareAttachmentAndSave(item.target_email, item.user_document, item.format);
 
                 ps.setString(j++, filePath);
             }
