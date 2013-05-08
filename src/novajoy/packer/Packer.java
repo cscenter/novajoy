@@ -86,7 +86,7 @@ class Packer{
             tidy = new Tidy();
             tidy.setQuiet(true);
             tidy.setShowErrors(0);
-            tidy.setShowWarnings(true);
+            tidy.setShowWarnings(false);
             tidy.setXHTML(true);
             tidy.setOutputEncoding("UTF-8");
             tidy.setInputEncoding("UTF-8");
@@ -519,7 +519,7 @@ class Packer{
 
         String domain = email.substring(email.indexOf("@")+1);
         String name = email.substring(0, email.indexOf("@"));
-        System.out.println(domain + "|" + name);
+        System.out.println("Processing: " + domain + "|" + name);
         String path = mailStoragePath + "/" + domain + "/" + name;
 
         String validXHTML = cleanHTML(attachment);
