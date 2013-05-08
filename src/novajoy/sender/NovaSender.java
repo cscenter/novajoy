@@ -163,13 +163,17 @@ public class NovaSender {
             if (file.exists())
                 file.delete();
 
-            File pdfFile = new File(messages[i].attachment.replace(".html",".pdf"));
+            /*File pdfFile = new File(messages[i].attachment.replace(".html",".pdf"));
             if (pdfFile.exists())
                 pdfFile.delete();
 
             File epubFile = new File(messages[i].attachment.replace(".html",".epub"));
             if (epubFile.exists())
-                epubFile.delete();
+                epubFile.delete();*/
+
+            File htmlFile = new File(messages[i].attachment.substring(0, messages[i].attachment.lastIndexOf(".")) + "html");
+            if (htmlFile.exists())
+                htmlFile.delete();
         }
 
         int rs = ps.executeUpdate();
@@ -218,7 +222,11 @@ public class NovaSender {
      */
     public Message formMessage(String subject, String body, String pathToContent, String[] to) throws MessagingException {
 
-        String format = pathToContent.substring(pathToContent.length()-3);
+        String format = null;
+
+        if (pathToContent != null) {
+            format = pathToContent.substring(pathToContent.lastIndexOf(".") + 1);
+        }
 
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(from));
