@@ -141,7 +141,7 @@ class Packer{
                 "ON COL.id=CONN.collection_id \n" +
                 "JOIN Server_rssitem IT \n" +
                 "ON IT.rssfeed_id=RS.id\n" +
-                "WHERE COL.user_id = " + uid + " ORDER BY COL.id, IT.pubDate;");
+                "WHERE COL.user_id = " + uid + " AND IT.pubDate >= NOW() ORDER BY COL.id, IT.pubDate;");
 
         int rowcount = 0;
         if (rs.last()) {
