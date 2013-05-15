@@ -11,14 +11,14 @@ function send(nameOfNewCollection,delta_sending_time,format,subject){
         function (data) {
             var response = data;
             if (response == "Success") {
-                $('.collection').append("<div><p><span>" + nameOfNewCollection + "</span></p></div>");
-                $('.collection span:last').on("click", function () {
+                $('.collection').append("<div><p><a>" + nameOfNewCollection + "</a></p></div>");
+                $('.collection a:last').on("click", function () {
                     clickCollection($(this).text());
                 });
                 curCol = nameOfNewCollection;
-                $('.collection span:last').click();
-                curObject = $('.collection span:last') ;
-                $('.collection span:last').click();
+                $('.collection a:last').click();
+                curObject = $('.collection a:last') ;
+                $('.collection a:last').click();
             } else {
                 alert(response);
             }
@@ -35,7 +35,7 @@ function sendEditCollection(oldName,nameOfNewCollection,delta_sending_time,forma
             var response = data;
             if (response == "Success") {
                 //<div><p><span title='{{ col }}'>{{ col }}</span></div>
-                curObject = $('.collection div:contains('+oldName+') p span').text(nameOfNewCollection);
+                curObject = $('.collection div:contains('+oldName+') p a').text(nameOfNewCollection);
                 curCol=nameOfNewCollection;
                 curObject.click();
                 // alert($('.collection div:contains('+oldName+')').text());

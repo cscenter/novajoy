@@ -91,7 +91,7 @@ $(document).ready(function () {
     format_map['pdf'] = 0;
     format_map['doc'] = 1;
     format_map['html'] = 2;
-    format_map['fb2'] = 3;
+    format_map['epub'] = 3;
 
     delta_sending_time_map=[];
     delta_sending_time_map[3600]=0;
@@ -101,12 +101,12 @@ $(document).ready(function () {
     delta_sending_time_map[43200]=4;
     delta_sending_time_map[86400]=5;
     delta_sending_time_map[172800]=6;
-    $(".collection span").bind('click',function(evt){
+    $(".collection a").bind('click',function(evt){
         evt.preventDefault();
         clickCollection($(this).text());
     });
     if($("#newCollection").length!=0){
-        if ($('.collection span').length == 0) {
+        if ($('.collection a').length == 0) {
             document.getElementById("addURL").disabled = true;
             document.getElementById("editCollection").disabled = true;
             document.getElementById("removeCollection").disabled = true;
@@ -117,8 +117,8 @@ $(document).ready(function () {
             document.getElementById("addURL").disabled = false;
             document.getElementById("editCollection").disabled = false;
             document.getElementById("removeCollection").disabled = false;
-            curCol = $('.collection span:first').text();
-            curObject =$('.collection span:first');
+            curCol = $('.collection a:first').text();
+            curObject =$('.collection a:first');
             curObject.click();
         }
     }

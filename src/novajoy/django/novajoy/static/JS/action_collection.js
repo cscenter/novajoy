@@ -16,15 +16,15 @@ function clickCollection(text) {
             for (var i = 0; i < tmp.length; i++) {
                 var url = tmp[i]['fields']['url'];
                 var tt = "<div class='link'><p><span>"+
-                    "<div class='h'><a href='"+url+"'>"+url+" </a></div>" +
+                    "<div class='h'><a href='"+url+"'>"+url+" </a><a href='"+url+"'><img src='/static/removeFeed1.png'/></a></div>" +
                     "</span></p></div> ";
+
+
                 $(".listURL").append(tt);
             }
-            $('.listURL a').bind('click',function(evt){
+            $('.listURL img').bind('click',function(evt){
                 evt.preventDefault();
-                //alert($(this).attr('href'));
-                showDialogRemoveRSS($(this).attr('href'));
-                //deleteRSS($(this).attr('href'));
+                showDialogRemoveRSS($(this).parent().attr('href'));
             });
         }
     ).always(function(){
@@ -38,7 +38,7 @@ function clickRemoveCollection(){
 }
 
 function deleteCollection(nameCollection){
-    if ($('.collection span').length == 1) {
+    if ($('.collection a').length == 1) {
         document.getElementById("addURL").disabled = true;
         document.getElementById("editCollection").disabled = true;
         document.getElementById("removeCollection").disabled = true;
@@ -48,9 +48,9 @@ function deleteCollection(nameCollection){
             var response = data;
             if (response == "Success") {
                 curObject.remove();
-                if($('.collection span').length>0){
-                    curObject= $('.collection span:last');
-                    curCol = $('.collection span:last').text();
+                if($('.collection a').length>0){
+                    curObject= $('.collection a:last');
+                    curCol = $('.collection a:last').text();
                     curObject.click();
                 }else{
                     curCol = "You have no collections";
