@@ -20,5 +20,5 @@ urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^about/',about),
                        url(r'^contact/',contact),
-                       url(r'^changedPassword/',changedPassword)
+                       url(r'^changedPassword/',changedPassword),
                        )

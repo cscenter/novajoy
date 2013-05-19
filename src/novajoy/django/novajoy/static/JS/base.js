@@ -19,6 +19,49 @@ function showDialogRemoveRSS(url){
 
     $("#dialogRemoveRSS").dialog("open");
 }
+
+function changedPass(){
+
+    var oldPass;var newPass1='';var newPass2;
+    $("#changePassword").dialog({autoOpen: false, width: 400, height: 350,closeOnEscape: false,title:"Changed Password",
+        close: function(){
+        },
+        open:function(){
+        },
+        buttons: {
+            OK: function () {
+                var oldPass = document.getElementById('chngPass').elements[0].value
+                var newPass1 = document.getElementById('chngPass').elements[1].value;
+                var newPass2 = document.getElementById('chngPass').elements[2].value;
+                document.getElementById('chngPass').reset();
+                //alert(oldPass+ " "+newPass1+" "+newPass2);
+                if(newPass1==newPass2 && newPass1!=''){
+                    $.post('/changedPassword/', {oldPassword:oldPass,newPassword:newPass1},
+                        function (data) {
+                            if(data=="Success"){
+                                alert("The password is changed");
+                            }else{
+                                alert("The password is entered incorrectly");
+                            }
+                        }
+                    )
+                }else{
+                    alert("Enter identical new passwords");
+                }
+                $(this).dialog("close");
+                return false;
+            },
+            Cancel: function () {
+                document.getElementById('chngPass').reset();
+                $(this).dialog("close");
+                return false;
+            }
+        }
+    });
+
+    $("#changePassword").dialog("open");
+
+}
 function showDialog(func,old_name) {
     $("#dialog1").dialog({autoOpen: false, width: 500, height: 450,closeOnEscape: false,title:"New Collection",
         close: function(){
@@ -26,10 +69,10 @@ function showDialog(func,old_name) {
         },
         open:function(){
             if (old_name.trim()!=""){
-                document.forms[0].elements[0].value = name_collection;
-                document.forms[0].elements[3].value = subject
-                document.forms[0].elements[1].options[delta_sending_time].selected=true;
-                document.forms[0].elements[2].options[format].selected=true;
+                document.getElementById('myform').elements[0].value = name_collection;
+                document.getElementById('myform').elements[3].value = subject
+                document.getElementById('myform').elements[1].options[delta_sending_time].selected=true;
+                document.getElementById('myform').elements[2].options[format].selected=true;
             }else{
                 document.getElementById('myform').reset();
             }
@@ -37,10 +80,10 @@ function showDialog(func,old_name) {
         buttons: {
             OK: function () {
                 //Data from a form
-                var nameOfNewCollection = document.forms[0].elements[0].value;
-                var delta_sending_time = document.forms[0].elements[1].value;
-                var format = document.forms[0].elements[2].value;
-                var subject = document.forms[0].elements[3].value;
+                var nameOfNewCollection = document.getElementById('myform').elements[0].value;
+                var delta_sending_time = document.getElementById('myform').elements[1].value;
+                var format = document.getElementById('myform').elements[2].value;
+                var subject = document.getElementById('myform').elements[3].value;
                 //clean form
                 document.getElementById('myform').reset();
                 nameOfNewCollection = nameOfNewCollection.trim();
@@ -85,36 +128,8 @@ function showDialog(func,old_name) {
         $("#dialog1").dialog("open");
     }
 }
-function vova(){
 
-    $("#changePassword").dialog({autoOpen: false, width: 300, height: 200,closeOnEscape: false,title:"Changed Password",
-        close: function(){
-        },
-        open:function(){
-        },
-        buttons: {
-            OK: function () {
-                var oldPass = $('oldPassword');
-                var newPass1 = document.forms[0].elements[1].value;
-                var newPass2 = document.forms[0].elements[2].value;
-                alert(oldPass+ " "+newPass1+" "+newPass2);
-
-                $(this).dialog("close");
-                return false;
-            },
-            Cancel: function () {
-                $(this).dialog("close");
-                return false;
-            }
-        }
-    });
-
-    $("#changePassword").dialog("open");
-}
 $(document).ready(function () {
-
-//    alert($('.nav > li > a').length);
-
     format_map = [];
     format_map['pdf'] = 0;
     format_map['doc'] = 1;
@@ -134,7 +149,6 @@ $(document).ready(function () {
         clickCollection($(this).text());
     });
     if($("#newCollection").length!=0){
-
         if ($('.collection a').length == 0) {
             document.getElementById("addURL").disabled = true;
             document.getElementById("editCollection").disabled = true;
