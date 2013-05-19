@@ -85,8 +85,36 @@ function showDialog(func,old_name) {
         $("#dialog1").dialog("open");
     }
 }
+function vova(){
 
+    $("#changePassword").dialog({autoOpen: false, width: 300, height: 200,closeOnEscape: false,title:"Changed Password",
+        close: function(){
+        },
+        open:function(){
+        },
+        buttons: {
+            OK: function () {
+                var oldPass = $('oldPassword');
+                var newPass1 = document.forms[0].elements[1].value;
+                var newPass2 = document.forms[0].elements[2].value;
+                alert(oldPass+ " "+newPass1+" "+newPass2);
+
+                $(this).dialog("close");
+                return false;
+            },
+            Cancel: function () {
+                $(this).dialog("close");
+                return false;
+            }
+        }
+    });
+
+    $("#changePassword").dialog("open");
+}
 $(document).ready(function () {
+
+//    alert($('.nav > li > a').length);
+
     format_map = [];
     format_map['pdf'] = 0;
     format_map['doc'] = 1;
@@ -106,6 +134,7 @@ $(document).ready(function () {
         clickCollection($(this).text());
     });
     if($("#newCollection").length!=0){
+
         if ($('.collection a').length == 0) {
             document.getElementById("addURL").disabled = true;
             document.getElementById("editCollection").disabled = true;
