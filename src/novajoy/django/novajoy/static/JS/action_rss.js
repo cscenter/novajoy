@@ -1,5 +1,5 @@
 function addRSS() {
-    var nameOfNewRSS = prompt("Enter name new RSS:");
+    var nameOfNewRSS = prompt("Enter new rssfeed address");
     nameOfNewRSS = nameOfNewRSS.trim();
     if (nameOfNewRSS == "") {
         alert("Empty Field");

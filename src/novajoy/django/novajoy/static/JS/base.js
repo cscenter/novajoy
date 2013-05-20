@@ -41,12 +41,12 @@ function changedPass(){
                             if(data=="Success"){
                                 alert("The password is changed");
                             }else{
-                                alert("The password is entered incorrectly");
+                                alert("Incorrect old password, try again.");
                             }
                         }
                     )
                 }else{
-                    alert("Enter identical new passwords");
+                    alert("Password confirmation doesn't match.");
                 }
                 $(this).dialog("close");
                 return false;
