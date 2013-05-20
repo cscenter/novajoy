@@ -47,13 +47,28 @@ public class Crawler extends Thread {
 
 			Statement stmt = dbManager.createStatement();
 			PreparedStatement ps = dbManager.createPreparedStatement(pquery);
+			
+			String squery = "UPDATE Server_rssfeed  SET spoiled = 1 WHERE id = ?";
+			PreparedStatement spoiled_statement = dbManager.createPreparedStatement(squery);
+			
 			ResultSet rs = stmt.executeQuery(query);
 			String addr;
 			int items_count = 0;
 			while (rs.next()) {
 				addr = rs.getString(2);
 				log.info("Crawling from: " + addr);
-				SyndFeed feed = readfeed(addr);
+				
+				SyndFeed feed = null;
+				try {
+					feed = readfeed(addr);
+				} catch (Exception e1) {
+					log.warning(e1.getMessage());
+					log.warning("Rssfeed with (id = " + rs.getString(1)+") is spoiled");
+					spoiled_statement.setLong(1, Long.parseLong(rs.getString(1)));
+					spoiled_statement.executeUpdate();
+					continue;
+				}
+				
 				for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
 					if (insert_item((SyndEntry) i.next(),
 							Long.parseLong(rs.getString(1))))
