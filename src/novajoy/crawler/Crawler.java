@@ -42,7 +42,7 @@ public class Crawler extends Thread {
 
 	private void process_reqsts() {
 		try {
-			String query = "Select * FROM Server_rssfeed";
+			String query = "Select * FROM Server_rssfeed WHERE spoiled <> 1";
 			String pquery = "UPDATE Server_rssfeed  SET pubDate = ? WHERE id = ?";
 
 			Statement stmt = dbManager.createStatement();
