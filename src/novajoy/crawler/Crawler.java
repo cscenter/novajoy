@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.io.ParsingFeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 import novajoy.util.db.JdbcManager;
@@ -47,28 +48,31 @@ public class Crawler extends Thread {
 
 			Statement stmt = dbManager.createStatement();
 			PreparedStatement ps = dbManager.createPreparedStatement(pquery);
-			
+
 			String squery = "UPDATE Server_rssfeed  SET spoiled = 1 WHERE id = ?";
-			PreparedStatement spoiled_statement = dbManager.createPreparedStatement(squery);
-			
+			PreparedStatement spoiled_statement = dbManager
+					.createPreparedStatement(squery);
+
 			ResultSet rs = stmt.executeQuery(query);
 			String addr;
 			int items_count = 0;
 			while (rs.next()) {
 				addr = rs.getString(2);
 				log.info("Crawling from: " + addr);
-				
+
 				SyndFeed feed = null;
 				try {
 					feed = readfeed(addr);
-				} catch (Exception e1) {
+				} catch (ParsingFeedException e1) {
 					log.warning(e1.getMessage());
-					log.warning("Rssfeed with (id = " + rs.getString(1)+") is spoiled");
-					spoiled_statement.setLong(1, Long.parseLong(rs.getString(1)));
+					log.warning("Rssfeed with (id = " + rs.getString(1)
+							+ ") is spoiled");
+					spoiled_statement.setLong(1,
+							Long.parseLong(rs.getString(1)));
 					spoiled_statement.executeUpdate();
 					continue;
 				}
-				
+
 				for (Iterator i = feed.getEntries().iterator(); i.hasNext();) {
 					if (insert_item((SyndEntry) i.next(),
 							Long.parseLong(rs.getString(1))))
@@ -113,7 +117,8 @@ public class Crawler extends Thread {
 			throws SQLException {
 
 		if (check_already_in(entry.getLink())) {
-			//log.info("Entry with link: " + entry.getLink() + " already exists.");
+			// log.info("Entry with link: " + entry.getLink() +
+			// " already exists.");
 			return false;
 		}
 
