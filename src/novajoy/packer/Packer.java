@@ -623,6 +623,9 @@ class Packer{
                 log.warning("Something went wrong while inserting");
             }
 
+            users = null;
+            ps.close();
+
         } catch (NullPointerException e) {
             log.info("There are no documents for update");
             return;
