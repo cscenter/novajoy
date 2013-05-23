@@ -72,8 +72,8 @@ def addCollection(request):
     else:
         interval_sec = int(delta_sending_time[:string.find(delta_sending_time,"h")]) * 60 * 60 * 24
 
-    # c = Collection(user=user,name_collection=request.POST['newCollection'],last_update_time=datetime.datetime.now(),
-                   # delta_sending_time=interval_sec,format = request.POST['format'],subject=request.POST['format'])
+        # c = Collection(user=user,name_collection=request.POST['newCollection'],last_update_time=datetime.datetime.now(),
+        # delta_sending_time=interval_sec,format = request.POST['format'],subject=request.POST['format'])
     c = Collection(user=user,name_collection=request.POST['newCollection'],last_update_time=datetime.datetime.now(),
                    delta_sending_time=interval_sec,format=request.POST['format'],subject=request.POST['subject'])
     c.save()
@@ -125,7 +125,8 @@ def addRSS(request):
             rss.save()
             return HttpResponse("Success")
         else:
-            newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate='2013-03-31 13:10:32',spoiled=False)
+            t = datetime.datetime.now()
+            newRSS = RSSFeed(url=request.POST.get('nameOfNewRSS'),pubDate=t.strftime("%Y-%m-%d %H:%M:%S"),spoiled=False)
             newRSS.save()
             newRSS.collection.add(collection)
             newRSS.save()
@@ -232,4 +233,13 @@ def contact(request):
                                   context_instance=RequestContext(request))
     else:
         return render_to_response('contact.html',{'templ':'registration/bar2.html','user_name':request.user.username},
-                                      context_instance=RequestContext(request))
+                                  context_instance=RequestContext(request))
+
+@user_passes_test(isAuth,login_url="/accounts/login/")
+def changedPassword(request):
+    user = Account.objects.get(username=request.user.username)
+    if user.check_password(request.POST['oldPassword']) == True:
+        user.set_password(request.POST['newPassword'])
+        user.save()
+        return HttpResponse("Success")
+    return HttpResponse("Error")

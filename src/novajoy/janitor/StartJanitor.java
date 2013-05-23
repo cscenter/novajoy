@@ -9,6 +9,8 @@ public class StartJanitor {
 		JdbcManager dbman = new JdbcManager(config.getDBaddress(),
 				config.getDBbasename(), config.getDBuser(),
 				config.getDBpassword());
-		new Janitor(dbman).clean_rssitems();
+		Janitor jan = new Janitor(dbman);
+		jan.clean_rssitems();
+		jan.clean_spoiled();
 	}
 }

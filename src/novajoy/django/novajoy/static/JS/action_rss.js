@@ -1,5 +1,5 @@
 function addRSS() {
-    var nameOfNewRSS = prompt("Enter name new RSS:");
+    var nameOfNewRSS = prompt("Enter new rssfeed address");
     nameOfNewRSS = nameOfNewRSS.trim();
     if (nameOfNewRSS == "") {
         alert("Empty Field");
@@ -9,17 +9,25 @@ function addRSS() {
                 var response = data;
                 if (response == "Success") {
                     var tt = "<div class='link'><p><span>" +
-                        "<a href='"+nameOfNewRSS+"'>"+nameOfNewRSS+"</a>" +
+                        "<div class='h'><a href='"+nameOfNewRSS+"'>"+nameOfNewRSS+"</a><a href='"+nameOfNewRSS+"'><img src='/static/removeFeed1.png'/></a></div>" +
                         "</span></p></div> ";
-                    $('.listURL').append(tt);
-                    $('.listURL a').bind('click',function(evt){
-                        evt.preventDefault();
-                        //alert($(this).attr('href'));
-                        showDialogRemoveRSS($(this).attr('href'));
-                        //deleteRSS($(this).attr('href'));
-                        //$('.listURL div:contains('+$(this).attr('href')+')').remove();
 
+//                    "<div class='link'><p><span>"+
+//                        "<div class='h'><a href='"+url+"'>"+url+" </a><a href='"+url+"'><img src='/static/removeFeed1.png'/></a></div>" +
+//                    "</span></p></div> "
+                    $('.listURL').append(tt);
+                    $('.listURL img').bind('click',function(evt){
+                        evt.preventDefault();
+                        showDialogRemoveRSS($(this).parent().attr('href'));
                     });
+//                    $('.listURL a').bind('click',function(evt){
+//                        //evt.preventDefault();
+//                        //alert($(this).attr('href'));
+//                        showDialogRemoveRSS($(this).attr('href'));
+//                        //deleteRSS($(this).attr('href'));
+//                        //$('.listURL div:contains('+$(this).attr('href')+')').remove();
+//
+//                    });
                 } else {
                     alert(response);
                 }

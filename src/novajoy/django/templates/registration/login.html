@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row">
                 <div class="span4 offset4 well">
-                    <legend>Please Sign In</legend>
+                    <legend>Please Log In</legend>
                     {% if form.errors %}
                         <span class="errorMess">Incorrect Username or Password!</span>
                     {% endif %}
@@ -21,11 +21,11 @@
                             <label class="checkbox">
                                 <input type="checkbox" name="remember" value="1"> Remember Me
                             </label>
-                            <button type="submit" name="submit" class="btn btn-info btn-block">Sign in</button>
+                            <button type="submit" name="submit" class="btn btn-info btn-block">Log in</button>
                         </dl>
                     </form>
-                    <button type="button" onclick="location.href='/accounts/passwordReset/'" name="forgot_password" class="btn btn-info btn-block">Forgot the password</button>
-                    <button type="button" onclick="location.href='/accounts/register/'" name="register" class="btn btn-info btn-block">Registration</button>
+                    <button type="button" onclick="location.href='/accounts/passwordReset/'" name="forgot_password" class="btn btn-info btn-block">Forgot password</button>
+                    <button type="button" onclick="location.href='/accounts/register/'" name="register" class="btn btn-info btn-block">Sign in</button>
                 </div>
             </div>
         </div>
