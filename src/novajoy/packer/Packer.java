@@ -627,7 +627,7 @@ class Packer{
             if (users != null)
                 updateFeedTime(users);
 
-            tasks = null;
+            //tasks = null;
 
             if (rs > 0) {
                 log.info("Routine tasks completed");
