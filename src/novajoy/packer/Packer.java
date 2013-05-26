@@ -572,7 +572,7 @@ class Packer{
             if (docs.isEmpty())
                 throw new NullPointerException();
 
-            es.shutdown();
+            //es.shutdown();
 
             for (Future<?> future : tasks) {     // wait all
                 future.get();
