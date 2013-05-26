@@ -529,38 +529,32 @@ class Packer{
             createEpub(validXHTML, resultPath.replace(".html", ".epub"));
             return resultPath.replace(".html", ".epub");
         } else if (format.equalsIgnoreCase("PDF")) {
-            tasks.add(es.submit(new PdfTask(validXHTML, resultPath.replace(".html", ".pdf"))));
+            //tasks.add(es.submit(new PdfTask(validXHTML, resultPath.replace(".html", ".pdf"))));
+            createPdf(validXHTML, resultPath.replace(".html", ".pdf"));
             return resultPath.replace(".html", ".pdf");
         } else
             return resultPath;
     }
 
-    /*public static void copyFile(File sourceFile, File destFile) throws IOException {
+    private void createPdf (String htmlDocument, String path) {
 
-        if(!destFile.exists()) {
-            destFile.createNewFile();
-        }
-
-        FileChannel source = null;
-        FileChannel destination = null;
+        ITextRenderer renderer = new ITextRenderer();
         try {
-            source = new RandomAccessFile(sourceFile,"rw").getChannel();
-            destination = new RandomAccessFile(destFile,"rw").getChannel();
+            renderer.getFontResolver().addFont("fonts/PTS55F.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
-            long position = 0;
-            long count    = source.size();
-
-            source.transferTo(position, count, destination);
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(htmlDocument.getBytes("UTF-8")));
+            renderer.setDocument(doc, null);
+            File file = new File(path);
+            OutputStream os = new FileOutputStream(file);
+            renderer.layout();
+            renderer.createPDF(os);
+            log.info(path + " created succesfully.");
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        finally {
-            if(source != null) {
-                source.close();
-            }
-            if(destination != null) {
-                destination.close();
-            }
-        }
-    }    */
+    }
 
     public void performRoutineTasks() {
 
@@ -574,9 +568,9 @@ class Packer{
 
             //es.shutdown();
 
-            for (Future<?> future : tasks) {     // wait all
+            /*for (Future<?> future : tasks) {     // wait all
                 future.get();
-            }
+            } */
 
             String query = "insert into Server_postletters (target,title,body,attachment) values ";
 
