@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * Date: 26.05.13
  * Time: 14:08
  */
-public class PdfTask implements Runnable {
+public class PdfTask extends Thread {
 
     private String document;
     private String path;
@@ -49,7 +49,7 @@ public class PdfTask implements Runnable {
         }
     }
 
-    public void run() {
+    public void start() {
 
         createPdf(document, path);
     }

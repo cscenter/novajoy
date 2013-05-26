@@ -51,9 +51,9 @@ class Packer{
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";
     private final String DEFAULT_BODY = "Thank you for using our service!";
 
-    //private LinkedList<Runnable> tasks = null;
-    Collection<Future<?>> tasks = null;
-    ExecutorService es = null;
+    private LinkedList<Thread> tasks = null;
+    //Collection<Future<?>> tasks = null;
+    //ExecutorService es = null;
 
     Connection con = null;
 
@@ -65,9 +65,9 @@ class Packer{
         dbName = worker.getDBbasename();
         userName = worker.getDBuser();
         userPassword = worker.getDBpassword();
-        //tasks = new LinkedList<Runnable>();
-        es = Executors.newCachedThreadPool();
-        tasks = new LinkedList<Future<?>>();
+        tasks = new LinkedList<Thread>();
+        //es = Executors.newCachedThreadPool();
+        //tasks = new LinkedList<Future<?>>();
     }
 
     public Packer() {
@@ -530,31 +530,40 @@ class Packer{
             return resultPath.replace(".html", ".epub");
         } else if (format.equalsIgnoreCase("PDF")) {
             //tasks.add(es.submit(new PdfTask(validXHTML, resultPath.replace(".html", ".pdf"))));
-            createPdf(validXHTML, resultPath.replace(".html", ".pdf"));
+            PdfTask pdftask = new PdfTask(validXHTML, resultPath.replace(".html", ".pdf"));
+            tasks.add(pdftask);
+            pdftask.start();
             return resultPath.replace(".html", ".pdf");
         } else
             return resultPath;
     }
 
-    private void createPdf (String htmlDocument, String path) {
+    /*public static void copyFile(File sourceFile, File destFile) throws IOException {
 
-        ITextRenderer renderer = new ITextRenderer();
-        try {
-            renderer.getFontResolver().addFont("fonts/PTS55F.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(htmlDocument.getBytes("UTF-8")));
-            renderer.setDocument(doc, null);
-            File file = new File(path);
-            OutputStream os = new FileOutputStream(file);
-            renderer.layout();
-            renderer.createPDF(os);
-            log.info(path + " created succesfully.");
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(!destFile.exists()) {
+            destFile.createNewFile();
         }
-    }
+
+        FileChannel source = null;
+        FileChannel destination = null;
+        try {
+            source = new RandomAccessFile(sourceFile,"rw").getChannel();
+            destination = new RandomAccessFile(destFile,"rw").getChannel();
+
+            long position = 0;
+            long count    = source.size();
+
+            source.transferTo(position, count, destination);
+        }
+        finally {
+            if(source != null) {
+                source.close();
+            }
+            if(destination != null) {
+                destination.close();
+            }
+        }
+    }    */
 
     public void performRoutineTasks() {
 
@@ -568,9 +577,18 @@ class Packer{
 
             //es.shutdown();
 
+            while (!tasks.isEmpty()) {
+
+                tasks.getFirst().join();
+                tasks.removeFirst();
+            }
+
+            log.info("Doc generating tasks completed. Mails create process starting");
+
             /*for (Future<?> future : tasks) {     // wait all
+
                 future.get();
-            } */
+            }*/
 
             String query = "insert into Server_postletters (target,title,body,attachment) values ";
 
@@ -609,7 +627,6 @@ class Packer{
             if (users != null)
                 updateFeedTime(users);
 
-            tasks.clear();
             tasks = null;
 
             if (rs > 0) {
