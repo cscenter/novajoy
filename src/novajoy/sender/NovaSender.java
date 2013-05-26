@@ -26,7 +26,7 @@ public class NovaSender {
     private String dbName = "";
     private String userName = "";
     private String userPassword = "";
-    private static Logger log =  new Loggers().getSenderLogger();
+    private static Logger log =  Logger.getLogger(NovaSender.class.getName());//new Loggers().getSenderLogger();
 
     // E-mail  configuration
 

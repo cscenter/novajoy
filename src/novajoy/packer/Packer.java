@@ -39,7 +39,7 @@ class Packer{
     private String userPassword = "";
 
     private final String configPath = "/home/ubuntu/NovaJoyConfig/config.ini";
-    private static Logger log =  new Loggers().getPackerLogger();
+    private static Logger log =  Logger.getLogger(Packer.class.getName());//new Loggers().getPackerLogger();
     private final String mailStoragePath = "mail_storage";
 
     private static Tidy tidy = null;
@@ -141,7 +141,7 @@ class Packer{
                 "ON COL.id=CONN.collection_id \n" +
                 "JOIN Server_rssitem IT \n" +
                 "ON IT.rssfeed_id=RS.id\n" +
-                "WHERE COL.user_id = " + uid + " AND IT.pubDate >= COL.last_update_time ORDER BY COL.id, IT.pubDate;");
+                "WHERE COL.user_id = " + uid + " AND IT.pubDate >= COL.last_update_time AND (UNIX_TIMESTAMP(COL.last_update_time)+COL.delta_sending_time<UNIX_TIMESTAMP()) ORDER BY COL.id, IT.pubDate;");
 
         int rowcount = 0;
         if (rs.last()) {
@@ -286,25 +286,6 @@ class Packer{
         } finally {
             os.close();
             return "/feed" + i + ".html";
-        }
-    }
-
-    private void createPdf (String htmlDocument, String path) {
-
-        ITextRenderer renderer = new ITextRenderer();
-        try {
-            renderer.getFontResolver().addFont("fonts/PTS55F.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(htmlDocument.getBytes("UTF-8")));
-            renderer.setDocument(doc, null);
-            File file = new File(path);
-            OutputStream os = new FileOutputStream(file);
-            renderer.layout();
-            renderer.createPDF(os);
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -537,7 +518,7 @@ class Packer{
             createEpub(validXHTML, resultPath.replace(".html", ".epub"));
             return resultPath.replace(".html", ".epub");
         } else if (format.equalsIgnoreCase("PDF")) {
-            createPdf(validXHTML, resultPath.replace(".html", ".pdf"));
+            new PdfTask(validXHTML, resultPath.replace(".html", ".pdf")).run();
             return resultPath.replace(".html", ".pdf");
         } else
             return resultPath;
