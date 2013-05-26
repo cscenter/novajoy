@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.logging.Logger;
 
 /**
  * User: romanfilippov
@@ -19,6 +20,7 @@ public class PdfTask implements Runnable {
 
     private String document;
     private String path;
+    private static Logger logger = Logger.getLogger(PdfTask.class.getName());
 
     public PdfTask(String _document, String _path) {
 
@@ -40,6 +42,7 @@ public class PdfTask implements Runnable {
             OutputStream os = new FileOutputStream(file);
             renderer.layout();
             renderer.createPDF(os);
+            logger.info(path + " created succesfully.");
             os.close();
         } catch (Exception e) {
             e.printStackTrace();

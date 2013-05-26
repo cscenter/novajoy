@@ -13,8 +13,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,6 +51,10 @@ class Packer{
     private final String DEFAULT_SUBJECT = "Your rss feed from novaJoy";
     private final String DEFAULT_BODY = "Thank you for using our service!";
 
+    //private LinkedList<Runnable> tasks = null;
+    Collection<Future<?>> tasks = null;
+    ExecutorService es = null;
+
     Connection con = null;
 
     private UserItem[] users = null;
@@ -57,6 +65,9 @@ class Packer{
         dbName = worker.getDBbasename();
         userName = worker.getDBuser();
         userPassword = worker.getDBpassword();
+        //tasks = new LinkedList<Runnable>();
+        es = Executors.newCachedThreadPool();
+        tasks = new LinkedList<Future<?>>();
     }
 
     public Packer() {
@@ -518,7 +529,7 @@ class Packer{
             createEpub(validXHTML, resultPath.replace(".html", ".epub"));
             return resultPath.replace(".html", ".epub");
         } else if (format.equalsIgnoreCase("PDF")) {
-            new PdfTask(validXHTML, resultPath.replace(".html", ".pdf")).run();
+            tasks.add(es.submit(new PdfTask(validXHTML, resultPath.replace(".html", ".pdf"))));
             return resultPath.replace(".html", ".pdf");
         } else
             return resultPath;
@@ -561,6 +572,12 @@ class Packer{
             if (docs.isEmpty())
                 throw new NullPointerException();
 
+            es.shutdown();
+
+            for (Future<?> future : tasks) {     // wait all
+                future.get();
+            }
+
             String query = "insert into Server_postletters (target,title,body,attachment) values ";
 
             ListIterator iterator = docs.listIterator();
@@ -597,6 +614,9 @@ class Packer{
 
             if (users != null)
                 updateFeedTime(users);
+
+            tasks.clear();
+            tasks = null;
 
             if (rs > 0) {
                 log.info("Routine tasks completed");
