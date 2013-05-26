@@ -18,7 +18,7 @@ import novajoy.util.logger.Loggers;
 public class Crawler extends Thread {
 	private final JdbcManager dbManager;
 	private final long sleepMillis;
-	private static Logger log = new Loggers().getCrawlerLogger();
+	private static Logger log = Logger.getLogger(Crawler.class.getName());//new Loggers().getCrawlerLogger();
 
 	public Crawler(String name, int sleepmin, JdbcManager dbManager) {
 		super(name);
